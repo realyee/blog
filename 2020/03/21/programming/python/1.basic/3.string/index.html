@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Python 字符串 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python 字符串</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python 字符串</h1><div class="post-meta">2020-03-21<span> | </span><span class="category"><a href="/blog/categories/python/">python</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 3k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 12</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">字符串的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">字符串的常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="toc-number">2.1.</span> <span class="toc-text">0) 字符串拼接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%B1%BB%E5%9E%8B---9"><span class="toc-number">2.2.</span> <span class="toc-text">1) 判断类型 - 9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%92%8C%E6%9B%BF%E6%8D%A2---7"><span class="toc-number">2.3.</span> <span class="toc-text">2) 查找和替换 - 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%B0%8F%E5%86%99%E8%BD%AC%E6%8D%A2---5"><span class="toc-number">2.4.</span> <span class="toc-text">3) 大小写转换 - 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E5%AF%B9%E9%BD%90---3"><span class="toc-number">2.5.</span> <span class="toc-text">4) 文本对齐 - 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9E%E6%8E%A5---5"><span class="toc-number">2.6.</span> <span class="toc-text">6) 拆分和连接 - 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1---2"><span class="toc-number">2.7.</span> <span class="toc-text">0) 统计 - 2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%88%87%E7%89%87"><span class="toc-number">3.</span> <span class="toc-text">字符串的切片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%92%8C%E5%80%92%E5%BA%8F"><span class="toc-number">3.1.</span> <span class="toc-text">索引的顺序和倒序</span></a></li></ol></li></ol></div></div><div class="post-content"><h2 id="字符串的定义">字符串的定义</h2>
+<ul>
+<li><strong>字符串</strong> 是 <strong>一串字符</strong>，也是
+<code>collection of character</code> ,
+因此，和列表、元组、字典有许多相同的方法特性。</li>
+<li>在 Python 中可以使用 <strong>一对双引号</strong> <code>"</code> 或者
+<strong>一对单引号</strong> <code>'</code> 定义一个字符串
+<ul>
+<li>虽然可以使用 <code>\"</code> 或者 <code>\'</code>
+做字符串的转义，但是在实际开发中：
+<ul>
+<li>如果字符串内部需要使用 <code>"</code> ，可以使用 <code>'</code>
+定义字符串</li>
+<li>如果字符串内部需要使用 <code>'</code> ，可以使用 <code>"</code>
+定义字符串</li>
+</ul></li>
+</ul></li>
+<li>可以使用 <strong>索引</strong> 获取一个字符串中
+<strong>指定位置的字符</strong>，索引计数从 <strong>0</strong> 开始</li>
+<li>也可以使用 <code>for</code> <strong>循环遍历</strong>
+字符串中每一个字符</li>
+</ul>
+<blockquote>
+<p>大多数编程语言都是用 <code>"</code> 来定义字符串</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">string = <span class="string">&quot;Hello Python&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> string:</span><br><span class="line">    <span class="built_in">print</span>(c)</span><br></pre></td></tr></table></figure>
+<h2 id="字符串的常用操作">字符串的常用操作</h2>
+<ul>
+<li>在 <code>ipython3</code> 中定义一个 <strong>字符串</strong>，例如：
+<code>hello_str = ""</code></li>
+<li>输入 <code>hello_str.</code> 按下 <code>TAB</code> 键，
+<code>ipython</code> 会提示 <strong>字符串</strong> 能够使用的
+<strong>方法</strong> 如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">In [1]: hello_str.</span><br><span class="line">hello_str.capitalize    hello_str.isidentifier  hello_str.rindex</span><br><span class="line">hello_str.casefold      hello_str.islower       hello_str.rjust</span><br><span class="line">hello_str.center        hello_str.isnumeric     hello_str.rpartition</span><br><span class="line">hello_str.count         hello_str.isprintable   hello_str.rsplit</span><br><span class="line">hello_str.encode        hello_str.isspace       hello_str.rstrip</span><br><span class="line">hello_str.endswith      hello_str.istitle       hello_str.split</span><br><span class="line">hello_str.expandtabs    hello_str.isupper       hello_str.splitlines</span><br><span class="line">hello_str.find          hello_str.join          hello_str.startswith</span><br><span class="line">hello_str.format        hello_str.ljust         hello_str.strip</span><br><span class="line">hello_str.format_map    hello_str.lower         hello_str.swapcase</span><br><span class="line">hello_str.index         hello_str.lstrip        hello_str.title</span><br><span class="line">hello_str.isalnum       hello_str.maketrans     hello_str.translate</span><br><span class="line">hello_str.isalpha       hello_str.partition     hello_str.upper</span><br><span class="line">hello_str.isdecimal     hello_str.replace       hello_str.zfill</span><br><span class="line">hello_str.isdigit       hello_str.rfind</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>提示：正是因为 python
+内置提供的方法足够多，才使得在开发时，能够针对字符串进行更加灵活的操作！应对更多的开发需求！</p>
+</blockquote>
+<h3 id="字符串拼接">0) 字符串拼接</h3>
+<p>python 中进行字符串拼接，极其简单。 使用 <code>+</code>
+连接两个字符串即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">5</span>]: test = <span class="string">&quot;hello&quot;</span>+<span class="string">&quot;world&quot;</span></span><br><span class="line">In [<span class="number">6</span>]: test</span><br><span class="line">Out[<span class="number">6</span>]: <span class="string">&#x27;helloworld&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>甚至直接去掉 <code>+</code> , 直接 whitespace 也可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">7</span>]: test = <span class="string">&quot;hello&quot;</span> <span class="string">&quot;world&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: test</span><br><span class="line">Out[<span class="number">8</span>]: <span class="string">&#x27;helloworld&#x27;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: test = (</span><br><span class="line">    ...:     <span class="string">&quot;www&quot;</span></span><br><span class="line">    ...:     <span class="string">&quot;.&quot;</span></span><br><span class="line">    ...:     <span class="string">&quot;google&quot;</span></span><br><span class="line">    ...:     <span class="string">&quot;.&quot;</span></span><br><span class="line">    ...:     <span class="string">&quot;com&quot;</span></span><br><span class="line">    ...:     )</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: test</span><br><span class="line">Out[<span class="number">11</span>]: <span class="string">&#x27;www.google.com&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="判断类型---9">1) 判断类型 - 9</h3>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 84%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>string.isspace()</td>
+<td>如果 string 中只包含 whitespace，则返回 True</td>
+</tr>
+<tr class="even">
+<td>string.isalnum()</td>
+<td>如果 string 至少有一个字符并且所有字符都是字母或数字则返回 True</td>
+</tr>
+<tr class="odd">
+<td>string.isalpha()</td>
+<td>如果 string 至少有一个字符并且所有字符都是字母则返回 True</td>
+</tr>
+<tr class="even">
+<td>string.isdecimal()</td>
+<td>如果 string 只包含数字则返回 True， <code>全角数字</code></td>
+</tr>
+<tr class="odd">
+<td>string.isdigit()</td>
+<td>如果 string 只包含数字则返回 True， <code>全角数字</code> 、
+<code>⑴</code> 、 <code>\u00b2</code> (注: 第二个是 unicode 字符串)</td>
+</tr>
+<tr class="even">
+<td>string.isnumeric()</td>
+<td>如果 string 只包含数字则返回 True， <code>全角数字</code> ，
+<code>汉字数字</code></td>
+</tr>
+<tr class="odd">
+<td>string.istitle()</td>
+<td>如果 string 是标题化的(每个单词的首字母大写)则返回 True</td>
+</tr>
+<tr class="even">
+<td>string.islower()</td>
+<td>如果 string
+中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回
+True</td>
+</tr>
+<tr class="odd">
+<td>string.isupper()</td>
+<td>如果 string
+中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回
+True</td>
+</tr>
+</tbody>
+</table>
+<p><strong>string.islower()</strong> This method checks if all the
+characters of a string are lowercase characters (a-z).
+只检查字符串中的英文字母，如果有其它数字或字符不受影响。
+string.isupper() 与它类似。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">51</span>]: test = <span class="string">&quot;adh13()12#&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">52</span>]: test.islower()</span><br><span class="line">Out[<span class="number">52</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">53</span>]: test = <span class="string">&quot;adH13()12#&quot;</span></span><br><span class="line">In [<span class="number">54</span>]: test.islower()</span><br><span class="line">Out[<span class="number">54</span>]: <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p><strong>string.isspace()</strong> 判断字符串是否只包含
+whitespaces(包含：空格， 制表符 换行符， 回车 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">63</span>]: test_str=<span class="string">&quot;\t\n\r &quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">64</span>]: test_str.isspace()</span><br><span class="line">Out[<span class="number">64</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p><strong>string.isdecimal string.isdigit string.isnumeric</strong>
+这三种都不能判断小数。开发中由于常常只针对整型数字，因此常用
+<code>isdecimal</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">65</span>]: num_str = <span class="string">&quot;一千零一&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">66</span>]: <span class="keyword">def</span> <span class="title function_">print_num</span>(<span class="params">num_str</span>):</span><br><span class="line">    ...:     <span class="built_in">print</span>(num_str)</span><br><span class="line">    ...:     <span class="built_in">print</span>(num_str.isdecimal())</span><br><span class="line">    ...:     <span class="built_in">print</span>(num_str.isdigit())</span><br><span class="line">    ...:     <span class="built_in">print</span>(num_str.isnumeric())</span><br><span class="line"></span><br><span class="line">In [<span class="number">68</span>]: print_num(num_str)</span><br><span class="line">一千零一</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="查找和替换---7">2) 查找和替换 - 7</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 69%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>string.startswith(str)</td>
+<td>检查字符串是否是以 str 开头，是则返回 True</td>
+</tr>
+<tr class="even">
+<td>string.endswith(str)</td>
+<td>检查字符串是否是以 str 结束，是则返回 True</td>
+</tr>
+<tr class="odd">
+<td>string.find(str, start=0, end=len(string))</td>
+<td>检测 str 是否包含在 string 中，如果 start 和 end
+指定范围，则检查是否包含在指定范围内，如果是返回开始的索引值，否则返回
+<code>-1</code></td>
+</tr>
+<tr class="even">
+<td>string.rfind(str, start=0, end=len(string))</td>
+<td>类似于 find()，不过是从右边开始查找</td>
+</tr>
+<tr class="odd">
+<td>string.index(str, start=0, end=len(string))</td>
+<td>跟 find() 方法类似，不过如果 str 不在 string ，
+会<strong>抛出异常</strong></td>
+</tr>
+<tr class="even">
+<td>string.rindex(str, start=0, end=len(string))</td>
+<td>类似于 index()，不过是从右边开始</td>
+</tr>
+<tr class="odd">
+<td>string.replace(old_str, new_str, num=string.count(old))</td>
+<td>把 string 中的 old_str 替换成 new_str，如果 num 指定，则替换不超过
+num 次</td>
+</tr>
+</tbody>
+</table>
+<h3 id="大小写转换---5">3) 大小写转换 - 5</h3>
+<table>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>string.capitalize()</td>
+<td>把字符串的第一个字符大写</td>
+</tr>
+<tr class="even">
+<td>string.title()</td>
+<td>把字符串的每个单词首字母大写</td>
+</tr>
+<tr class="odd">
+<td>string.lower()</td>
+<td>转换 string 中所有大写字符为小写</td>
+</tr>
+<tr class="even">
+<td>string.upper()</td>
+<td>转换 string 中的小写字母为大写</td>
+</tr>
+<tr class="odd">
+<td>string.swapcase()</td>
+<td>翻转 string 中的大小写</td>
+</tr>
+</tbody>
+</table>
+<p><strong>upper() 和 lower()</strong></p>
+<p>大小写转换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=<span class="string">&#x27;hello&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.upper()</span><br><span class="line"><span class="string">&#x27;HELLO&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;hello&#x27;</span>.upper()</span><br><span class="line"><span class="string">&#x27;HELLO&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><strong>string.capitalize() 与 string.title() 区别</strong></p>
+<p><strong>string.capitalize()</strong> <strong>capitalize()</strong>
+method converts the first character of a string to capital
+<strong>(uppercase)</strong> letter. 大写的是整个字符串的第一个字符。
+如果字符串第一个字符不是英文字母或者是大写的英文字母，那直接返回原字符串的一份
+copy</p>
+<p><strong>string.title()</strong> 就像文章的 title
+一样，大写的是字符串中的每一个 word， 并且会把 number 或 symbol
+后面的第一个字符也大写。 The title() method returns a string where the
+first character in every word is upper case. Like a header, or a
+title.</p>
+<p>If the word contains a number or a symbol, the first letter after
+that will be converted to upper case.</p>
+<p>题目: <a
+target="_blank" rel="noopener" href="https://www.hackerrank.com/challenges/capitalize/problem">Capitalize!</a></p>
+<ol type="1">
+<li>capitalize 和 title 方法的区别</li>
+<li>python 还有一个 string 模块有个 string.capwords
+方法可以直接实现题目的要求。</li>
+<li>写代码要尽可能精确，比如: 本题目说 word 之间是 spaces，
+而不一定是一个 space， 因此，在 split 的时候，使用 split(" ")
+保留空格，比直接 split() 更加符合要求。</li>
+</ol>
+<h3 id="文本对齐---3">4) 文本对齐 - 3</h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>string.ljust(width)</td>
+<td>返回一个原字符串左对齐，并使用空格填充至长度 width 的新字符串</td>
+</tr>
+<tr class="even">
+<td>string.rjust(width)</td>
+<td>返回一个原字符串右对齐，并使用空格填充至长度 width 的新字符串</td>
+</tr>
+<tr class="odd">
+<td>string.center(width)</td>
+<td>返回一个原字符串居中，并使用空格填充至长度 width 的新字符串</td>
+</tr>
+</tbody>
+</table>
+<p><strong>center</strong></p>
+<ol type="1">
+<li><p>Syntax</p>
+<p><em>string</em>.center(<em>length, character</em>)</p></li>
+<li><p>Parameter Values</p>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><em>length</em></td>
+<td style="text-align: left;">Required. The length of the returned
+string</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>character</em></td>
+<td style="text-align: left;">Optional. The character to fill the
+missing space on each side. Default is " " (space)</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">    &gt;&gt;&gt; <span class="built_in">print</span>(<span class="string">&#x27; Welcome to InfoGath &#x27;</span>.center(<span class="number">35</span>,<span class="string">&#x27;*&#x27;</span>))</span><br><span class="line">    ******* Welcome to InfoGath *******</span><br><span class="line">    &gt;&gt;&gt; <span class="built_in">print</span>(<span class="built_in">len</span>(<span class="string">&#x27; Welcome to InfoGath &#x27;</span>.center(<span class="number">35</span>,<span class="string">&#x27;*&#x27;</span>)))</span><br><span class="line">    <span class="number">35</span></span><br><span class="line">    ```</span><br><span class="line"></span><br><span class="line"><span class="comment">### 5) 去除空白字符 - 3</span></span><br><span class="line"></span><br><span class="line">| 方法            | 说明                               |</span><br><span class="line">| --------------- | ---------------------------------- |</span><br><span class="line">| string.lstrip() | 截掉 string 左边（开始）的空白字符 |</span><br><span class="line">| string.rstrip() | 截掉 string 右边（末尾）的空白字符 |</span><br><span class="line">| string.strip()  | 截掉 string 左右两边的空白字符     |</span><br><span class="line"></span><br><span class="line">**strip(character) **</span><br><span class="line"></span><br><span class="line">指定取出字符串首尾的 characters</span><br><span class="line"></span><br><span class="line">去除字符串**头尾**（内部的不能去掉，只能先把尾部的去掉，然后内部成为尾部，才能再去掉它）**指定的字符**可以是多个（无序，只要是头尾就行），如果不指定，默认为空格，回车，换行等 whitespaces</span><br><span class="line"></span><br><span class="line">``` python</span><br><span class="line">In [<span class="number">46</span>]: web</span><br><span class="line">Out[<span class="number">46</span>]: <span class="string">&#x27;baidu \tb\n&#x27;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">47</span>]: web.strip(<span class="string">&quot;b\t&quot;</span>)</span><br><span class="line">Out[<span class="number">47</span>]: <span class="string">&#x27;aidu \tb\n&#x27;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">48</span>]: web.strip(<span class="string">&quot; b\t\n&quot;</span>)</span><br><span class="line">Out[<span class="number">48</span>]: <span class="string">&#x27;aidu&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="拆分和连接---5">6) 拆分和连接 - 5</h3>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>string.partition(str)</td>
+<td>把字符串 string 分成一个 3 元素的元组 (str 前面, str, str 后面)</td>
+</tr>
+<tr class="even">
+<td>string.rpartition(str)</td>
+<td>类似于 partition() 方法，不过是从右边开始查找</td>
+</tr>
+<tr class="odd">
+<td>string.split(str="", num)</td>
+<td>以 str 为分隔符拆分 string，如果 num 有指定值，则仅分隔 num + 1
+个子字符串，str 默认包含 ', ', '' 和空格</td>
+</tr>
+<tr class="even">
+<td>string.splitlines()</td>
+<td>按照行(', '', '')分隔，返回一个包含各行作为元素的列表</td>
+</tr>
+<tr class="odd">
+<td>string.join(seq)</td>
+<td>以 string 作为分隔符，将 seq
+中所有的元素（的字符串表示）合并为一个新的字符串</td>
+</tr>
+</tbody>
+</table>
+<p><strong>string.split(str="", num)</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c=<span class="string">&#x27;I love python&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> c.split(sep=<span class="string">&#x27; &#x27;</span>):</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;i&#125;</span>&#x27;</span>,end=<span class="string">&#x27;_&#x27;</span>))</span><br><span class="line">...</span><br><span class="line">I_love_python_&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;www.baidu.com&#x27;</span>.split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">[<span class="string">&#x27;www&#x27;</span>, <span class="string">&#x27;baidu&#x27;</span>, <span class="string">&#x27;com&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>string.join(seq)</strong></p>
+<p>常常用来连接元素为字符串的列表进行固定格式的输出， 示例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">54</span>]: str_list = [<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;world&quot;</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">55</span>]: <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span>.join(str_list))</span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+<h3 id="统计---2">0) 统计 - 2</h3>
+<p><strong>len(string)</strong> 统计字符串的长度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">61</span>]: str_test = <span class="string">&quot;hellow&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">62</span>]: <span class="built_in">len</span>(str_test)</span><br><span class="line">Out[<span class="number">62</span>]: <span class="number">6</span></span><br></pre></td></tr></table></figure>
+<p><strong>stirng.count(substr)</strong></p>
+<p>Python count()
+方法用于统计字符串里某个字符或者字符串出现的次数。可选参数为在字符串搜索的开始与结束位置。
+如果要查找的字符或字符串在源字符串中没有，程序并不会报错，只会得到结果
+0。 <code>str.count(sub, start= 0,end=len(string))</code></p>
+<p>sub -- 搜索的子字符串 返回值
+该方法返回子字符串在字符串中出现的次数。</p>
+<p><strong>注： 当字符串较长时，counter 函数耗时，慎用</strong></p>
+<p>举例：a 字符串中从 索引为 7 开始，a 的个数为 2 个。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">5</span>]: a=<span class="string">&quot;nationl daya!&quot;</span></span><br><span class="line">In [<span class="number">6</span>]: a.count(<span class="string">&quot;a&quot;</span>,<span class="number">7</span>)</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">2</span></span><br><span class="line">In [<span class="number">34</span>]: sub_str=<span class="string">&quot;ay“</span></span><br><span class="line"><span class="string">In [35]: a=&quot;</span>nationl daya! ayhe ay<span class="string">&quot;</span></span><br><span class="line"><span class="string">In [36]: a.count(sub_str)</span></span><br><span class="line"><span class="string">Out[36]: 3</span></span><br><span class="line"><span class="string">In [37]: a.count(&#x27;a&#x27;)</span></span><br><span class="line"><span class="string">Out[37]: 5</span></span><br></pre></td></tr></table></figure>
+<h2 id="字符串的切片">字符串的切片</h2>
+<ul>
+<li><strong>切片</strong> 方法适用于
+<strong>字符串</strong>、<strong>列表</strong>、<strong>元组</strong>
+<ul>
+<li><strong>切片</strong> 使用 <strong>索引值</strong>
+来限定范围，从一个大的 <strong>字符串</strong> 中 <strong>切出</strong>
+小的 <strong>字符串</strong></li>
+<li><strong>列表</strong> 和 <strong>元组</strong> 都是
+<strong>有序</strong> 的集合，都能够 <strong>通过索引值</strong>
+获取到对应的数据</li>
+<li><strong>字典</strong> 是一个 <strong>无序</strong> 的集合，是使用
+<strong>键值对</strong> 保存数据</li>
+</ul></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">字符串[开始索引:结束索引:步长]</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：</p>
+<ol type="1">
+<li>指定的区间属于 <strong>左闭右开</strong> 型
+<code>[开始索引, 结束索引)</code> =&gt;
+<code>开始索引 &gt;= 范围 &lt; 结束索引</code>
+<ul>
+<li>从 <code>起始</code> 位开始，到 ** <code>结束</code> 位的前一位**
+结束（<strong>不包含结束位本身</strong>)</li>
+</ul></li>
+<li>不写开始索引。默认从头开始，<strong>开始索引
+数字可以省略，冒号不能省略</strong></li>
+<li>不写结束索引，默认到末尾结束，<strong>结束索引
+数字可以省略，冒号不能省略</strong></li>
+<li>步长默认为 <code>1</code>
+，如果连续切片，<strong>数字和冒号都可以省略</strong></li>
+</ol>
+<h3 id="索引的顺序和倒序">索引的顺序和倒序</h3>
+<ul>
+<li>在 Python 中不仅支持 <strong>顺序索引</strong>，同时还支持
+<strong>倒序索引</strong></li>
+<li>所谓倒序索引就是 <strong>从右向左</strong> 计算索引
+<ul>
+<li>最右边的索引值是 <strong>-1</strong>，依次递减</li>
+</ul></li>
+</ul>
+<p><strong>演练需求</strong></p>
+<ul>
+<li><ol type="1">
+<li>截取从 2 ~ 5 位置 的字符串</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>截取从 2 ~ <code>末尾</code> 的字符串</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>截取从 <code>开始</code> ~ 5 位置 的字符串</li>
+</ol></li>
+<li><ol start="4" type="1">
+<li>截取完整的字符串</li>
+</ol></li>
+<li><ol start="5" type="1">
+<li>从开始位置，每隔一个字符截取字符串</li>
+</ol></li>
+<li><ol start="6" type="1">
+<li>从索引 1 开始，每隔一个取一个</li>
+</ol></li>
+<li><ol start="7" type="1">
+<li>截取从 2 ~ <code>末尾 - 1</code> 的字符串</li>
+</ol></li>
+<li><ol start="8" type="1">
+<li>截取字符串末尾两个字符</li>
+</ol></li>
+<li><ol start="9" type="1">
+<li>字符串的逆序（面试题）</li>
+</ol></li>
+</ul>
+<p><strong>答案</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">num_str = <span class="string">&quot;0123456789&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 截取从 2 ~ 5 位置 的字符串</span></span><br><span class="line"><span class="built_in">print</span>(num_str[<span class="number">2</span>:<span class="number">6</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 截取从 2 ~ `末尾` 的字符串</span></span><br><span class="line"><span class="built_in">print</span>(num_str[<span class="number">2</span>:])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 截取从 `开始` ~ 5 位置 的字符串</span></span><br><span class="line"><span class="built_in">print</span>(num_str[:<span class="number">6</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 截取完整的字符串</span></span><br><span class="line"><span class="built_in">print</span>(num_str[:])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 从开始位置，每隔一个字符截取字符串</span></span><br><span class="line"><span class="built_in">print</span>(num_str[::<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 从索引 1 开始，每隔一个取一个</span></span><br><span class="line"><span class="built_in">print</span>(num_str[<span class="number">1</span>::<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 倒序切片</span></span><br><span class="line"><span class="comment"># -1 表示倒数第一个字符</span></span><br><span class="line"><span class="built_in">print</span>(num_str[-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 截取从 2 ~ `末尾 - 1` 的字符串</span></span><br><span class="line"><span class="built_in">print</span>(num_str[<span class="number">2</span>:-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 8. 截取字符串末尾两个字符</span></span><br><span class="line"><span class="built_in">print</span>(num_str[-<span class="number">2</span>:])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 9. 字符串的逆序（面试题）</span></span><br><span class="line"><span class="built_in">print</span>(num_str[<span class="number">0</span>::-<span class="number">1</span>])   <span class="comment"># 从 0 开始，步长为 -1， 向左切片，只会把 0 切出来</span></span><br><span class="line"><span class="built_in">print</span>(num_str[-<span class="number">1</span>::-<span class="number">1</span>])  <span class="comment"># 从最后一个字符开始，步长为 -1， 这样就造成了逆序</span></span><br><span class="line"></span><br><span class="line">Final：</span><br><span class="line"><span class="built_in">print</span>(num_str[::-<span class="number">1</span>])	<span class="comment"># 之前在取完整字符串的时候，开始和结束索引都不用指定，因此，字符串逆序的时候，开始和结束索引也可以省略。</span></span><br></pre></td></tr></table></figure>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/collections/" rel="tag">collections</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2020/03/21/programming/python/1.basic/3.dict/">Python 字典</a><a class="next" href="/blog/2020/03/21/programming/python/1.basic/6.arg_return/">Python function</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

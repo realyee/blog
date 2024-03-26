@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>快速傅里叶变换 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">快速傅里叶变换</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">快速傅里叶变换</h1><div class="post-meta">2023-03-25<span> | </span><span class="category"><a href="/blog/categories/Cryptography/">Cryptography</a><a href="/blog/categories/Cryptography/math/">math</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 2.4k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 10</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">1.</span> <span class="toc-text">快速傅里叶变换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%E7%A6%BB%E6%95%A3%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%E4%B8%8E%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">1.1.</span> <span class="toc-text">傅里叶变换、离散傅里叶变换与快速傅里叶变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fft"><span class="toc-number">1.2.</span> <span class="toc-text">FFT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#naive-polynomial-multiplication"><span class="toc-number">1.2.1.</span> <span class="toc-text">naive polynomial
+multiplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#polynomial-representations"><span class="toc-number">1.2.2.</span> <span class="toc-text">polynomial representations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fft-1"><span class="toc-number">1.2.3.</span> <span class="toc-text">FFT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%95%B0%E4%B8%8E%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.4.</span> <span class="toc-text">复数与欧拉函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#discrete-fourier-transform"><span class="toc-number">1.3.</span> <span class="toc-text">Discrete Fourier Transform</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#inverse-discrete-fourier-transform"><span class="toc-number">1.4.</span> <span class="toc-text">Inverse Discrete Fourier
+Transform</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#references"><span class="toc-number">1.5.</span> <span class="toc-text">References</span></a></li></ol></li></ol></div></div><div class="post-content"><h1 id="快速傅里叶变换">快速傅里叶变换</h1>
+<h2
+id="傅里叶变换离散傅里叶变换与快速傅里叶变换">傅里叶变换、离散傅里叶变换与快速傅里叶变换</h2>
+<blockquote>
+<p>The Fourier Transform is a tool that breaks a waveform (a function or
+signal) into an alternate representation, characterized by the
+<strong>sine and cosine functions </strong>of varying
+<strong>frequencies</strong>. The Fourier Transform shows that any
+waveform can be re-written as the sum of sinusoidals.</p>
+</blockquote>
+<p>傅里叶变换(Fourier
+transform，FT)将函数(在应用上称：信号，波形）分解为不同特征的正弦函数的和，从而将其由时域转换到频域。逆傅里叶变换则反向操作，因其基本思想首先由法国学者约瑟夫·傅里叶系统地提出，所以以其名字来命名以示纪念。</p>
+<p>一般情况下，若“傅里叶变换”一词不加任何限定语，则指的是“连续傅里叶变换”（连续函数的傅里叶变换）。在工程应用中，得益于数字技术的应用，绝大多数傅里叶变换的应用都是采用离散傅里叶变换（DFT），更确切的说，是它的快速算法快速傅里叶变换（FFT，Fast
+Fourier Transform)。离散傅里叶变换就是对连续傅里叶变换离散化,
+等价于对信号进行采样，将其变为有限序列的傅里叶变换。</p>
+<blockquote>
+<p>The Discrete Fourier Transform (DFT) is the equivalent of the
+continuous Fourier Transform for signals known only at N instants
+separated by sample times T (i.e. a finite sequence of data) ^4</p>
+</blockquote>
+<p>快速傅里叶变换（Fast Fourier Transform，FFT）是一种可在 O(nlogn)
+时间内完成的离散傅里叶变换（Discrete Fourier transform，DFT）算法。而从
+computer science 的视角，FFT 主要是被用来将 O(n^2)复杂度多项式乘法加速为
+O(nlogn) ，从而快速计算多项式乘法。</p>
+<h2 id="fft">FFT</h2>
+<h3 id="naive-polynomial-multiplication">naive polynomial
+multiplication</h3>
+<p>考虑朴素的多项式乘积算法，考虑到两个多项式 A(x), B(x) 的乘积
+C(x)，假设 A(x)的项数为 n, 其系数构成 n 维向量 <span
+class="math inline">\((a_0, a_1,\cdots,a_n)\)</span>，B(x) 的项数为
+m，对应 m 维向量 <span class="math inline">\((b_0,
+b_1,\cdots,b_m)\)</span>。则 C(x) 的系数构成 n+m-1
+维的向量，其算法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(a)):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(b)):</span><br><span class="line">        c[i + j] += a[i] * b[j]</span><br></pre></td></tr></table></figure>
+<p>多项式乘法本质上是加法卷积，而 FFT
+可以加速卷积操作。卷积是信号处理重要操作，公式如下：</p>
+<p><span class="math display">\[
+(f*g)[k] = \sum_{i=\infty}^{\infty} f[k]g[k-i]
+\]</span></p>
+<p>则多项式乘法可以表示为下面公式。也就是说要计算出 C(x)的 <span
+class="math inline">\(x^k\)</span> 项的系数，需要 A(x) 的 <span
+class="math inline">\(x^i\)</span> 项的系数和 B(x)的 <span
+class="math inline">\(x^{k-i}\)</span> 项的系数乘积。</p>
+<p><span class="math display">\[
+C[k] = \sum_{k=\infty}^{\infty} A[k]B[k-i]
+\]</span></p>
+<p>对应代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def bound(idx, arr): return arr[idx] if idx in range(len(arr)) else 0</span><br><span class="line">for k in range(len(a)+len(b)-1):</span><br><span class="line">    for i in range(k+1):</span><br><span class="line">        c[k] += bound(i, a) * bound(k-i, b)</span><br></pre></td></tr></table></figure>
+<p>注意补 0 操作：对于索引超出 [0,m] 的 f(x) 的多项式系数以及索引超出
+[0，n] 的 g(x) 多项式系数设置为 0</p>
+<p>也可以写成：<span class="math inline">\(C[k] = \sum_{i+j=k}
+A[i]B[j]\)</span></p>
+<p>形如 <span class="math inline">\(C[k] = \sum_{i \bigoplus j=k}
+A[i]B[j]\)</span> 的式子称为卷积，其中 <span
+class="math inline">\(\bigoplus\)</span> 为某种运算。</p>
+<h3 id="polynomial-representations">polynomial representations</h3>
+<p>对于 degree = n-1 多项式 A(x)，</p>
+<ol type="1">
+<li><p>Coefficient representation: 所有项的系数组成的系数向量<span
+class="math inline">\((a_0, a_1,a_2,...,a_{n-1})\)</span>
+唯一确定多项式:<span class="math inline">\(A(x) =
+\sum_{i=0}^{n-1}a_ix^i\)</span></p></li>
+<li><p>Point-value representation: 一组互不相同的<span
+class="math inline">\((x_0, x_1,x_2, \cdots,x_{n})\)</span> 代入
+A(x),得到 n 个取值 <span class="math inline">\((y_0,y_1, \cdots,
+y_n)\)</span>, 其中 <span class="math inline">\(y_i = \sum_{j=0}^{n}a_j
+x_i\)</span>，可以通过拉格朗日插值方法唯一确定多项式。</p></li>
+</ol>
+<p>定理: 一个 n-1 次多项式在 n 个不同点的取值唯一确定了该多项式。</p>
+<p>已知一组插值点 <span class="math inline">\((x_0, x_1,x_2,
+\cdots,x_{n})\)</span>中 A(x) 与 B(x)（假设多项式阶数相同，没有的视为
+0，这也就是为什么补 0 的原因）对应的点值向量分别为 <span
+class="math inline">\((y_{a0},y_{a1}, \cdots, y_{an})\)</span> 和 <span
+class="math inline">\((y_{b0},y_{b1}, \cdots, y_{bn})\)</span>, 则
+C(x)=A(x)B(x)的点值表达式可以在 O(n) 的时间求出来，为 <span
+class="math inline">\((y_{a0}y_{b0},y_{a1}y_{b1}, \cdots,
+y_{an}y_{bn})\)</span>. 因为 C(x) 的项数为二者之和，而 A(x), B(x) 分别有
+n,m 项，所以我们代入的差值节点至少有 n+m 个。</p>
+<p>在多项式的点值表示法下多项式乘法可以在 O(n)
+时间内求出，远快于系数表示法的
+O(n^2)暴力卷积。但是如果按照定义根据系数表示求一个多项式的点值表示，时间复杂度为
+O(n^2).
+已知多项式的点值表示，求其系数表示，使用朴素的插值算法时间复杂度为
+O(n^2)。 因此，FFT 通过以下思路优化多项式乘法:</p>
+<ol type="1">
+<li>polynomial multiplication under Point-value representation</li>
+<li>choose root of unity to accelerate the convertion between
+Point-value representation and class representation.</li>
+</ol>
+<p>当然，如果从矩阵角度理解的话，FFT 通过以下思路优化多项式乘法: factor
+the matrix of polynomial multiplication with the property of root of
+unity. [^7]</p>
+<h3 id="fft-1">FFT</h3>
+<p>FFT 算法流程：把系数表达转换为点值表达 -&gt; 点值表达相乘
+-&gt;把点值表达转换为系数表达。</p>
+<p>“把系数表达转换为点值表达”的算法叫做 DFT，
+“把点值表达转换为系数表达”的算法叫做 IDFT(DFT 的逆运算)</p>
+<p>其实插值点的选择没有规定，只要选择的插值点不同，个数足够就可以进行
+DFT。但是二者转换的复杂度就是 O(n^2)
+了，和多项式乘法一样没有必要。而傅立叶，一个很懂复数的人，把选择了单位圆的单位根
+root of unity 代入了多项式,求点值表达, 利用单位根的特性就实现了 O(nlogn)
+的效率。</p>
+<h3 id="复数与欧拉函数">复数与欧拉函数</h3>
+<p>Euler's Formula on unit of circle: for any real x , <span
+class="math inline">\(e^{ix} =cosx+isinx\)</span>, where i is the
+imaginary unit, <span class="math inline">\(i^2= −1\)</span>.</p>
+<p>根据复数的知识，向量的计算，乘除法比较方便，直接将两个相量的模相乘/除、辐角相加/减即可；而加减法就需要做反复的直角坐标-极坐标的相互转换，计算非常麻烦。</p>
+<p>具有实部和虚部的复数做乘法等运算实际上很不方便，但是借助于欧拉公式，虽然加减法计算依然很麻烦，但是复数的乘除法变得简单起来:
+<strong>复数相乘时,模长相乘,幅角相加</strong>：</p>
+<p>设单位圆上复数点 <span class="math inline">\(x_1,x_2\)</span>
+相乘，</p>
+<p><span class="math display">\[
+(cosx_1+isinx_1)(cosx_2+isinx_2) = e^{ix_1}*e^{ix_2} = e^{i(x_1+x_2)}=
+cos(x_1+x_2)+i sin(x_1+x_2)
+\]</span></p>
+<p>将单位圆的角度均分为 n
+份,并选择对应的从原点向外辐射的半径做向量，其中幅角为正且最小的向量称为
+n 次单位向量，记为 <span class="math inline">\(\omega_n^1\)</span>。
+<span class="math inline">\(w_n^k = e^{\frac{2 \pi k}{n}
+i}\)</span>.</p>
+<p>因此，单位向量有以下运算性质:</p>
+<ol type="1">
+<li><span class="math inline">\(\omega_i = \omega^i\)</span>, where
+<span class="math inline">\(\omega\)</span> is a generator.</li>
+<li><span class="math inline">\(\omega_n^k = \omega_n^{k-1}*w^1_n \quad
+(2 \le k \le n)\)</span></li>
+<li><span class="math inline">\(\omega_{2n}^{2k} = w^k_n\)</span>，
+从几何理解分 2n 份和分 n 份，然后比例一样，辐角一样。</li>
+<li><span class="math inline">\(w^{k+\frac{n}{2}} = -w^k_n\)</span>,
+多转了半圈，方向相反。</li>
+</ol>
+<p><strong>注意: root of unity 的阶选择 2^m，2
+的次幂。这与子群的阶和群的阶的关系有关</strong></p>
+<h2 id="discrete-fourier-transform">Discrete Fourier Transform</h2>
+<p>FFT 利用单位根的性质，将多项式分成奇偶，采用分治方式操作。</p>
+<p>DFT: 考虑 n 项（deg=n-1）多项式 A(x), 其系数向量为 <span
+class="math inline">\((a_0, a_1, \cdots, a_{n-1})\)</span>, 将 n
+次单位根的 0~n-1 次幂分别代入 A(x) 得到其点值向量 <span
+class="math inline">\((A(w_n^0), A(w_n^1), \cdots,
+A(w_n^{n-1}))\)</span>. 注意: 这里假设 n 是 2 的幂次。</p>
+<p>对于 <span class="math inline">\(A(x) = a_0 + a_1x^1 + \cdots +
+a_{n-1}x^{n-1}\)</span>，将其奇偶分开，得到:</p>
+<p><span class="math inline">\(A(x) = a_0 + a_2x^2 + a_4x^4 + \cdots +
+a_{n-2}x^{n-2} + x(a_1 + a_3x^2 + a_5x^4 + \cdots +
+a_{n-1}x^{n-2})\)</span></p>
+<p><span class="math inline">\(AL(x) = a_0 + a_2x^2 + a_4x^4 + \cdots +
+a_{n-2}x^{\frac{n-2}{2}}\)</span></p>
+<p><span class="math inline">\(AR(x) = a_1 + a_3x^2 + a_5x^2 + \cdots +
+a_{n-1}x^{\frac{n-2}{2}})\)</span></p>
+<p><span class="math inline">\(A(x) = AL(x^2) + xAR(x^2)\)</span></p>
+<p>然后将单位根分别带入 AL(x^2) 和 AR(x^2)</p>
+<p>设 <span class="math inline">\(0 \le k \le \frac{n}{2}-1 \quad k \in
+Z\)</span> , 根据前面提到的单位根的特性，<span
+class="math inline">\(A(w_n^k) = AL(w_n^{2k}) + w_n^{k} AR(x^{2k}) =
+AL(w_{n/2}^{k}) + w_n^{k} AR({n/2}^{k})\)</span></p>
+<p>当 $ k+ n-1$,</p>
+<p><span class="math display">\[
+A(w_n^{k+\frac{n}{2}})
+= AL(w_{n}^{2k+n}) + w_n^{k+\frac{n}{2}} AR(w_{n}^{2k+n})
+= AL(w_{n/2}^{k}) - w_n^{k} AR(w_{n/2}^{k})
+\]</span></p>
+<p>注意 k 与 k+n/2 取遍了[0，n-1]中的 n 个整数，保证了可以由这 n
+个点值反推解出系数.</p>
+<p>因此，只需要知道<span class="math inline">\(AL(x)\)</span> 和 <span
+class="math inline">\(AR(x)\)</span> 分别在 <span
+class="math inline">\(w_{n/2}^0,w_{n/2}^1,\cdots,w_{n/2}^{n/2-1}\)</span>
+的取值，就可以在 O(n) 时间得出 A(x) 的取值，而二者是
+A(x)的一般规模，可转化为子问题递归求解，时间复杂度: T(n) = 2T(n/2)+O(n)
+= O(nlogn).</p>
+<h2 id="inverse-discrete-fourier-transform">Inverse Discrete Fourier
+Transform</h2>
+<p>使用快速傅里叶变换将点值表示的多项式转化为系数表示，这个过程叫做离散傅里叶反变换（Inverse
+Discrete Fourier Transform）。</p>
+<h2 id="references">References</h2>
+<p>推荐 Introduction to Algorithms，讲解思路很好，从 evaluation on
+point-value polynomial 到 FFT,通过 Vandermonde matrix 求逆来讲解 inverse
+FFT.</p>
+<ol type="1">
+<li>TODO -[ ] <a
+target="_blank" rel="noopener" href="http://mitpress.mit.edu/9780262046305/introduction-to-algorithms/">Introduction
+to Algorithms CHAPTER 32: POLYNOMIALS AND THE FFT</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2">傅里叶变换
+- 维基百科，自由的百科全书</a></li>
+<li>TODO -[ ] <a
+target="_blank" rel="noopener" href="https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/">An
+Interactive Guide To The Fourier Transform – BetterExplained</a></li>
+<li>TODO -[ ] <a
+target="_blank" rel="noopener" href="https://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/">Understanding
+the FFT Algorithm | Pythonic Perambulations</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.thefouriertransform.com/">Fourier
+Transform</a></li>
+<li>^4 <a
+target="_blank" rel="noopener" href="https://www.robots.ox.ac.uk/~sjrob/Teaching/SP/l7.pdf">DFT.pdf</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://towardsdatascience.com/understanding-discrete-convolution-as-polynomial-multiplication-5f94a13acd55">Understanding
+Discrete Convolution as Polynomial Multiplication | by Shailesh Kumar |
+Towards Data Science</a></li>
+<li>[^7] <a
+target="_blank" rel="noopener" href="https://github.com/zlotus/notes-linear-algebra/blob/master/chapter27.ipynb">gilbert
+strang linear-algebra/chapter27.ipynb GitHub</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/command-block/fft-xue-xi-bi-ji">傅里叶变换(FFT)学习笔记
+- command_block 的博客 - 洛谷博客</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31584464">一小时学会快速傅里叶变换（Fast
+Fourier Transform） - 知乎</a></li>
+</ol>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2023/03/26/crypto/zk/7.circom_grammar/">Circom 2 语法与注意点</a><a class="next" href="/blog/2023/03/24/crypto/math/6.ecc_finitefield/">5.有限域上的椭圆曲线</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Python format 格式化输出 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python format 格式化输出</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python format 格式化输出</h1><div class="post-meta">2020-07-21<span> | </span><span class="category"><a href="/blog/categories/python/">python</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 841</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 4</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#member-and-element-access"><span class="toc-number">1.</span> <span class="toc-text">Member and Element Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#numerical-representation"><span class="toc-number">2.</span> <span class="toc-text">Numerical Representation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#field-width-and-alignment"><span class="toc-number">3.</span> <span class="toc-text">Field Width and Alignment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E6%95%B0-typed"><span class="toc-number">4.</span> <span class="toc-text">整数 type&#x3D;d</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-type-%E4%B8%BA%E7%A9%BA"><span class="toc-number">4.1.</span> <span class="toc-text">字符串 type 为空</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E6%95%B0-typef"><span class="toc-number">4.2.</span> <span class="toc-text">小数 type&#x3D;f</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conversions"><span class="toc-number">5.</span> <span class="toc-text">Conversions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">参考文章</span></a></li></ol></div></div><div class="post-content"><p>格式化字符串的函数 <code>str.format()</code> 与 <code>f-string</code>
+的格式几乎一致，因此我把它放在一起学习与记录。</p>
+<h2 id="member-and-element-access">Member and Element Access</h2>
+<p>format 函数可以接受不限个参数，位置可以不按顺序。</p>
+<ol type="1">
+<li><p>不设置指定位置序号， 则按默认顺序访问</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">14</span>]: <span class="string">&quot;&#123;&#125;, &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;world&quot;</span>)</span><br><span class="line">Out[<span class="number">14</span>]: <span class="string">&#x27;hello, world&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>指定位置序号，则按照指定的顺序访问</p>
+<p>对 format()
+括号中的参数编号，然后前面字符串需要哪个位置的，便填写对应序号。</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">16</span>]: <span class="string">&quot;&#123;1&#125;, &#123;0&#125;, &#123;1&#125;&quot;</span>.<span class="built_in">format</span>(<span class="string">&quot;value_0&quot;</span>, <span class="string">&quot;value_1&quot;</span>)</span><br><span class="line">Out[<span class="number">16</span>]: <span class="string">&#x27;value_1, value_0, value_1&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>通过名字访问</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">17</span>]: name = <span class="string">&quot;Violetu&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">18</span>]: sex=<span class="string">&quot;male&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">19</span>]: <span class="string">&quot;&#123;sex&#125;, &#123;name&#125;&quot;</span>.<span class="built_in">format</span>(name=name, sex=sex)</span><br><span class="line">Out[<span class="number">19</span>]: <span class="string">&#x27;male, Violetu&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>通过索引访问</p>
+<p>这里的 <code>0[0]</code> 是指第零个元素（person）的索引 0 位置。</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">20</span>]: person = [<span class="string">&quot;Violetu&quot;</span>, <span class="string">&quot;male&quot;</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">21</span>]: <span class="string">&quot;name: &#123;0[0]&#125;, sex: &#123;0[1]&#125;&quot;</span>.<span class="built_in">format</span>(person)</span><br><span class="line">Out[<span class="number">21</span>]: <span class="string">&#x27;name: Violetu, sex: male&#x27;</span></span><br></pre></td></tr></table></figure></p>
+<p>注： 这里的 0 不可以省略。</p></li>
+<li><p>通过属性访问</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">28</span>]: <span class="keyword">class</span> <span class="title class_">test</span>:</span><br><span class="line">    ...:     <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, value</span>):</span><br><span class="line">    ...:         self.value = value</span><br><span class="line">    ...: my_value = test(<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: <span class="string">&quot;value is &#123;0.value&#125;&quot;</span>.<span class="built_in">format</span>(my_value)</span><br><span class="line">Out[<span class="number">29</span>]: <span class="string">&#x27;value is 6&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>通过键值访问</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">42</span>]: <span class="string">&quot;name: &#123;name&#125;, sex: &#123;sex&#125;&quot;</span>.<span class="built_in">format</span>(**person_dict)</span><br><span class="line">Out[<span class="number">42</span>]: <span class="string">&#x27;name: Violetu, sex: male&#x27;</span></span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="numerical-representation">Numerical Representation</h2>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>'&#123;:x&#125;'.format(100)</code></th>
+<th style="text-align: left;">Hexadecimal representationOutput:
+<code>64</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>'&#123;:X&#125;'.format(3487)</code></td>
+<td style="text-align: left;">Hexadecimal representation (uppercase
+letters) <br>Output: <code>D9F</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'&#123;:#x&#125;'.format(100)</code></td>
+<td style="text-align: left;">Hexadecimal representation (including the
+<code>0x</code>) <br>Output: <code>0x64</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>'&#123;:b&#125;'.format(100)</code></td>
+<td style="text-align: left;">Binary representation <br>Output:
+<code>1100100</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'&#123;:c&#125;'.format(100)</code></td>
+<td style="text-align: left;">Character representation <br>Output:
+<code>d</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>'&#123;:d&#125;'.format(100)</code></td>
+<td style="text-align: left;">Decimal representation (default)
+<br>Output: <code>100</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'&#123;:,&#125;'.format(1000000)</code></td>
+<td style="text-align: left;">With thousands separator <br>Output:
+<code>1,000,000</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>'&#123;:o&#125;'.format(100)</code></td>
+<td style="text-align: left;">Octal representation <br>Output:
+<code>144</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'&#123;:n&#125;'.format(100)</code></td>
+<td style="text-align: left;">Like <code>d</code>, but uses locale
+information for separators <br>Output: <code>100</code></td>
+</tr>
+<tr class="odd">
+<td
+style="text-align: left;"><code>'&#123;:e&#125;'.format(0.0000000001)</code></td>
+<td style="text-align: left;">Exponent notation <br>Output:
+<code>1.000000e-10</code></td>
+</tr>
+<tr class="even">
+<td
+style="text-align: left;"><code>'&#123;:E&#125;'.format(0.0000000001)</code></td>
+<td style="text-align: left;">Exponent notation (capital 'E')
+<br>Output: <code>1.000000E-10</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>'&#123;:f&#125;'.format(3/14.0)</code></td>
+<td style="text-align: left;">Fixed point <br>Output:
+<code>0.214286</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'&#123;:g&#125;'.format(3/14.0)</code></td>
+<td style="text-align: left;">General format <br>Output:
+<code>0.214286</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>'&#123;:%&#125;'.format(0.66)</code></td>
+<td style="text-align: left;">Percentage <br>Output:
+<code>66.000000%</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'&#123;:.3&#125;'.format(0.214286)</code></td>
+<td style="text-align: left;">Precision <br>Output:
+<code>0.214</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="field-width-and-alignment">Field Width and Alignment</h2>
+<p><code>&#123;number&#125;:&#123;padding&#125;&#123;align&#125;&#123;+&#125;&#123;width&#125;&#123;type&#125;</code></p>
+<h2 id="整数-typed">整数 type=d</h2>
+<ol type="1">
+<li>padding character:
+冒号后面，对齐符号前边写，只能是一个字符，不指定则默认是用空格填充。</li>
+<li>align symbol： <code>^</code>, <code>&lt;</code>, <code>&gt;</code>
+分别是居中、左对齐、右对齐， 默认是右对齐。</li>
+<li><code>+</code>: 表示在正数前显示 +，负数前显示 -； 
+（空格）表示在正数前加空格</li>
+<li>width：宽度，只有宽度大于数字宽度事，对齐才有意义。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">66</span>]: <span class="string">f&quot;<span class="subst">&#123;<span class="number">3</span>:5d&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">66</span>]: <span class="string">&#x27;    3&#x27;</span></span><br><span class="line">In [<span class="number">65</span>]: <span class="string">f&quot;<span class="subst">&#123;<span class="number">3</span>:&lt;5d&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">65</span>]: <span class="string">&#x27;3    &#x27;</span></span><br><span class="line">In [<span class="number">63</span>]: <span class="string">f&quot;<span class="subst">&#123;<span class="number">3</span>:x&lt;5d&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">63</span>]: <span class="string">&#x27;3xxxx&#x27;</span></span><br><span class="line"><span class="comment"># 这个为数字 3, 左对齐， 宽度为 5， 填充字符 `x`。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">In [<span class="number">76</span>]: <span class="string">f&quot;<span class="subst">&#123;-<span class="number">3</span>:+8d&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">76</span>]: <span class="string">&#x27;      -3&#x27;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">82</span>]: <span class="string">f&quot;<span class="subst">&#123;<span class="number">3</span>:<span class="number">0</span>&lt;+8d&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">82</span>]: <span class="string">&#x27;+3000000&#x27;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">78</span>]: <span class="string">f&quot;<span class="subst">&#123;-<span class="number">3</span>:-8d&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">78</span>]: <span class="string">&#x27;      -3&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="字符串-type-为空">字符串 type 为空</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">83</span>]: <span class="string">&#x27;&#123;:*^15&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="string">&#x27;text&#x27;</span>)</span><br><span class="line">Out[<span class="number">83</span>]: <span class="string">&#x27;*****text******&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="小数-typef">小数 type=f</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">86</span>]: <span class="string">f&quot;<span class="subst">&#123;<span class="number">3.14159</span>:x&gt;+<span class="number">10.2</span>f&#125;</span>&quot;</span></span><br><span class="line">Out[<span class="number">86</span>]: <span class="string">&#x27;xxxxx+3.14&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>解释：带符号，宽度为 10， 右对齐，填充 <code>x</code>，
+保留两位小数。</p>
+<h2 id="conversions">Conversions</h2>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>'&#123;!r&#125;'.format('string')</code></th>
+<th>Calling <code>repr</code> on argumentsOutput:
+<code>'string'</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>'&#123;!s&#125;'.format(1.53438987)</code></td>
+<td>Calling <code>str</code> on arguments</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考文章">参考文章</h2>
+<blockquote>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://kapeli.com/cheat_sheets/Python_Format_Strings.docset/Contents/Resources/Documents/index">Python
+Format Strings</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-format.html">Python
+format 格式化函数</a></li>
+</ol>
+</blockquote>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2020/07/21/programming/python/problems/self_print/">自己实现 python print 函数</a><a class="next" href="/blog/2020/07/20/programming/python/1.basic/5.para_gl_local/">局部变量与全局变量</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

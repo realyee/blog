@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>vim 入门简单使用 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">vim 入门简单使用</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">vim 入门简单使用</h1><div class="post-meta">2020-02-13<span> | </span><span class="category"><a href="/blog/categories/linux/">linux</a><a href="/blog/categories/linux/tools/">tools</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.2k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 4</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">三种模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#insert-%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">insert 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#normal-%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">Normal 模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E5%86%85%E5%AE%B9"><span class="toc-number">2.</span> <span class="toc-text">删除所有内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8"><span class="toc-number">2.1.</span> <span class="toc-text">移动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim-%E5%BF%AB%E9%80%9F%E7%A7%BB%E5%8A%A8%E5%85%89%E6%A0%87%E8%87%B3%E8%A1%8C%E9%A6%96%E5%92%8C%E8%A1%8C%E5%B0%BE"><span class="toc-number">3.</span> <span class="toc-text">Vim 快速移动光标至行首和行尾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim-%E8%B7%B3%E8%BD%AC%E5%88%B0%E6%8C%87%E5%AE%9A%E8%A1%8C"><span class="toc-number">4.</span> <span class="toc-text">vim 跳转到指定行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2"><span class="toc-number">4.1.</span> <span class="toc-text">搜索</span></a></li></ol></li></ol></div></div><div class="post-content"><h2 id="三种模式">三种模式</h2>
+<ul>
+<li><strong>Insert mode</strong> is where you insert i.e. write the
+text.</li>
+<li><strong>Normal mode</strong> is where you can run commands. This is
+the default mode in which  Vim starts up.</li>
+<li><strong>Visual mode</strong> is where you visually select a bunch of
+text, so that you can run a command/operation only on that part of the
+text.</li>
+</ul>
+<h3 id="insert-模式">insert 模式</h3>
+<p>normal mode → insert mode：</p>
+<ol type="1">
+<li>按下 <code>i</code> 表示 insert， 插入东西到光标前</li>
+<li>按下 <code>I</code> 表示 insert before line，
+插入东西到当前行首</li>
+<li>按下 <code>a</code>，表示 append， 追加东西到光标后</li>
+<li>按下 <code>A</code>，表示 append， 追加东西到当前行尾</li>
+<li>按下 <code>o</code>， 表示 open a line below， 在下面新建一行。</li>
+<li>按下 <code>O</code>， 表示 open a line above， 在
+上面新建一行。</li>
+</ol>
+<p>Esc ：Insert mode → Normal mode</p>
+<p><code>:wq</code> 写入并退出( write and quit )</p>
+<h3 id="normal-模式">Normal 模式</h3>
+<p>输入<code>:</code> 后，进入命令模式</p>
+<p><code>:vs</code> (vertical split)</p>
+<p><code>:sp</code> (split)</p>
+<p><code>:% s/foo/bar/g</code> 全局替换</p>
+<p><code>:set nu!</code> 设置行号</p>
+<p>命令模式下，不小心按错命令，可以按 Esc 消除命令</p>
+<p>复制一行：<code>yy</code></p>
+<p>复制 n 行：<code>nyy</code></p>
+<p>也可进入 visual 模式，选择多行，然后 <code>yy</code></p>
+<ol type="1">
+<li><p>选定文本块。使用 v 进入可视模式，移动光标键选定内容。</p></li>
+<li><p>复制的命令是 <code>y</code>，即 yank（提起）
+，常用的命令如下：</p>
+<p><code>y</code>: 在使用 v
+模式选定了某一块的时候，复制选定块到缓冲区用；</p>
+<p><code>yy</code>: 复制整行（<code>nyy</code> 或者 <code>yny</code>
+，复制 n 行，n 为数字）；</p>
+<p><code>y^</code>: 复制当前到行头的内容；</p>
+<p><code>y$</code>: 复制当前到行尾的内容；</p>
+<p><code>yw</code>: 复制一个 word （<code>nyw</code> 或者
+<code>ynw</code>，复制 n 个 word，n 为数字）；</p>
+<p><code>yG</code>: 复制至档尾（<code>nyG</code> 或者
+<code>ynG</code>，复制到第 n 行，例如 1yG 或者
+y1G，复制到档尾）</p></li>
+<li><p>删除的命令是 <code>d</code>，即 delete，<code>d</code> 与
+<code>y</code> 命令基本类似，所以两个命令用法一样，包括含有数字的用法. d
+删除选定块到缓冲区；</p>
+<p><code>dd</code>: 剪切整行</p>
+<p><code>ndd</code>: 向后剪切 n 行（包含所在行）</p>
+<p><code>d^</code>: 剪切至行首</p>
+<p><code>d$</code> 或 <code>G</code>: 剪切至行尾</p>
+<p><code>dw</code>: 剪切一个 word</p>
+<p><code>dG</code>: 剪切至文档尾</p>
+<p>删除的命令 <code>c</code> 跟 <code>d</code>
+类似，但是删除完成后会进入插入模式</p></li>
+<li><p>粘贴的命令式 <code>p</code>，即 paste（放下）</p>
+<p>小写 <code>p</code> 向后粘贴,
+代表贴至游标后（下），因为游标是在具体字符的位置上，所以实际是在该字符的后面.</p>
+<p>大写 <code>P</code> 向前粘贴,代表贴至游标前（上）</p>
+<p>整行的复制粘贴在游标的上一行，非整行的复制则是粘贴在游标的前</p></li>
+</ol>
+<p>注： 在正则表达式中，<code>^</code>
+表示匹配字符串的开始位置，<code>$</code> 表示匹配字符串的结束位置。
+命令前面加数字表示重复的次数，加字母表示使用的缓冲区名称。使用英文句号"."可以重复上一个命令。
+在复制粘贴时，另一组常用的命令是
+<code>u</code>（撤销操作），<code>U</code>（撤销某一行最近所有修改），<code>Ctrl+R</code>（重做），这些功能主要是
+vim 中的，vi 中略有差别</p>
+<h2 id="删除所有内容">删除所有内容</h2>
+<p>命令为：<code>ggdG</code></p>
+<p>讲解：<code>gg</code> 为跳转到文件首行；<code>dG</code>
+为删除光标所在行以及其下所有行的内容，其中 <code>d</code>
+为删除，<code>G</code> 为跳转到文件末尾行；</p>
+<p>删除到某一行: <code>d63G</code> delete from the current line until
+line 63.</p>
+<h3 id="移动">移动</h3>
+<p><code>home</code> 键 行首、<code>end</code> 键 行尾、</p>
+<p><code>h</code> 向左、<code>j</code> 向下、<code>k</code>
+是向上、<code>l</code> 是向右</p>
+<p>向下跳 10 行：<code>10j</code></p>
+<p>向上跳 10 行：<code>10k</code></p>
+<p>向上翻页：<code>pgup</code> 或者 <code>ctrl + b(backwad)</code></p>
+<p>向下翻页: <code>pgdn</code> 或者 <code>ctrl +f （forward）</code></p>
+<p>按单词向后移动 ： w (word)</p>
+<p>按单词往回移动：b （back）</p>
+<h2 id="vim-快速移动光标至行首和行尾">Vim 快速移动光标至行首和行尾</h2>
+<ol type="1">
+<li><p>需要按行快速移动光标时，可以使用键盘上的编辑键
+<code>home</code>，快速将光标移动至当前行的行首。除此之外，也可以在命令模式中使用快捷键
+<code>^</code>（即 <code>Shift+6</code>）或 <code>0</code>（数字
+0）。</p></li>
+<li><p>如果要快速移动光标至当前行的行尾，可以使用编辑键
+End。也可以在命令模式中使用快捷键 <code>$（Shift+4）</code>。与快捷键
+<code>^</code> 和 <code>0</code> 不同，快捷键 <code>$</code>
+前可以加上数字表示移动的行数。例如使用"1$"表示当前行的行尾，<code>2$</code>
+表示当前行的下一行的行尾。</p></li>
+</ol>
+<h2 id="vim-跳转到指定行">vim 跳转到指定行</h2>
+<ol type="1">
+<li><p><code>ngg 或 nG</code>，其中 n 是想跳转到的行标，如 10gg，或
+10G，但这种方式输入时不显示所输内容，个人感觉不够直观。</p></li>
+<li><p><code>:n</code>，在一般模式下按冒号进入命令模式，直接输行标，然后回车。这种方法直接显示所输内容。</p></li>
+<li><p>一般模式下直接输入<code>H</code>移动到当前屏幕第一行（home）；<code>M</code>移动到当前屏幕中间一行（middle）;
+<code>L</code>移动到当前屏幕最后一行（last）。</p></li>
+</ol>
+<h3 id="搜索">搜索</h3>
+<p>输入
+<code>/</code>，然后输入要搜索的东西，<strong>并回车</strong>即可。</p>
+<p>查看上一个匹配位置：<code>shift + n</code></p>
+<p>查看下一个匹配位置：<code>n</code></p>
+<p><a target="_blank" rel="noopener" href="https://harttle.land/2016/08/08/vim-search-in-file.html">在
+Vim 中优雅地查找和替换 Vim-Practice</a></p>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/vim/" rel="tag">vim</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2020/03/05/websec/sql_injection/pseudo_static_injection/">伪静态静态注入</a><a class="next" href="/blog/2020/01/09/os/os/">操作系统知识点小结</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Python 文件操作基础 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python 文件操作基础</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python 文件操作基础</h1><div class="post-meta">2020-03-22<span> | </span><span class="category"><a href="/blog/categories/python/">python</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 2.7k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 10</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">文件的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 文件的概念和作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">文件的存储方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%92%8C%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.1.</span> <span class="toc-text">文本文件和二进制文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">02. 文件的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6%E7%9A%84%E5%A5%97%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 操作文件的套路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 操作文件的函数&#x2F;方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-%E6%96%B9%E6%B3%95-%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 read 方法 —— 读取文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%8C%87%E9%92%88%E7%9F%A5%E9%81%93"><span class="toc-number">2.3.1.</span> <span class="toc-text">文件指针（知道）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 打开文件的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 按行读取文件内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#readline-%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.1.</span> <span class="toc-text">readline 方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E6%A1%88%E4%BE%8B-%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 文件读写案例 —— 复制文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6"><span class="toc-number">2.6.1.</span> <span class="toc-text">小文件复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%A7%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6"><span class="toc-number">2.6.2.</span> <span class="toc-text">大文件复制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%9A%84%E5%B8%B8%E7%94%A8%E7%AE%A1%E7%90%86%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">03. 文件&#x2F;目录的常用管理操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">3.1.</span> <span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="toc-number">3.2.</span> <span class="toc-text">目录操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E7%9A%84%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F%E7%A7%91%E6%99%AE"><span class="toc-number">4.</span> <span class="toc-text">04. 文本文件的编码格式（科普）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ascii-%E7%BC%96%E7%A0%81%E5%92%8C-unicode-%E7%BC%96%E7%A0%81"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 ASCII 编码和 UNICODE 编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ascii-%E7%BC%96%E7%A0%81"><span class="toc-number">4.1.1.</span> <span class="toc-text">ASCII 编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#utf-8-%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F"><span class="toc-number">4.1.2.</span> <span class="toc-text">UTF-8 编码格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ptyhon-2.x-%E4%B8%AD%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%B8%AD%E6%96%87"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 Ptyhon 2.x 中如何使用中文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#unicode-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">4.2.1.</span> <span class="toc-text">unicode 字符串</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">5.1.</span> <span class="toc-text">读取的方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%BC%8F%E7%B1%BB%E4%B8%8E%E6%97%A7%E5%BC%8F%E7%BB%8F%E5%85%B8%E7%B1%BB"><span class="toc-number">6.</span> <span class="toc-text">新式类与旧式（经典）类</span></a></li></ol></div></div><div class="post-content"><h2 id="文件的概念">文件的概念</h2>
+<h3 id="文件的概念和作用">1.1 文件的概念和作用</h3>
+<ul>
+<li>计算机的 <strong>文件</strong>，就是存储在某种
+<strong>长期储存设备</strong> 上的一段 <strong>数据</strong></li>
+<li>长期存储设备包括：硬盘、U 盘、移动硬盘、光盘...</li>
+</ul>
+<p>文件的作用: 将数据长期保存下来，在需要的时候使用</p>
+<h3 id="文件的存储方式">文件的存储方式</h3>
+<ul>
+<li>在计算机中，文件是以 <strong>二进制</strong>
+的方式保存在磁盘上的</li>
+</ul>
+<h4 id="文本文件和二进制文件">文本文件和二进制文件</h4>
+<ul>
+<li>文本文件
+<ul>
+<li>可以使用 <strong>文本编辑软件</strong> 查看</li>
+<li>本质上还是二进制文件</li>
+<li>例如：python 的源程序</li>
+</ul></li>
+<li>二进制文件
+<ul>
+<li>保存的内容 不是给人直接阅读的，而是
+<strong>提供给其他软件使用的</strong></li>
+<li>例如：图片文件、音频文件、视频文件等等</li>
+<li>二进制文件不能使用 <strong>文本编辑软件</strong> 查看</li>
+</ul></li>
+</ul>
+<h2 id="文件的基本操作">02. 文件的基本操作</h2>
+<h3 id="操作文件的套路">2.1 操作文件的套路</h3>
+<p>在 <strong>计算机</strong>
+中要操作文件的套路非常固定，一共包含<strong>三个步骤</strong>：</p>
+<ol type="1">
+<li>打开文件</li>
+<li>读、写文件
+<ul>
+<li><strong>读</strong> 将文件内容读入内存</li>
+<li><strong>写</strong> 将内存内容写入文件</li>
+</ul></li>
+<li>关闭文件</li>
+</ol>
+<h3 id="操作文件的函数方法">2.2 操作文件的函数/方法</h3>
+<ul>
+<li>在 <code>Python</code> 中要操作文件需要记住 1 个函数和 3 个方法</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">序号</th>
+<th style="text-align: left;">函数/方法</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01</td>
+<td style="text-align: left;">open</td>
+<td style="text-align: left;">打开文件，并且返回文件操作对象</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">02</td>
+<td style="text-align: left;">read</td>
+<td style="text-align: left;">将文件内容读取到内存</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">03</td>
+<td style="text-align: left;">write</td>
+<td style="text-align: left;">将指定内容写入文件</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04</td>
+<td style="text-align: left;">close</td>
+<td style="text-align: left;">关闭文件</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>open</code> 函数负责打开文件，并且返回文件对象</li>
+<li><code>read</code>/<code>write</code>/<code>close</code>
+三个方法都需要通过 <strong>文件对象</strong> 来调用</li>
+</ul>
+<h3 id="read-方法-读取文件">2.3 read 方法 —— 读取文件</h3>
+<p>Python file method <strong>read()</strong> reads at most
+<em>size</em> bytes from the file. If the read hits EOF before obtaining
+size bytes, then it reads only available bytes.</p>
+<p>Following is the syntax for <strong>read()</strong> method −</p>
+<blockquote>
+<p>fileObject.read( size );</p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>size</strong> − This is the number of bytes to be read from
+the file.</li>
+</ul>
+<p><strong>Return Value</strong></p>
+<p>This method returns the bytes read in string.</p>
+<p>即：read 有一个可选参数：读取的字符个数，如果不写，默认读取到 EOF
+截止。返回一个字符串（包含读取的内容）</p>
+<ul>
+<li><p><strong>open
+函数的第一个参数是要打开的文件名（文件名区分大小写）</strong></p>
+<p>对于读取模式 r 来说，</p>
+<ul>
+<li>如果文件 <strong>存在</strong>，返回
+<strong>文件操作对象</strong></li>
+<li>如果文件 <strong>不存在</strong>，会 <strong>抛出异常</strong></li>
+</ul>
+<p>而对于写模式 w 与追加模式 a
+来说，如果文件不存在则会新建文件，并不会抛出异常。</p></li>
+<li><p><code>read</code> 方法可以一次性 <strong>读入</strong> 并
+<strong>返回</strong> 文件的 <strong>所有内容</strong></p></li>
+<li><p>close 方法负责关闭文件</p>
+<ul>
+<li>如果
+<strong>忘记关闭文件</strong>，<strong>会造成系统资源消耗，而且会影响到后续对文件的访问</strong></li>
+</ul></li>
+<li><p><strong>注意</strong>：<code>read</code> 方法执行后，会把
+<strong>文件指针</strong> 移动到 <strong>文件的末尾</strong></p></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 打开 - 文件名需要注意大小写</span></span><br><span class="line">file = <span class="built_in">open</span>(<span class="string">&quot;README&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 读取</span></span><br><span class="line">text = file.read()</span><br><span class="line"><span class="built_in">print</span>(text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 关闭</span></span><br><span class="line">file.close()</span><br></pre></td></tr></table></figure>
+<p><strong>提示</strong></p>
+<ul>
+<li>在开发中，通常会先编写 <strong>打开</strong> 和
+<strong>关闭</strong> 的代码，再编写中间针对文件的
+<strong>读/写</strong> 操作！</li>
+</ul>
+<h4 id="文件指针知道">文件指针（知道）</h4>
+<ul>
+<li><strong>文件指针</strong> 标记
+<strong>从哪个位置开始读取数据</strong></li>
+<li><strong>第一次打开</strong> 文件时，通常
+<strong>文件指针会指向文件的开始位置</strong>(如果以追加方式打开，文件指针在末尾)</li>
+<li>当执行了 read 方法后，文件指针会移动到读取内容的末尾
+<ul>
+<li>默认情况下会移动到 <strong>文件末尾</strong></li>
+</ul></li>
+</ul>
+<p><strong>思考</strong></p>
+<ul>
+<li>如果执行了一次 <code>read</code> 方法，读取了所有内容，那么再次调用
+<code>read</code> 方法，还能够获得到内容吗？</li>
+</ul>
+<p><strong>答案</strong></p>
+<ul>
+<li>不能</li>
+<li>第一次读取之后，文件指针移动到了文件末尾，再次调用不会读取到任何的内容</li>
+</ul>
+<h3 id="打开文件的方式">2.4 打开文件的方式</h3>
+<ul>
+<li><code>open</code> 函数默认以 <strong>只读方式</strong>
+打开文件，并且返回文件对象</li>
+</ul>
+<p>语法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;文件名&quot;</span>, <span class="string">&quot;访问方式&quot;</span>)</span><br></pre></td></tr></table></figure>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 92%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">访问方式</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">r</td>
+<td
+style="text-align: left;">以<strong>只读</strong>方式打开文件。文件的指针将会放在文件的开头，这是<strong>默认模式</strong>。如果文件不存在，抛出异常</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">w</td>
+<td
+style="text-align: left;">以<strong>只写</strong>方式打开文件。如果文件存在会被覆盖。如果文件不存在，创建新文件</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">a</td>
+<td
+style="text-align: left;">以<strong>追加</strong>方式打开文件。如果该文件已存在，文件指针将会放在文件的结尾。如果文件不存在，创建新文件进行写入</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">r+</td>
+<td
+style="text-align: left;">以<strong>读写</strong>方式打开文件。文件的指针将会放在文件的开头。如果文件不存在，抛出异常</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">w+</td>
+<td
+style="text-align: left;">以<strong>读写</strong>方式打开文件。如果文件存在会被覆盖。如果文件不存在，创建新文件</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">a+</td>
+<td
+style="text-align: left;">以<strong>读写</strong>方式打开文件。如果该文件已存在，文件指针将会放在文件的结尾。如果文件不存在，创建新文件进行写入</td>
+</tr>
+</tbody>
+</table>
+<p><strong>提示</strong></p>
+<ul>
+<li>频繁的移动文件指针，<strong>会影响文件的读写效率</strong>，开发中更多的时候会以
+<strong>只读</strong>、<strong>只写</strong> 的方式来操作文件</li>
+</ul>
+<p><strong>写入文件示例</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开文件</span></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;README&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">&quot;hello python！\n&quot;</span>)</span><br><span class="line">f.write(<span class="string">&quot;今天天气真好&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭文件</span></span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+<h3 id="按行读取文件内容">2.5 按行读取文件内容</h3>
+<ul>
+<li><code>read</code> 方法默认会把文件的 <strong>所有内容</strong>
+<strong>一次性读取到内存</strong></li>
+<li>如果文件太大，对内存的占用会非常严重</li>
+</ul>
+<h4 id="readline-方法"><code>readline</code> 方法</h4>
+<ul>
+<li><code>readline</code> 方法可以一次读取一行内容</li>
+<li>方法执行后，会把 <strong>文件指针</strong>
+移动到下一行，准备再次读取</li>
+</ul>
+<p><strong>读取大文件的正确姿势</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开文件</span></span><br><span class="line">file = <span class="built_in">open</span>(<span class="string">&quot;README&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment"># 读取一行内容</span></span><br><span class="line">    text = file.readline()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断是否读到内容</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 每读取一行的末尾已经有了一个 `\n`</span></span><br><span class="line">    <span class="built_in">print</span>(text, end=<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭文件</span></span><br><span class="line">file.close()</span><br></pre></td></tr></table></figure>
+<h3 id="文件读写案例-复制文件">2.6 文件读写案例 —— 复制文件</h3>
+<p><strong>目标</strong></p>
+<p>用代码的方式，来实现文件复制过程</p>
+<h4 id="小文件复制">小文件复制</h4>
+<p>对于小文件读取来说，使用 read 即可</p>
+<ul>
+<li>打开一个已有文件，读取完整内容，并写入到另外一个文件</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 打开文件</span></span><br><span class="line">file_read = <span class="built_in">open</span>(<span class="string">&quot;README&quot;</span>)</span><br><span class="line">file_write = <span class="built_in">open</span>(<span class="string">&quot;README[复件]&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 读取并写入文件</span></span><br><span class="line">text = file_read.read()</span><br><span class="line">file_write.write(text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 关闭文件</span></span><br><span class="line">file_read.close()</span><br><span class="line">file_write.close()</span><br></pre></td></tr></table></figure>
+<h4 id="大文件复制">大文件复制</h4>
+<p>大文件读取，需要使用 readline，read 一次读入全部，内存占用过大</p>
+<ul>
+<li>打开一个已有文件，逐行读取内容，并顺序写入到另外一个文件</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 打开文件</span></span><br><span class="line">file_read = <span class="built_in">open</span>(<span class="string">&quot;README&quot;</span>)</span><br><span class="line">file_write = <span class="built_in">open</span>(<span class="string">&quot;README[复件]&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 读取并写入文件</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment"># 每次读取一行</span></span><br><span class="line">    text = file_read.readline()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断是否读取到内容</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    file_write.write(text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 关闭文件</span></span><br><span class="line">file_read.close()</span><br><span class="line">file_write.close()</span><br></pre></td></tr></table></figure>
+<h2 id="文件目录的常用管理操作">03. 文件/目录的常用管理操作</h2>
+<ul>
+<li>在终端/文件浏览器中可以执行常规的文件/目录管理操作，例如：
+<ul>
+<li>创建、重命名、删除、改变路径、查看目录内容、……</li>
+</ul></li>
+<li>在 <code>Python</code> 中，如果希望通过程序实现上述功能，需要导入
+<code>os</code> 模块</li>
+</ul>
+<h3 id="文件操作">文件操作</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">序号</th>
+<th style="text-align: left;">方法名</th>
+<th style="text-align: left;">说明</th>
+<th style="text-align: left;">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01</td>
+<td style="text-align: left;">rename</td>
+<td style="text-align: left;">重命名文件</td>
+<td
+style="text-align: left;"><code>os.rename(源文件名, 目标文件名)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">02</td>
+<td style="text-align: left;">remove</td>
+<td style="text-align: left;">删除文件</td>
+<td style="text-align: left;"><code>os.remove(文件名)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="目录操作">目录操作</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">序号</th>
+<th style="text-align: left;">方法名</th>
+<th style="text-align: left;">说明</th>
+<th style="text-align: left;">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01</td>
+<td style="text-align: left;">listdir</td>
+<td style="text-align: left;">目录列表</td>
+<td style="text-align: left;"><code>os.listdir(目录名)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">02</td>
+<td style="text-align: left;">mkdir</td>
+<td style="text-align: left;">创建目录</td>
+<td style="text-align: left;"><code>os.mkdir(目录名)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">03</td>
+<td style="text-align: left;">rmdir</td>
+<td style="text-align: left;">删除目录</td>
+<td style="text-align: left;"><code>os.rmdir(目录名)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04</td>
+<td style="text-align: left;">getcwd</td>
+<td style="text-align: left;">获取当前目录</td>
+<td style="text-align: left;"><code>os.getcwd()</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">05</td>
+<td style="text-align: left;">chdir</td>
+<td style="text-align: left;">修改工作目录</td>
+<td style="text-align: left;"><code>os.chdir(目标目录)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">path.isdir</td>
+<td style="text-align: left;">判断是否是文件</td>
+<td style="text-align: left;"><code>os.path.isdir(文件路径)</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>提示：文件或者目录操作都支持 <strong>相对路径</strong> 和
+<strong>绝对路径</strong></p>
+</blockquote>
+<h2 id="文本文件的编码格式科普">04. 文本文件的编码格式（科普）</h2>
+<ul>
+<li>文本文件存储的内容是基于 <strong>字符编码</strong>
+的文件，常见的编码有 <code>ASCII</code> 编码，<code>UNICODE</code>
+编码等</li>
+</ul>
+<blockquote>
+<p>Python 2.x 默认使用 <code>ASCII</code> 编码格式 Python 3.x 默认使用
+<code>UTF-8</code> 编码格式</p>
+</blockquote>
+<h3 id="ascii-编码和-unicode-编码">4.1 ASCII 编码和 UNICODE 编码</h3>
+<h4 id="ascii-编码"><code>ASCII</code> 编码</h4>
+<ul>
+<li>计算机中只有 <code>256</code> 个 <code>ASCII</code> 字符</li>
+<li>一个 ASCII 在内存中占用 1 个字节的空间
+<ul>
+<li><code>8</code> 个 <code>0/1</code> 的排列组合方式一共有
+<code>256</code> 种，也就是 <code>2 ** 8</code></li>
+</ul></li>
+</ul>
+<h4 id="utf-8-编码格式"><code>UTF-8</code> 编码格式</h4>
+<ul>
+<li>计算机中使用 <strong>1~6 个字节</strong> 来表示一个
+<code>UTF-8</code> 字符，涵盖了
+<strong>地球上几乎所有地区的文字</strong></li>
+<li>大多数汉字会使用 <strong>3 个字节</strong> 表示</li>
+<li><code>UTF-8</code> 是 <code>UNICODE</code> 编码的一种编码格式</li>
+</ul>
+<h3 id="ptyhon-2.x-中如何使用中文">4.2 Ptyhon 2.x 中如何使用中文</h3>
+<blockquote>
+<p>Python 2.x 默认使用 <code>ASCII</code> 编码格式 Python 3.x 默认使用
+<code>UTF-8</code> 编码格式</p>
+</blockquote>
+<ul>
+<li>在 Python 2.x 文件的 <strong>第一行</strong>
+增加以下代码，解释器会以 <code>utf-8</code> 编码来处理 python 文件</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># *-* coding:utf8 *-*</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这方式是官方推荐使用的！</p>
+</blockquote>
+<ul>
+<li>也可以使用</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf8</span></span><br></pre></td></tr></table></figure>
+<h4 id="unicode-字符串">unicode 字符串</h4>
+<ul>
+<li>在 <code>Python 2.x</code> 中，即使指定了文件使用 <code>UTF-8</code>
+的编码格式，但是在遍历字符串时，仍然会 <strong>以字节为单位遍历</strong>
+字符串</li>
+<li>要能够 <strong>正确的遍历字符串</strong>，在定义字符串时，需要
+<strong>在字符串的引号前</strong>，增加一个小写字母
+<code>u</code>，告诉解释器这是一个 <code>unicode</code> 字符串（使用
+<code>UTF-8</code> 编码格式的字符串）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># *-* coding:utf8 *-*</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在字符串前，增加一个 `u` 表示这个字符串是一个 utf8 字符串</span></span><br><span class="line">hello_str = <span class="string">u&quot;你好世界&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hello_str)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> hello_str:</span><br><span class="line">    <span class="built_in">print</span>(c)</span><br></pre></td></tr></table></figure>
+<h2 id="小结">小结</h2>
+<h3 id="读取的方法">读取的方法</h3>
+<ol type="1">
+<li>read()
+将所有内容读到一个字符串中（包括换行符）。可以加参数，指定要读多少个字符</li>
+<li>readline() 一行一行读取，包括 </li>
+<li>readlines(）将所有内容，按照行，分到列表中</li>
+<li>seek(arg) 定位指针 seek(0） 将文件流指针定位到文件首。</li>
+</ol>
+<p>常用读取方法：</p>
+<ol type="1">
+<li>for 循环与 readlines 迭代</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">f=<span class="built_in">open</span>(<span class="string">&#x27;ip.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> f.readlines():</span><br><span class="line">  <span class="built_in">print</span>(i,end=<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>因为读取的文件每行末尾有<code>\n</code>，而 print
+打印的时候，默认又会打印一个<code>\n</code>。所以<strong>最好的方法是让
+print 不打印 <code>\n</code>。</strong></p>
+<p>或者通过字符串的 <code>strip()</code> 方法（默认去掉 whitespace，包括
+<code>\t,\r,\n</code>，空格）将文件中每一行末尾的 <code>\n</code>
+（Linux）或 <code>\r\n</code> （Windows）去除</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">f=<span class="built_in">open</span>(<span class="string">&#x27;ip.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> f.readlines():</span><br><span class="line">  <span class="built_in">print</span>(i.strip())</span><br></pre></td></tr></table></figure>
+<h2 id="新式类与旧式经典类">新式类与旧式（经典）类</h2>
+<blockquote>
+<p><code>objec</code> 是 <code>Python</code>
+为所有对象提供的<strong>基类</strong>，提供有一些内置的属性和方法，可以使用
+<code>dir</code>函数查看</p>
+</blockquote>
+<ul>
+<li><p>新式类：以 <code>object</code>为基类的类，推荐使用</p></li>
+<li><p>经典类：不以 <code>object</code>为基类的类，不推荐使用</p></li>
+<li><p>在 <code>Python3, x</code>
+中定义类时，如果没有指定父类，会<strong>默认使用</strong>
+<code>object</code> 作为该类的<strong>基类</strong>.</p>
+<p>Python3, x 中定义的类都是新式类</p></li>
+</ul>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2020/03/25/websec/logic_vuln/access_control/">访问控制与越权</a><a class="next" href="/blog/2020/03/22/programming/python/2.object-oriented/py_single_instance/">Python single instance</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

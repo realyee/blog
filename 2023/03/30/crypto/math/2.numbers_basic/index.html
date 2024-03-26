@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>数论基础 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">数论基础</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">数论基础</h1><div class="post-meta">2023-03-30<span> | </span><span class="category"><a href="/blog/categories/Cryptography/">Cryptography</a><a href="/blog/categories/Cryptography/math/">math</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.6k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 7</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">2. 数论基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9D%E7%A5%96%E7%AD%89%E5%BC%8F%E5%AE%9A%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">贝祖等式&#x2F;定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E7%AE%97%E6%9C%AF%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">1.2.</span> <span class="toc-text">模算术的性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%A9%E4%BD%99%E7%B1%BB-residue-class"><span class="toc-number">1.3.</span> <span class="toc-text">剩余类 (Residue class)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#znz"><span class="toc-number">1.3.1.</span> <span class="toc-text">Z&#x2F;nZ</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">费马小定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AC%A7%E6%8B%89%E5%AE%9A%E7%90%86"><span class="toc-number">1.5.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1-n-%E7%9A%84%E6%9C%AC%E5%8E%9F%E6%A0%B9-prime-rootprimitive-rootprimitive-element"><span class="toc-number">1.6.</span> <span class="toc-text">模 n
+的(本)原根 prime root、primitive root、primitive element</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BE%A4%E7%9A%84%E7%94%9F%E6%88%90%E5%85%83"><span class="toc-number">1.7.</span> <span class="toc-text">群的生成元</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><h1 id="数论基础">2. 数论基础</h1>
+<p>模算术（Modular Arithmetic）是数论的一个分支，a 与 b 模 n 同余：<span
+class="math inline">\(a \equiv b \mod n\)</span>,表示 a-b = kn, k
+为大于等于 1 的整数。 a 与 b 的关系称同余关系，n 叫做模数。</p>
+<p><span class="math inline">\(a+b \equiv c \mod p\)</span>: 如果 a 和 b
+是任意的整数，p 是一个正整数，c 是一个非负整数，且 (a+b)÷p 的余数等于
+c÷p 的余数.</p>
+<p>对于模数 n，与 a 同余的所有整数集合成为同余类 Congruence class，用
+<span class="math inline">\(\bar a_{n}\)</span> 表示。
+模数要是整数的原因是为了保证模运算的良好性质，如唯一性、封闭性、消去律等</p>
+<h2 id="贝祖等式定理">贝祖等式/定理</h2>
+<p>对于任意两个大于 1 的正整数 a 和
+b，<strong>它们的最大公约数（GCD）与最小公倍数（LCM）的乘积等于这两个数的乘积</strong>。即：<span
+class="math inline">\(GCD(a,b) * LCM (a,b) = a * b\)</span></p>
+<h2 id="模算术的性质">模算术的性质</h2>
+<p>模运算满足：反身性，对称性，传递性，加法性，减法性，乘法性，除法性，幂运算性</p>
+<p>如果 a≡b (mod q) 且 c≡d (mod q)</p>
+<ul>
+<li>加法性：a+c≡b+d (mod q)</li>
+<li>减法性：a-c≡b-d (mod q)</li>
+<li>乘法性：a×c≡b×d (mod q)。</li>
+<li>除法性：如果 a≡b(mod n) 且 c 和 n 互素，那么 a/c ≡ b/c(mod n)。</li>
+<li>幂运算性：如果 a≡b(mod n)，那么对于任意的正整数 k，都有 <span
+class="math inline">\(a^k≡b^k(mod n)\)</span>。</li>
+<li>消去律：如果 <span class="math inline">\(ac \equiv bc \mod n，c \ne
+0, and gcd(c,n) = 1\)</span>, 则有 <span class="math inline">\(a \equiv
+b \mod n\)</span></li>
+</ul>
+<p>模运算的逆运算：找到一个整数 b，使得 <span class="math inline">\(ab
+\equiv 1 \mod n\)</span>，其中 a 和 n 是已知的整数。这个整 数 b 就叫做 a
+关于 n 的模逆元。</p>
+<h2 id="剩余类-residue-class">剩余类 (Residue class)</h2>
+<p>设 n &gt; 0, 对于每个整数 a， 定义：<span class="math inline">\([a] =
+\{x| x \equiv a \mod n\}\)</span>, [a] 是模 n 同余于 a 的所有整数的集合,
+称 [a] 为 a 模 n 的同余类, a 是 the class representative</p>
+<blockquote>
+<p>In other words, [𝑎] is the set of all integers that are congruent to
+𝑎 modulo n. We call [𝑎] the residue class of 𝑎 modulo 𝑚. The integer a
+is called the class representative.</p>
+</blockquote>
+<p>I/(n): 模 n 的所有同余类的集合，We denote the set of all residue
+classes modulo n by I/(n). 例如: <span class="math inline">\(I/(4) = {
+[0]_4, [1]_4, [2]_4, [3]_4}\)</span> 和 <span
+class="math inline">\(I/(n) = { [0]_n, [1]_n, [2]_n, ...
+,[n-1]_n}\)</span></p>
+<p>注意: I/(n) 是集合(同余类)的集合</p>
+<p>简化剩余类(reduced residue class)是 m 的剩余系中与 m
+互素的数构成的子集</p>
+<blockquote>
+<p>Since we can’t cancel numbers that aren’t prime to the modulus, we
+sometimes want to omit these numbers from our complete residue system,
+and consider only representatives from the various congruence classes
+that are relatively prime to m. This is called a <strong>reduced residue
+system</strong> mod m.</p>
+</blockquote>
+<h3 id="znz">Z/nZ</h3>
+<p>The set of congruence classes mod n is called the set of <em>integers
+modulo n</em>, and denoted Z/nZ.</p>
+<p>Many authors write Zn for Z/nZ, but this conflicts with other
+notation in number theory. (Some people just write Z/n.)</p>
+<p>Warning: the elements of Z/nZ are congruence classes, not integers.
+Each element is a set of integers. For example, <span
+class="math inline">\(Z/4Z = \{[0]_4, [1]_4, [2]_4, [3]_4\}\)</span>.
+This is not a subset of Z.</p>
+<h2 id="费马小定理">费马小定理</h2>
+<p>假如 a 是一个整数 , p 是一个质数，且 gcd(a, p) = 1, 那么 <span
+class="math inline">\(a^{p-1} \equiv 1 \mod p\)</span></p>
+<p>证明: 如果 p 为质数，那么一定有 residue class=<span
+class="math inline">\(\{[1]_p,[2]_p,[3]_p,[4]_p,[5]_p,…,[p-1]_p\}\)</span>，因为互质，所以需要
+p-1 步遍历所有的点，就是在 p-1 步的时候回到原位置，所以<span
+class="math inline">\(a^{p-1} \equiv 1 \mod p\)</span>。</p>
+<h2 id="欧拉定理">欧拉定理</h2>
+<p>对于正整数 n，欧拉函数（Euler's function）是小于 n 的正整数中与 n
+互质的数的个数。通常表示为 <span
+class="math inline">\(\varphi(n)\)</span>.
+其有对应的计算函数（复杂略过），三个常用性质：</p>
+<ol type="1">
+<li>如果 n 为质数，<span class="math inline">\(\varphi(n) =
+n-1\)</span></li>
+<li>如果 m, n 互质，则 <span class="math inline">\(\varphi(mn) =
+\varphi(m)\varphi(n)\)</span></li>
+<li>如果 p 是一个质数，k 是大于等于 1 的正整数，则 <span
+class="math inline">\(\varphi(p^k) = p^{k-1}\varphi(p) =
+p^{k-1}*(p-1)\)</span></li>
+</ol>
+<h2 id="模-n-的本原根-prime-rootprimitive-rootprimitive-element">模 n
+的(本)原根 prime root、primitive root、primitive element</h2>
+<p>a number g is a primitive root modulo n if every number a coprime to
+n is congruent to a power of g modulo n. In formula, <span
+class="math inline">\(m \equiv g^i mod n\)</span>, <span
+class="math inline">\(m \in \{m|gcd(m,n) = 1\}\)</span></p>
+<p>对于模数 n 的每个互质数 a，都存在一个整数 k 满足：<span
+class="math inline">\(g^k \equiv a \mod n\)</span>, 称 g 为模 n
+的原根。g, as a primitive root modulo n, is also called the generator of
+the multiplicative group of integers modulo n.</p>
+<p>不是每个数都有原根， 只有当 n 等于 2,4,p<sup>k,2p</sup>k, 其中 p
+为奇质数时，n 才有原根。所以对应群论，并不是所有的有限 n 阶群在模 n
+算数下都可以形成循环群。[^1]</p>
+<p>对于 n 为素数的情况，For prime n, g is a primitive root of prime n if
+and only if the results of g^i mod n is distinct and congruent to
+[1,n-1], which is congruent to n, i in [1, phi(n)=n-1]. that is <span
+class="math inline">\(g^1, g^2,...g^{n-1}\)</span> are distinct and
+equals to [1,n-1].</p>
+<p>Why prime root is called generator？</p>
+<p>The relevant (and cool) fact is this: if 𝑔 is a primitive root modulo
+𝑛 (so that 𝑔 has multiplicative order 𝜙(𝑛) modulo 𝑛), then every integer
+in the world that is relatively prime to 𝑛 is congruent modulo 𝑛 to some
+power of 𝑔. In other words, the powers of 𝑔 "generate" the entire set of
+reduced residue classes modulo 𝑛. (In terms of groups: the
+multiplicative group of reduced residue classes modulo 𝑛 is cyclic, and
+𝑔 is a generator for that cyclic group.)</p>
+<p>原根生成了所有与 n
+互素的数的集合，也就是简化剩余类，简化剩余类的元素可以组成乘法群，从而原根就是生成元,而且是循环群的生成元，也就是可以通过原根一个元素生成整个循环群。</p>
+<h2 id="群的生成元">群的生成元</h2>
+<blockquote>
+<p>a generating set of a group is a subset of the group set such that
+every element of the group can be expressed as a combination (under the
+group operation) of finitely many elements of the subset and their
+inverses.</p>
+</blockquote>
+<p>Generating set of a group 生成元集合 (g_1,...,g_n)
+是群元素的集合，对于循环群来说，一个生成元便可生成整个群，该生成元即为模
+n
+的原根。对于其他非循环的有限群来说，存在生成元，但不存在可以单独生成整个群的一个生成元。通过生成元集合生成有限群。</p>
+<blockquote>
+<p>A set of generators (g_1,...,g_n) is a set of group elements that can
+be used to generate all the elements in the group through repeated
+application of the generators and their inverses. Cyclic groups can be
+generated as powers of a single generator, but for all other groups,
+you'll need more than one generator.</p>
+</blockquote>
+<h1 id="参考资料">参考资料</h1>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://chenliang.org/2021/02/25/foundations-of-number-theory/">密码学-01-数论基础
+· 陈亮的个人博客</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://math.libretexts.org/Bookshelves/Combinatorics_and_Discrete_Mathematics/Elementary_Number_Theory_%28Barrus_and_Clark%29/01%3A_Chapters/1.21%3A_Residue_Classes_and_the_Integers_Modelo_m">1.21:
+Residue Classes and the Integers Modelo m - Mathematics
+LibreTexts</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://courses.smp.uq.edu.au/MATH2301/Chapter2.pdf">Ghostscript
+wrapper for C:and Settings.DOMATHSDropbox\2301\2010__2301.pdf</a></li>
+<li><a target="_blank" rel="noopener" href="https://solitaryroad.com/c304.html">Congruence, residue
+classes of integers modulo m</a></li>
+<li><a target="_blank" rel="noopener" href="https://mathworld.wolfram.com/GroupGenerators.html">Group
+Generators -- from Wolfram MathWorld</a></li>
+</ol>
+<ul class="task-list">
+<li><label><input type="checkbox" />6. <a
+target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=DKy98FWHwdg">Primitive Roots -
+YouTube</a></label></li>
+</ul>
+<ol start="7" type="1">
+<li>[^1]<a
+target="_blank" rel="noopener" href="http://ramanujan.math.trinity.edu/rdaileda/teach/f20/m3341/lectures/lecture16_slides.pdf">Primitive
+Roots Modulo Prime Powers</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://math.stackexchange.com/questions/2191852/why-are-primitive-roots-called-generators">elementary
+number theory - Why are primitive roots called generators? - Mathematics
+Stack Exchange</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://math.berkeley.edu/~mcivor/math115su12/lectures/lecture5.pdf">berkeley
+mcivor's math lecture5.pdf</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Generating_set_of_a_group">Generating
+set of a group - Wikipedia</a></li>
+</ol>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2023/04/01/crypto/zk/10.iop_kzg/">Interactive Oracle Proof (IOP)</a><a class="next" href="/blog/2023/03/30/crypto/math/4.%20finite_field_operations/">4. 有限域运算以及代码理解</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

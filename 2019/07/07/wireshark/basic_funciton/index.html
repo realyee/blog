@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>二. Wireshark的基本功能 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">二. Wireshark的基本功能</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">二. Wireshark的基本功能</h1><div class="post-meta">2019-07-07<span> | </span><span class="category"><a href="/blog/categories/wireshark/">wireshark</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 5.8k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 21</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E8%A7%A3%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">协议解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E8%BF%BD%E8%B8%AA"><span class="toc-number">2.</span> <span class="toc-text">数据流追踪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%93%E5%AE%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">3.</span> <span class="toc-text">专家信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1"><span class="toc-number">4.</span> <span class="toc-text">统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E7%BB%9F%E8%AE%A1%E6%91%98%E8%A6%81%E8%AF%B4%E6%98%8E"><span class="toc-number">4.1.</span> <span class="toc-text">捕获文件属性(统计摘要说明)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E5%88%86%E7%BA%A7"><span class="toc-number">4.2.</span> <span class="toc-text">协议分级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E7%82%B9%E4%B8%8E%E4%BC%9A%E8%AF%9D"><span class="toc-number">4.3.</span> <span class="toc-text">端点与会话</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AB%AF%E7%82%B9"><span class="toc-number">4.3.1.</span> <span class="toc-text">端点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%9A%E8%AF%9D"><span class="toc-number">4.3.2.</span> <span class="toc-text">会话</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E9%95%BF%E5%BA%A6"><span class="toc-number">4.4.</span> <span class="toc-text">分组长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E8%A1%A8%E5%88%86%E6%9E%90"><span class="toc-number">4.5.</span> <span class="toc-text">图表分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#io-%E5%9B%BE%E8%A1%A8"><span class="toc-number">4.5.1.</span> <span class="toc-text">IO 图表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%9B%BE"><span class="toc-number">4.5.2.</span> <span class="toc-text">数据流图</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http"><span class="toc-number">5.</span> <span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcp-%E6%B5%81%E5%9B%BE%E5%BD%A2tcp-graph"><span class="toc-number">6.</span> <span class="toc-text">TCP 流图形（TCP Graph）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ipv4-statistics"><span class="toc-number">7.</span> <span class="toc-text">IPv4 Statistics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">命令行模式</span></a></li></ol></div></div><div class="post-content"><h2 id="协议解析">协议解析</h2>
+<p>Wireshark
+最强大的功能之一就是协议解析功能，协议解析是由协议解析器完成。它将原始数据包拆分为相关数据段，并按照协议格式解析为</p>
+<p>它是原始数据流与协议的翻译器。如果遇到新的协议可以用 C 语言或 Python
+编写解析程序。注意： Wireshark
+进行协议解析时，并不见得每次都会选择正确的协议解析器，尤其是当网络上的一个协议使用了不同于标准的配置的时候，一旦遇到这种情况，我们就需要手动更改。比如：FTP
+协议原本应该使用 20，21 端口，却使用了 HTTPS 的 443
+端口，这样可能将其解析为 HTTPS 协议，此时，可以通过查看 SSL
+数据包中的数据字节区的 ASCII
+码部分是否有相关有意义的明文出现，根据其中显示的 FileZilla Server
+等明文，判断为 FTP
+协议。此时，可以在需要转化类型的数据报上右键-&gt;解码为
+选择合适的协议解码，注意：这样的设置只在本次软件使用时有效，下次启动时就恢复至原状态了。</p>
+<p>Wireshark
+是开源软件，可以通过下载查看其源代码来查看其解析错误的原因。</p>
+<h2 id="数据流追踪">数据流追踪</h2>
+<p>TCP 数据报可以说是是我们日常分析中最常见的了，因此 Wireshark
+为了方便我们分析，提供了将 TCP
+数据报重组为易于阅读的形式。我们可以在一个 TCP
+数据包上右键选择追踪流-&gt; TCP 流，Wireshark
+便将与之相关的数据包重组，弹窗显示出 HTTP 报文。</p>
+<h2 id="专家信息">专家信息</h2>
+<p>菜单栏 -&gt; 分析 -&gt; 专家信息</p>
+<p>是内置于 Wireshark
+软件中最强大的工具之一，不但能在抓包过程中自动识别网络中发生的异常，甚至还能给出导致异常状况的原因，
+Wireshark 会把识别出来的事件按出故障概率的高低，通过 Expert Info
+工具以事件类别的方式加以显示，同时还使用了颜色来加以区分。</p>
+<p>信息类别：</p>
+<ol type="1">
+<li><p>Errors：所抓数据识别出的严重错误，比如，感知到畸形（标准化配置不对）SPOOLSS
+或 GTP
+协议数据包，又或者识别到某些数据包的某种协议头部的某些字段值跟预期不符（比如，IPv4
+数据包的 IP 包头中校验和字段值跟预期值不符合，即 IPv4
+数据包通不过校验和检查）</p>
+<p>注意：川出现一两个畸形包时没问题，因为 Wireshark 的识别器也不是
+100%准确的。</p></li>
+<li><p>Warnings：所抓数据识别出的一般性问题</p></li>
+<li><p>Notes：所抓数据识别出的可能会引发故障的异常现象</p></li>
+<li><p>Chats：此标签下的数据包都符合常规流量特征</p></li>
+<li><p>Details：此标签显示 Chats 标签事件的详情</p></li>
+<li><p>Packet Comments：把含有注释信息的数据包一一记录在案</p></li>
+</ol>
+<p>可以通过专家信息对当前网络的稳定性或稳健性有一个了解。</p>
+<p>errors，warnings，notes
+这三个是最重要的，通过双击某个数据报，可以在数据列表区显示，也可以右键应用为过滤器，过滤查看。</p>
+<p>认识 Errors 事件： Wireshark 感知到的子类 Error
+事件，主要分为以下两种情况</p>
+<ol type="1">
+<li><p>校验和出错：既可能是 Ethernet 帧或者 IP
+数据包真的通不过检验和检查所致，也可能是 checksum offload
+参数方面的配置问题</p>
+<p>数据流动方向：网卡（接收）&lt; - &gt; CPU (处理) &lt; - &gt;
+Wireshark，为了减轻 CPU
+的负担，校验和现在是放在网卡上做。网卡首先对到达自己的包，检验二层（链路层）的校验和，如果此校验和不对，直接丢弃，若正确，接收，再然后校验三层的校验和。所以一般情况下，Wireshark
+抓不到校验和错误的问题，只有一种情况它会抓到：自己产生的数据包（因为自己产生的数据报被
+CPU 处理时，校验和是空的，校验和由网卡负责，而 Wireshark 就是抓的 CPU
+位置的数据包）</p>
+<p>校验和出错：某些操作系统支持 checksum
+offload（校验和计算下放）功能。为了节省 CPU 资源，操作系统把
+IP、TCP、UDP 校验和计算功能下放给 NIC（网卡，network interface
+controller，也叫网络接口控制器，也叫网络适配器），数据包在出 NIC
+的时候执行校验和计算。但是 Wireshark 会在数据到达 NIC
+之前抓取数据包，此时 IP、TCP、UDP 校验和字段值并没有，于是会看到
+Wireshark 感知到很多校验和有误之类的 Error
+事件。而且这些校验和错误的数据包的源 IP 地址为本机 IP 地址。这样的 Error
+事件可以忽略不考虑。也可以关闭 Wireshark IP、TCP 的校验和检查功能。
+Wireshark 3.0.2
+默认是关闭的(新版估计都默认关闭了，不确定的话，再按照下面操作一遍)</p>
+<p>操作方式：编辑（edit） -&gt; 首选项（preference） -&gt;
+协议（protocol）-&gt; Ipv4 -&gt; 取消勾选 Validate the IPv4 checksum if
+possible。然后再对 TCP 也取消勾选那个。</p></li>
+<li><p>伪造的数据包问题：一般是具体的应用层协议问题，也有可能是
+Wireshark 的协议解析问题</p></li>
+</ol>
+<p>认识 Errors 事件：总结</p>
+<p>对于一个网络而言，穿梭于其中的数据包只要有百分之一、二的害群之马（即具备
+Error 事件特征的数据包），不但会导致事故频发（比如 TCP
+重传），而且会使网络变得很慢，因此只要网络用起来大致正常，Wireshark
+是不可能抓到那么多真的害群之马的。</p>
+<p>Warnings：所抓数据识别出的一般性问题。比如，感知到了存在 TCP 零窗
+口、TCP window full、TCP 报文段失序、TCP 报文段丢失等现象，又或者
+识别出了相关网络协议在运作时发出的数据包的内容与正常情况不一致。所
+谓一般性问题几乎都是应用程序问题或通信问题。</p>
+<p>认识 Warnings 事件： Wireshark 感知到的子类 Error
+事件，主要分为以下三种情况</p>
+<ol type="1">
+<li>含 Reassembly 字样的几种子事件：大多是指 Wireshark 抓到了未能重组
+的数据包。一般而言，这都是 Wireshark 协议解析器问题。</li>
+<li>在 Summary 一栏里含 window 字样的子事件：几乎都是指 Wireshark
+感知到了网络中存在 TCP zero windown 或 window full
+问题，一般而言都是建立 TCP 连接的端到端设备忙不过来所致。</li>
+<li>在 Summary 一栏里含 Segment 字样的子事件：Wireshark 生成 TCP 报文
+段丢失事件信息，是因其未抓全隶属于某股 TCP 数据流的所有 TCP 报文段：生成
+TCP 报文段失序事件信息，是因其感知到了 TCP 报文段未按发送主
+机发出的顺序到达接受主机 这三种子事件都属于 TCP
+故障，一般是由网络故障所引发</li>
+</ol>
+<p>认识 Warnings 事件：总结</p>
+<p>Wireshark 能感知数据包中的种种特征，比如窗口大小字段、TCP
+报文在传输中是否失序、TCP 数据收到之后是否做出确认。但是请注意，Warnings
+事件只是 Wireshark 自认为比较重要的事件，却也不可全信，比如说 Wireshark
+未能抓取所有数据包，则必会生成 Warnings
+事件，但这未必就是网络问题，可能只是抓包时机把握。</p>
+<p>Notes：所抓数据识别出的可能会发故障的异常现象。比如，感知到了 TCP
+重传。重复确认、以及快速重传等现象。虽然上述行为可能会对网络产生严重影响，但也属于
+TCP 的正常行为，所以被归类在
+Notes，提醒用户这些数据有导致问题的嫌疑。</p>
+<p>认识 Notes 事件： Wireshark 感知到的子类 Error
+事件，主要分为以下三种情况</p>
+<ol type="1">
+<li>Summary-栏里含 Retransmissioyls、Fast Retrarmsmissions、DuplifateACK
+字样的子事件：通常预示着网速慢）丢包或者通过 TCP
+传输数据的主机的应用程序忙不过来。</li>
+<li>在 Summary 一栏里含 Keep-Alive 字样的子事件：通常预示着 TCP 或者基
+于 TCP 的应用程序的问题。</li>
+<li>在 Summary 一栏里含 Time to live
+字样的子事件：通常预示看路由问题</li>
+</ol>
+<p>认识 Notes 事件：总结 Notes
+事件的每一种子事件，并非是由定的募一种类型的网络故障所导致的，以 TCP
+重传现象为例，可能是因为包错误）网络状态差（带宽低、延时高）、服务器或客户端停止响应等。Wireshark
+只是通过 Expert Info 工具提示存在 TCP
+重传现象，至于如何定位原因找到问题，还得靠自己。</p>
+<p>Chats，可以统计各种数据包的个数，尤其是 TCP 的 SYN 的个数，可以判断是
+否正在受到 SYN flood 的攻击。</p>
+<p>总结：</p>
+<ol type="1">
+<li>有时 Wireshark 感知的 Warnings 事件无关紧要，但是识别出的 Notes
+事件却偏偏会影响网络性能，所以排除故障时，需要关注内
+在，切勿只看表面</li>
+<li>Wireshark 摆乌龙的情况时有发生，既可能是杯弓蛇影、谎报军情
+误报故障；也有可能会一叶障目感知不到网络的异常状况。</li>
+<li>所以 Wireshark 虽然智能，但也不过是个工具而已，解决网络故障
+靠的还是网管人员的知识储备。</li>
+</ol>
+<h2 id="统计">统计</h2>
+<h3 id="捕获文件属性统计摘要说明">捕获文件属性(统计摘要说明)</h3>
+<p>菜单栏 -&gt; 统计 -&gt; 捕获文件属性</p>
+<p>对抓获的数据报进行全局统计</p>
+<p>抓取数据包的文件名，长度，时间，抓包接口，还有一些抓包速度，大小，比例等统计信息。</p>
+<h3 id="协议分级">协议分级</h3>
+<p>菜单栏 -&gt; 统计 -&gt; 协议分层</p>
+<p>统计通信流量中不同协议占同一层次的百分比。通过这个工具的百分比可以对全网流量有直观的了解，整个网络中哪些流量占用多，哪些流量占用少。可以通过百分比查看网络异常，比如:
+ARP 流量一般是 0.0 几% 或 0.几% ，如果你看到网络中 ARP 流量为 10%或
+20%，那么网络中大概率有 ARP 泛洪 攻击</p>
+<p>使用 UDP 的一般有 DNS、OICQ，使用 TCP 的一般有 HTTP、SSL、Data</p>
+<p>各字段讲解：</p>
+<ol type="1">
+<li>协议：数据包所归属的协议名称</li>
+<li>按分组百分比：抓包文件所含数据包个数在每一种协议类型中的占比（同一层）</li>
+<li>分组：每种协议类型数据包个数</li>
+<li>按字节百分比：抓包文件所含数据包字节数在每种协议类型中的占比（同一层）</li>
+<li>字节：每种协议类型数据包字节数</li>
+<li>比特每秒：某种协议类型的数据包在抓包时段内的传输速率</li>
+<li>结束
+分组：隶属于该协议类型的数据包的<strong>纯粹数量</strong>。（举例：比如当
+TCP 协议的 Packets 和 End Packets 数量分别是 13716 和
+9425，这就表示抓取的数据中，以 TCP 封装数据总数是 13716 个，但只有 9425
+个纯 TCP 数据包，也就是还有 4291 个数据包在 TCP
+头部之后还紧跟了高层应用协议头部，比如 HTTP 头部）</li>
+<li>结束 字节；隶属于该协议类型的数据包的纯粹字节数</li>
+<li>结束 位每秒：隶属于该协议类型的数据包在抓包时段内纯粹传输速率</li>
+</ol>
+<p>比如： 前后 1000 100，即： 后面比前面少得离谱 这种情况下，900
+多个在传数据的包，很大程度上是基于 TCP 的攻击</p>
+<h3 id="端点与会话">端点与会话</h3>
+<p>端点是结点与结点之间，会话是一对一的，可以通过他们来找出发送流量，占用带宽大的或有异常行为的。</p>
+<h4 id="端点">端点</h4>
+<p>罗列出所有二层、三层、四层节点数据统计信息，还可以从高到
+低排列，通过这些统计信息，可以很好解释一下现象：</p>
+<ol type="1">
+<li>MAC 地址少，IP
+端点多：这种现象可能的原因是有一台路由器来负责转发所有进出本地 LAN 的 IP
+流量，也就是说所有流量都是由某一个 IP
+地址为网关做集中转发的。这属于正常现象。</li>
+<li>IP 地址少，TCP 端点（TCP 端口号）多：即 每个 lP
+都试图建立或已经建立多条 TCP 连接。对于此现象，如果建立多条连接的 IP
+端点是服务器，就属于正常现象，否则极有可能就是有人在发动网络攻击，比如
+TCP SYN 攻击。</li>
+</ol>
+<h4 id="会话">会话</h4>
+<ol type="1">
+<li>窗口左下角
+显示过滤器的限制复选框：该窗口将会显示经过显示过滤器过滤的信息</li>
+<li>窗口左下角 解析名称复选框：用相应的名字取代窗口显示的信息</li>
+<li>Ethernet：观察具有不同 MAC
+地址的主机之间发生过什么样的交流。通过此标签，可以观察是否出现了二层广播风暴，或者伪造
+MAC 地址欺骗攻击等问题、</li>
+<li>IPv4/IPv6：观察具有不同 IP
+地址主机之间有过什么样的沟通。通过此标签，可以观察极高曝光率的 IP
+地址，判断流量的异常，判断是否有黑客工具在扫描网络，或者判断由于感染上蠕虫病毒持续发送巨量
+Ping 包的主机。</li>
+<li>TCP/UDP：观察具有不同 IP 地址的主机之间建立的各种 TCP/UDP
+会话。通过此标签，可以观察是否有某一台主机打开过多的 TCP/UDP
+连接，对于单台而言打开 10-20
+个连接应该是正常范畴，若连接过百，就可能有问题。或者判断是否有主机试图与稀奇古怪的
+TCP/UDP 目的端口号建立连接，也就是所谓的 TCP/UDP 端口扫描。</li>
+</ol>
+<h3 id="分组长度">分组长度</h3>
+<p>选择统计-&gt; 分组长度</p>
+<p>统计数据流量中包长度的分布，通过数据报长度的分布情况，对网络情况做一个大概的分析。</p>
+<p>正常包的话，大部分为 40-2559，小型帧（小于 40）或巨型侦（大于
+2559）攻击，当小于 40 或者大于 2559 的比例占到 5%或
+10%时，有可能存在这种攻击。</p>
+<p>可以通过显示过滤器输入协议类型，比如： arp， tcp
+等，查看各类型协议的长度大概都是多大。</p>
+<p>40-319：大部分都是小型帧，比如：</p>
+<p>arp：一般是 40 或 50 多，为小型帧</p>
+<p>icmp：ping 包一般 70 多到 90 多，别的可能到 100 多 200 多左右</p>
+<p>dns：79 到 227 左右</p>
+<p>tcp 的控制信息：50，60，70 等</p>
+<p>320-2559：大型帧，一般为 tcp 碎片包一般 800，900，1000 多</p>
+<p>TCP 和 IP 头部均为 20 字节，UDP 头部 8 字节，以太网帧 MTU 1500
+字节，除去 TCP，IP 头部，还剩下 1460 个字节。</p>
+<p>重点关注 1280-2559
+长度的数据包，像这种较大的数据包，一般是用于数据传输，比如：http
+下载，ftp
+上传等，如果这种类型的数据包比较多，说明我们可能在看视频，浏览网页比较多，较小的数据包用传输控制信息。</p>
+<h3 id="图表分析">图表分析</h3>
+<h4 id="io-图表">IO 图表</h4>
+<p>菜单 -&gt; 统计 -&gt; IO 图表</p>
+<p>IO 图是 Wireshark
+最高效也最强大的工具之一，它对网络中的吞吐流量进行实时的图形显示，用来分析网络性能</p>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E5%85%A5%E9%97%A8/iograph.png" /></p>
+<p>界面：</p>
+<p>上半部分是图形显示区域，下边是配置区域。</p>
+<p>下方列表是可供显示的 IO 图，可以看到有 8 列</p>
+<ol type="1">
+<li>Enabled ：显示此图与否</li>
+<li>Graph Name ：图表名，双击鼠标左键，可以自定义</li>
+<li>Display Filter
+：显示过滤器，用来输入过滤语句，双击鼠标左键，可以自定义语句</li>
+<li>Color：图的颜色，双击鼠标左键，可以自定义</li>
+<li>Style：图表的类型，有 bar，dot，line
+等，双击鼠标左键，可以自定义</li>
+<li>Y Axis：Y 轴的单位，双击鼠标左键，可以自定义 字节，比特
+MAX（）：每个计时单位内，所传输数据包中相关参数的最高值
+MIN（）：每个计时单位内，所传输数据包中相关参数的最低值
+AVG（）：每个计时单位内，所传输数据包中相关参数的平均值
+SUM（）：右边输入适当条件（如：ip.len），单位时间内，参数总和 COUNT
+FRAMES（）：统计在每个计时单位内，发生的匹配该条件的现象 COUNT
+FIELDS（）：每个计时单位内，所传输数据包中该字段出现的次数</li>
+<li>后面两类还没动过... 左下角加减号可以自己增加或减少图，间隔是用来控制
+x 的单位的，一天时钟复选框勾选，以一天当中具体时间来显示 x
+轴，可以选择鼠标拖拽或缩放图表。</li>
+</ol>
+<p>举例： 通过 IO Graphs 图形来反映对 xx Web 页面的访问量：
+显示在不同时间内，访问 baidu 站点的次数。显示过滤器表达式为 http.host
+contains "xx"</p>
+<p>测算端到端之间的吞吐量（主机 172.16.89.101 和 172.16.89.100 间的 IP
+流量图）： 显示过滤器语句 ip.addr eq 172.16.89.101 and ip.addr eq
+172.16.89.100</p>
+<p>添加更多的条件来观察数据流在传输过程中发生的变故： tcp.stream eq 16
+and tcp.analysis.retransmission，反映某股数据流重传现象 tcp.stream eq 16
+and tcp.analysis.zero_ window，反映某股数据流中的 TCP 零窗口现象
+（tcp.stream eq 8 表示流编号等于 8 的，即：trace 中第 8 个 TCP 流）
+注释： TCP 重传：TCP
+重传现象预示着发生了丢包，说明网络卡或者其他与网络性能有关的问题。 TCP
+零窗口：TCP 零窗口现象意味着 TCP 接收方或者发送方反映迟钝。</p>
+<p>获悉某股 TCP 数据流中数据包的抖动情况</p>
+<p>选中其中一个 TCP 包，右键-&gt; 对话过滤器-&gt;
+TCP，然后复制语句，打开 IO 图表，再写上 frame.time_delta_displayed
+就可以了</p>
+<h4 id="数据流图">数据流图</h4>
+<p>菜单 -&gt; 统计 -&gt; 流量图</p>
+<p>将会话通信过程图形可视化出来，可以通过显示过滤器过滤想要查看的，再查看。</p>
+<ol type="1">
+<li>All packets：所有数据包</li>
+<li>Displayed packets：经过过滤器过滤</li>
+<li>流类型：All
+flow：所有数据或者经过过滤器的数据包生成总体数据流图、tcp
+flow：所有或者进过过滤器的包生成 TCP 标记、序列号、ACK
+号以及报文段长度的 TCP 数据流图、UDP Flow 等</li>
+<li>左下角 限制显示过滤器 复选框（暂时还不知道咋用）。</li>
+</ol>
+<h2 id="http">HTTP</h2>
+<ol type="1">
+<li><p>分组计数器 Packet Counter：了解抓包文件中 HTTP
+数据包的总数以及其中 HTTP 各类型请求数据包（post、get 等）和 HTTP
+响应数据包（从 1xx 开始的响应状态码）数量及比率分别为多少。</p></li>
+<li><p>请求序列 Request Sequences：主机请求访问的 Web
+站点的分布情况，以及所访问的 Web 站点上的具体资源，指向资源的
+URL</p></li>
+<li><p>负载分配 Load Distribution：了解访问过哪些 Web 站点。</p>
+<p>注：可下载专业排除 HTTP 故障的软件 Fiddler</p></li>
+</ol>
+<h2 id="tcp-流图形tcp-graph">TCP 流图形（TCP Graph）</h2>
+<p>TCP Stream Graph 菜单中 Time-Sequence（Stevens）子菜单用法：</p>
+<ol type="1">
+<li>该工具不能在线实时生成统计信息，使用之前先停止抓包</li>
+<li>具有方向性，需要选中一个隶属于需要分析的 TCP
+数据流的数据包再生成图表，比如，要让此工具生成与 HTTP
+下载流量有关的统计信息，就应该选择下行流量的数据包，即源 P
+是公网，端口是 80，目标 IP 是私网，端口是随机的数据包。</li>
+<li>Stenvens 子菜单所生成的图形实际上反映的是，在单位时间内，受监控的
+TCP
+流在某个方向所传输数据的字节数。根据此可以判断某应用的下载或者上传速度。</li>
+<li>需要放大图表中的某个区域，只需要用鼠标圈定该点所在的区域，缩小按减号</li>
+<li>鼠标左键图表中的点，便可在主窗口中的数据包列表区域定位到与其对应的数据包</li>
+<li>可在弹出的窗口调整相关的显示参数。</li>
+</ol>
+<p>TCP Stream Graph 菜单中 Time-Sequence（tcp-trace）子菜单用法：</p>
+<ol type="1">
+<li>tcp-trace 子菜单功能起源于 UNIX tcp dump 工具</li>
+<li>可提供被监控 TCP 连接的诸多信息，包括 TCP 确认、TCP 重传、以及 TCP
+窗口大小等。</li>
+<li>也需要先停止抓，再分析数据，生成图表</li>
+<li>此菜单反映的信息星及其丰富，可为网络排障诊断提供重要线索</li>
+<li>可直观反映出诸多现象，比如，TCP 窗口的填充速度高于预期的大规模 TCP
+重传等现象</li>
+</ol>
+<p>一条曲线：表示单位时间内，受监控的 TCP，在某个方向上所传数据的字节数
+另一条表示曲线：表示整个数据传输过程中 TCP 报文段的 TCP 接受窗口</p>
+<p>吞吐量：不但能了解某条 TCP 连接的吞吐量，而且还能判断 TCP
+连接是否稳定。</p>
+<p>往返时间：能了解到某条 TCP 连接中特定方向上的所有 TCP
+报文段的往返时间（RTT）。</p>
+<p>窗口尺寸：能了解通过 TCP 连接传送数据时，发送方的窗口大小。</p>
+<h2 id="ipv4-statistics">IPv4 Statistics</h2>
+<ol type="1">
+<li>All Address：生成有关 IP 地址的统计</li>
+<li>Destinations and Ports：生成 IP
+地址在发包时所用的传输层协议以及端口号</li>
+<li>IP protocol Types：生成抓取数据中 IP 上层的协议统计。</li>
+<li>Source and Destination Addresses：生成源和目标 IP
+地址统计信息。</li>
+</ol>
+<h2 id="命令行模式">命令行模式</h2>
+<p>使用命令行分析的优势</p>
+<p>利用命令行对捕获文件进行调优分析</p>
+<p>掌握命令行工具的常用命令</p>
+<p>掌握命令行行工具与第三方辅助工具的使用方法</p>
+<p>找到 Wireshark 的安装目录，下面有 tshark.exe 及其帮助文档
+tshark.html，复杂网络情况，手工比较困难，可以使用编写脚本，这是就需要使用
+命令行工具了。</p>
+<p>要使用 tshark 等工具，需要切换至对应目录或将目录加入环境变量</p>
+<p>命令行可以在 linux 中使用 grep、awk 等高效处理工具</p>
+<p>如果需要对捕获文件的概述信息进行查看，可以使用 capinfos.exe</p>
+<p>一般抓包之后，先看看捕获文件属性（summary），再看协议分级，掌握一下当前网络的大体情况，然后再干别的。</p>
+<p>大体完了，细节处，在以后实战的时候，见到再完善。</p>
+<p>参考资料：</p>
+<blockquote>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/li-hao/archive/2011/12/07/2279912.html">IP
+头，TCP 头，UDP 头，MAC 帧头定义</a></li>
+</ul>
+</blockquote>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" rel="tag">Wireshark功能</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2019/07/07/wireshark/arp_protocol/">ARP协议</a><a class="next" href="/blog/2019/07/01/network/device_conflicting_domain/">网络设备与两种冲突域</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

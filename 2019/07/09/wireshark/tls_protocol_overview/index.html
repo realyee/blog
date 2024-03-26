@@ -1,0 +1,378 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>从数据包看 TLS 1.2 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">从数据包看 TLS 1.2</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">从数据包看 TLS 1.2</h1><div class="post-meta">2019-07-09<span> | </span><span class="category"><a href="/blog/categories/wireshark/">wireshark</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 4.8k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 17</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80.-%E4%BD%9C%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">一. 作用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">三、基本的运行过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E5%8C%85"><span class="toc-number">2.</span> <span class="toc-text">抓包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.</span> <span class="toc-text">原理步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#client-hello"><span class="toc-number">3.1.</span> <span class="toc-text">Client Hello</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#server-hello"><span class="toc-number">3.2.</span> <span class="toc-text">Server Hello</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#server-certificate"><span class="toc-number">3.3.</span> <span class="toc-text">Server Certificate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#server-key-exchange-server-hello-done"><span class="toc-number">3.4.</span> <span class="toc-text">Server Key Exchange &amp;
+Server Hello Done</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#client-key-exchange-change-cipher-spec-encrypted-handshake"><span class="toc-number">3.5.</span> <span class="toc-text">Client
+Key Exchange &#x2F; Change Cipher Spec &#x2F;Encrypted handshake</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#encrypted-application-data"><span class="toc-number">3.6.</span> <span class="toc-text">Encrypted Application Data</span></a></li></ol></li></ol></div></div><div class="post-content"><p>TLS（Transport Layer Security）和它的上一代 SSL（Secure Sockets
+Layer）都用来提供网络通信安全的加密协议，其中 SSL
+如今已经不被推荐使用。这些协议的一些版本在 web
+浏览器、电子邮件、即时通讯以及 IP 电话等方面被广泛地使用着。</p>
+<p>TLS（Transport Layer Security）协议是 Web
+上最流行的加密协议，它通过确保浏览器与服务端之间的保密性以及数据的完整性来保护
+Web 上的用户。在本文中，我将介绍 TLS 1.2
+版本中握手阶段(子协议)的细节。</p>
+<p>TLS 1.2 中所有与握手相关的子协议都在 <a
+target="_blank" rel="noopener" href="https://www.ietf.org/rfc/rfc5246.txt">RFC
+5246</a>被定义，下面我将通过 Wireshark 抓包的方式进行讲解</p>
+<h1 id="一.-作用">一. 作用</h1>
+<p>不使用 SSL/TLS 的 HTTP
+通信，就是不加密的通信。所有信息明文传播，带来了三大风险。</p>
+<blockquote>
+<p>（1）
+<strong>窃听风险</strong>（eavesdropping）：第三方可以获知通信内容。</p>
+<p>（2）
+<strong>篡改风险</strong>（tampering）：第三方可以修改通信内容。</p>
+<p>（3）
+<strong>冒充风险</strong>（pretending）：第三方可以冒充他人身份参与通信。</p>
+</blockquote>
+<p>SSL/TLS 协议是为了解决这三大风险而设计的，希望达到：</p>
+<blockquote>
+<p>（1） 所有信息都是<strong>加密传播</strong>，第三方无法窃听。</p>
+<p>（2）
+具有<strong>校验机制</strong>，一旦被篡改，通信双方会立刻发现。</p>
+<p>（3） 配备<strong>身份证书</strong>，防止身份被冒充。</p>
+</blockquote>
+<p>互联网是开放环境，通信双方都是未知身份，这为协议的设计带来了很大的难度。而且，协议还必须能够经受所有匪夷所思的攻击，这使得
+SSL/TLS 协议变得异常复杂。</p>
+<p>二、历史</p>
+<p>互联网加密通信协议的历史，几乎与互联网一样长。</p>
+<blockquote>
+<p>1994 年，NetScape 公司设计了 SSL 协议（Secure Sockets Layer）的 1.0
+版，但是未发布。</p>
+<p>1995 年，NetScape 公司发布 SSL 2.0 版，很快发现有严重漏洞。</p>
+<p>1996 年，SSL 3.0 版问世，得到大规模应用。</p>
+<p>1999 年，互联网标准化组织 ISOC 接替 NetScape 公司，发布了 SSL
+的升级版<a
+target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer">TLS</a> 1.0
+版。</p>
+<p>2006 年和 2008 年，TLS 进行了两次升级，分别为 TLS 1.1 版和 TLS 1.2
+版。最新的变动是 2011 年 TLS 1.2 的<a
+target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc6176">修订版</a>。</p>
+</blockquote>
+<p>目前，应用最广泛的是 TLS 1.2，主流浏览器都已经实现了 TLS 1.2
+的支持。</p>
+<h2 id="三基本的运行过程">三、基本的运行过程</h2>
+<p>SSL / TLS 协议的基本思路是采用<a
+target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Public-key_cryptography">公钥加密法</a>，也就是说，客户端先向服务器端索要公钥，然后用公钥加密信息，服务器收到密文后，用自己的私钥解密。</p>
+<p>但是，这里有两个问题。</p>
+<p><strong>（1）如何保证公钥不被篡改？</strong></p>
+<blockquote>
+<p>解决方法：将公钥放在<a
+target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Digital_certificate">数字证书</a>中。只要证书是可信的，公钥就是可信的。</p>
+</blockquote>
+<p><strong>（2）公钥加密计算量太大，如何减少耗用的时间？</strong></p>
+<blockquote>
+<p>解决方法：每一次对话（session），客户端和服务器端都生成一个"对话密钥"（session
+key），用它来加密信息。由于"对话密钥"是对称加密，所以运算速度非常快，而服务器公钥只用于加密"对话密钥"本身，这样就减少了加密运算的消耗时间。</p>
+</blockquote>
+<p>因此，SSL/TLS 协议的基本过程是这样的：</p>
+<blockquote>
+<p>（1） 客户端向服务器端索要并验证公钥。</p>
+<p>（2） 双方协商生成"对话密钥"。</p>
+<p>（3） 双方采用"对话密钥"进行加密通信。</p>
+</blockquote>
+<p>上面过程的前两步，又称为"握手阶段"（handshake），握手阶段使用非对称加密算法，通信阶段使用对称算法。</p>
+<h1 id="抓包">抓包</h1>
+<ol type="1">
+<li><p>打开 Wireshark 进行抓包</p></li>
+<li><p>定位对应网站数据包，两个方法</p>
+<ol type="1">
+<li><p>ctrl + f ，在捕获过滤器下面出现一个搜索栏，第一个下拉列表选择
+“分组详情” ，最后一个下拉列表选择
+“字符串”，搜索你访问的网站的域名，比如:
+baidu,这样就能定位数据报，也就能定位到其 IP 地址了。</p>
+<p>这样做可行的原因是：在 TLS/SSL 握手的时候，Client Hello
+报文中会包含服务器的域名。</p></li>
+<li><p>打开浏览器，按 F12，调出开发者工具，选中 network
+一栏，然后访问一个国内（不用翻墙的网站）的使用 HTTPS
+的网站，待网页加载完毕。然后在开发者工具中找到网站主页，查看此次访问的
+IP。</p></li>
+</ol></li>
+</ol>
+<ol start="3" type="1">
+<li><p>在显示过滤器中输入: ip.addr == 你访问的 ip &amp;&amp; ssl</p>
+<p>更精确的话，可以输入：ip.addr == 你访问的 ip &amp;&amp;
+tls.handshake</p></li>
+</ol>
+<p>对应方法 b 有两个注意点：</p>
+<ol type="1">
+<li><p>为什么要在开发者工具里面实时看 IP，而不直接 ping
+呢？因为现在稍微大一点网站一个域名对应一个主机集群，并不仅仅只是一个主机（IP），所以，即使你在打开网页的同时去在
+cmd 里面 ping 该域名，你 ping 出来的 IP 也不一定是你刚才访问的
+IP。</p></li>
+<li><p>为什么要访问不翻墙的网站呢?</p>
+<p>其实你一看开发者工具就知道了，比如你使用
+Shadowsocks，那么你访问需要翻墙的网站时，在开发者工具里面看到的地址是：127.0.0.0.1:1080.
+这样，还是找不到 IP 呀。</p></li>
+</ol>
+<p>注：</p>
+<ol type="1">
+<li>上面找 IP
+的方法是为了能够找到自己访问的特定网站的数据报所提供，如果你不想找特定网站，那么直接使用显示过滤语法：ssl
+或者 tls.handshake 即可</li>
+<li>本来想放到后面说，但是还是在前面说的，免得你发现自己的包与我的讲解不太相符。要知道即使都是
+TLS 1.2 在执行过程中也会有些许不一样（我猜的，因为我自己抓的和网上找的
+2018 年的一个抓包文件，都是 TLS 1.2
+但有些小差异，也有可能是小版本改动）。此外，你要是都不是 TLS
+1.2，那就更不一样了，不过，大体步骤顺序是一样的，原理一样。</li>
+</ol>
+<p>相关知识：</p>
+<blockquote>
+<p>一个域名用 dns 解析到多台服务器，服务器如果做了负载冗余，那么其中一个
+ip 的服务器宕机了的话，另外一个立马补上而用户去察觉不到
+冗余：起到的作用是在你主备服务器的主机宕机之后，立刻启动备机防止应用不能访问，提供
+24
+小时不间断服务。负载是在一个服务器组中做均衡，提高服务器组的总体运行安全度。这点负载与冗余有很大的相似处。</p>
+</blockquote>
+<p>先放两个图，下面使用一张图来讲解。</p>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/icourse_tls.png" /></p>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/tls.png" /></p>
+<h1 id="原理步骤">原理步骤</h1>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/tls_handshake.png" /></p>
+<p>"握手阶段"涉及四次通信，我们一个个来看。需要注意的是，"握手阶段"的所有通信都是明文的。</p>
+<h2 id="client-hello"><strong>Client Hello</strong></h2>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/client_hello_proc.jpg"
+alt="client hello" />
+<figcaption aria-hidden="true">client hello</figcaption>
+</figure>
+<p>客户端发送 “Client Hello” 报文给服务端</p>
+<p>如果客户端（ Web 浏览器或 手机应用）发起一个 TLS 握手，它将会在
+“Client Hello” 报文中发送下列重要的参数：</p>
+<ul>
+<li><p>随机字节：客户端使用一个安全的随机数产生器产生随机字节。随机数生成的熵源将取决于操作系统和客户端软件的实现，稍后参与生成
+“对话密钥”</p></li>
+<li><p>会话 ID：如果客户端与服务端在过去建立过一个 TLS
+会话，该标识符便可以具有先前的会话 ID
+值，如截图所示，其可以用于更新该会话的加密参数。对于新会话，此字段为空白，这里涉及会话复用知识，会考虑再加一篇文章或给出参考资料。</p></li>
+<li><p>加密套件列表：客户端还会根据它的偏好发送一个它支持的加密套件列表，在此图中，客户端最钟情的加密套件是
+TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256，然而，我们可以看到服务端选择了第二个套件（在下一步中可以看到），这一长串的加密名字表示什么呢？以
+TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 为例，如下图所示：</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/format.png"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>密钥交换使用 ECDHE 算法，服务身份验证使用 RSA 算法，数据传输加密使用
+AES（+GCM），握手使用 SHA256 检验。</p>
+<p>换句话说，证书签名使用 RSA，如果证书验证正确，那么将使用 ECDHE
+算法进行密钥交换，保证浏览器和服务拥有相同的私有密钥，然后一方使用这把密钥进行
+AES 数据加密，另一方使用相同的密钥进行 AES
+数据解密。验证证书签名合法性和密钥交换的身份确认都是使用 SHA256
+这个哈希算法进行检验。具体过程下文展开描述。</p></li>
+<li><p>Compression Method 压缩方式，可以展开下拉列表，默认是
+null。0，即：不使用压缩。</p></li>
+<li><p>下面我们可以看一看 Extension</p>
+<ol type="1">
+<li>Reserverd 是保留</li>
+<li>server_name
+服务器名，可以下拉列表展开，这里可以看到，我是抓的包的服务端是
+www.icourse163.org，就是中国大学 MOOC。</li>
+<li>session_ticket 会话票据，客户端发起 client hello，Extention
+中带上空的 session ticket TLS，表明自己支持 session ticket。</li>
+<li>supported_version 包含 Client 支持的 TLS 协议版本。</li>
+<li>以后有重要的再补充</li>
+</ol></li>
+</ul>
+<h2 id="server-hello">Server Hello</h2>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/serverhello_proc.jpg"
+alt="server hello" />
+<figcaption aria-hidden="true">server hello</figcaption>
+</figure>
+<p>“Server Hello” 报文是用来回应 “Client Hello” 报文的。</p>
+<p>服务器收到客户端请求后，向客户端发出回应，这叫做 ServerHello
+。服务器从收到的客户端请求的加密方法列表选择一组它支持的加密方法，如果该列表中不包括服务器认可、支持或想要使用的加密方法组，那么服务器将会忽略这些密文，如果服务器找不到自己支持的加密组，那么它将发送失败警告并关闭连接。</p>
+<p>服务器的回应内容包括以下内容</p>
+<ul>
+<li>随机数：服务端生成一个与客户端独立（无关）的随机数，稍后参与生成
+“对话密钥”</li>
+<li>加密通信协议版本和加密套件：如果浏览器与服务器支持的版本不一致，服务器关闭加密通信。在本次抓包中，服务端选择了客户端第二偏好的加密套件：<code>TLS 1.2 with TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</code>.</li>
+<li>Session ID : 这里返回的 session ID 为
+0，即：服务器没有进行会话复用。原因是因为服务器会话老化了，服务期开启了新的会话，新的会话的会话
+ID 为 0</li>
+<li>带有证书链的服务器证书（客户端信任库中存储的证书将验证该证书链）</li>
+</ul>
+<p>除了上面这些信息，如果服务器需要确认客户端的身份，就会再包含一项请求，要求客户端提供"客户端证书"，比如，金融机构往往只允许认证客户连入自己的网络，就会向正式客户提供
+USB 密钥，里面就包含了一张客户端证书。</p>
+<h2 id="server-certificate">Server Certificate</h2>
+<p>在 “server hello” 完成之后，服务端必须发送能够被浏览器或移动设备的根
+CA 验证的证书或证书链，根据上面显示的数字，这些证书是被
+www.icouse163.com
+服务器发送的。（客户端收到服务器回应以后，首先验证服务器证书。如果证书不是可信机构颁布、或者证书中的域名与实际域名不一致、或者证书已经过期，就会向访问者显示一个警告，由其选择是否还要继续通信。）</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/cert.png"
+alt="Certificate" />
+<figcaption aria-hidden="true">Certificate</figcaption>
+</figure>
+<p>CA（<em>certification authority</em>）是以构建在公钥基础设施
+PKI（public key
+infrastructure）基础之上的产生和确定数字证书的第三方可信机构（trusted
+third
+party）。在这里，我将简要介绍一下当浏览器收到服务端的证书时发生了些什么。基于
+PKI 的 CA 和 TLS 协议结合起来能提供很好的安全性。
+要知道，我们对根证书有无条件的信任。注意下面一段的内容并不属于 TLS
+协议的一部分。</p>
+<p>“加密”字段实际上是与第一个证书相关联的数字签名。“encrypted”字段上方的“algorithmIdentifier”字段表示
+sha256WithRSAEncryption 。这意味着第一个证书的 SHA-256
+哈希值是使用上面的证书颁发机构的 RSA（私有）密钥签名的。
+浏览器使用证书中与之相对应的公钥来验证签名。继续相同的验证步骤，直到 CA
+证书正好位于根 CA 之下。根 CA 证书不需要验证，因为它由浏览器隐式信任。
+请注意，“algorithmIdentifier” 值与前面描述的“密码套件不相关。
+现在，在此消息中突出显示一个字段非常重要。嵌入在证书链中第一个证书中的公钥如下图所示：</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/rsa_pukey.png"
+alt="www.icourse163.com 在第一个证书中的公钥" />
+<figcaption aria-hidden="true">www.icourse163.com
+在第一个证书中的公钥</figcaption>
+</figure>
+<p>此证书包含 www.icourse163.com 服务器的 RSA
+公钥（以及相关的数学参数），因为服务器选择了包含 RSA
+作为数字签名算法的密码套件。该公钥将在握手的后续步骤中用于数字签名。</p>
+<h2 id="server-key-exchange-server-hello-done">Server Key Exchange &amp;
+Server Hello Done</h2>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/server_exchage.png"
+alt="server_exchage" />
+<figcaption aria-hidden="true">server_exchage</figcaption>
+</figure>
+<p>服务器在 “server key exchange message” 消息中发送它的参数</p>
+<p>握手协议的下一步是交换用于生成对称密钥的参数以加密所有未来的应用程序数据。
+当服务器和客户端同意使用 Elliptic Curve Diffie-Hellman
+Ephemeral（ECDHE）时，他们需要交换 ECDHE
+算法中使用的公共参数。加密细节超出了这里的范围。
+但是，请注意此处发送的三个突出显示的值：</p>
+<ul>
+<li>命名曲线：服务器为计算选择的椭圆曲线。</li>
+<li>公钥：客户端使用的服务器的公共组件。</li>
+<li>签名：使用服务器的私有 RSA
+密钥对值进行签名，以便客户端可以验证（使用证书中的相应公钥）ECDHE
+参数确实来自与其通信的服务器而不是攻击者。</li>
+</ul>
+<p>“Server Hello done” 意味着 “Server Hello” 报文的结束</p>
+<h2
+id="client-key-exchange-change-cipher-spec-encrypted-handshake">Client
+Key Exchange / Change Cipher Spec /Encrypted handshake</h2>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/key_change.png"
+alt="key_change" />
+<figcaption aria-hidden="true">key_change</figcaption>
+</figure>
+<p><strong>Client Key Exchange</strong></p>
+<p>“Client Key Exchange” 包含客户端的供 ECDHE
+使用的公共参数，在这种情况下，客户端参数并未签名。</p>
+<p>现在，在我们查看上面屏幕截图中的其他消息之前，让我们先看看客户端和服务器如何生成密钥（称为主密钥）。</p>
+<p>根据 8.1 RFC 5246，master_secret 的公式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">master_secret = PRF(pre_master_secret, &quot;master secret&quot;,   ClientHello.random + ServerHello.random)</span><br></pre></td></tr></table></figure>
+<p>上面提到的* pre_master_secret *实际上是服务器和客户端使用 ECDHE
+算法计算的密钥。伪随机函数（PRF）实际上是 HMAC-SHA256。
+ClientHello.random 和 ServerHello.random 是在初始 hello
+消息期间分别由客户端和服务器生成和交换的随机值。字符串 “master secret”
+也用在 PRF 中。 master_secret 长 48 个字节。</p>
+<p>至于为什么一定要用三个随机数，来生成"会话密钥"，<a
+target="_blank" rel="noopener" href="http://blog.csdn.net/dog250/article/details/5717162">dog250</a>解释得很好：</p>
+<blockquote>
+<p>"不管是客户端还是服务器，都需要随机数，这样生成的密钥才不会每次都一样。由于
+SSL
+协议中证书是静态的，因此十分有必要引入一种随机因素来保证协商出来的密钥的随机性。</p>
+<p>对于 RSA 密钥交换算法来说，pre-master-key 本身就是一个随机数，再加上
+hello
+消息中的随机，三个随机数通过一个密钥导出器最终导出一个对称密钥。</p>
+<p>pre master 的存在在于 SSL
+协议不信任每个主机都能产生完全随机的随机数，如果随机数不随机，那么 pre
+master secret 就有可能被猜出来，那么仅适用 pre master secret
+作为密钥就不合适了，因此必须引入新的随机因素，那么客户端和服务器加上 pre
+master secret
+三个随机数一同生成的密钥就不容易被猜出了，一个伪随机可能完全不随机，可是是三个伪随机就十分接近随机了，每增加一个自由度，随机性增加的可不是一。"</p>
+</blockquote>
+<p>此时，重要的是指出一个在 TLS 记录协议中执行关于 master_secret
+的操作。 TLS
+记录协议是一个单独的子协议，用于实际加密和传输高级协议数据，如
+HTTP。使用 TLS 记录协议中的 PRF 将主密钥“扩展”为更多秘密。 从
+master_secret 派生的密钥在 RFC 规范的<a
+target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc5246#section-6.3">section
+6.3</a>中命名如下：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client_write_MAC_key[SecurityParameters.mac_key_length]   server_write_MAC_key[SecurityParameters.mac_key_length]   client_write_key[SecurityParameters.enc_key_length]      server_write_key[SecurityParameters.enc_key_length]      client_write_IV[SecurityParameters.fixed_iv_length]      server_write_IV[SecurityParameters.fixed_iv_length]</span><br></pre></td></tr></table></figure>
+<p>可以猜测，“写密钥”用于加密数据。 “写 MAC” 密钥用于计算应用级数据的
+MAC。仅在密码套件需要时才计算初始化向量（IV）。由于客户端和服务器都具有所有这些密钥，因此它们可以解密并验证消息的完整性。</p>
+<p><strong>Change Cipher Spec</strong></p>
+<p>Change Cipher Spec 是 TLS 中的一个单独的子协议，用于指示 TLS
+协商中的任何一方将使用协商的密钥和算法加密后续消息。</p>
+<p><strong>Encrypted Handshake Message (Finished Message)</strong></p>
+<p>你们中的一些人可能想知道握手消息中中间人攻击（Man-In-The-Middle
+）的可能性。例如，如果攻击者改变客户端发送的密码套件列表以使服务器选择相对较弱的密码套件，该怎么办？
+TLS 协议确实使用 Finished Message 来防止 MITM 攻击，它在 Change Cipher
+Spec 消息之后发送。 屏幕截图中的“加密握手消息”将是一个 HMAC-SHA256
+。他有下列属性</p>
+<ol type="1">
+<li>有着 主密钥（master_secret）</li>
+<li>所有先前握手消息的哈希值（从 ClientHello 到 Finished Message
+，不包括此 Finished Message ）</li>
+<li>结束标志字符串（客户端消息为“client finished”，服务器消息为“server
+finished”）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">verify_data</span><br><span class="line">			PRF(master_secret, finished_label, Hash(handshake_messages))(quoted from section 7.4.9 of RFC 5246)</span><br></pre></td></tr></table></figure>
+<p>如果服务器或客户端无法验证握手消息的完整性，则 TLS 握手失败。</p>
+<h2 id="encrypted-application-data">Encrypted Application Data</h2>
+<p>在握手完成后，传送加密的数据。</p>
+<ul>
+<li>MAC-then-Encrypt：在明文上计算
+MAC，将其附加到数据，然后加密整个（这就是<a
+target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc5246">TLS</a>所做的）</li>
+<li>加密和 MAC：在明文上计算 MAC，加密明文，然后将 MAC
+附加到密文的末尾（这就是 SSH 所做的）</li>
+<li>Encrypt-then-MAC：加密明文，然后在密文上计算
+MAC，并将其附加到密文（在这种情况下，我们不要忘记将初始化矢量（IV）和加密方法标识符包含在
+MACed 数据中）</li>
+</ul>
+<p>前两个选项通常称为“MAC-then-encrypt”，而第三个选项则是“encrypt-then-MAC”。</p>
+<p>直到 TLS 1.2，“MAC-then-Encrypt” 技术仍然用来从上层（ TLS record
+协议）加密和保证数据的完整性。首先，使用 客户端的 client_write_MAC_key
+或 服务端的 server_write_MAC_key 来创建消息的 MAC，然后明文数据和 MAC
+被客户端使用 client_write_key 和服务端使用 server_write_key
+各自加密。</p>
+<p>参考资料</p>
+<blockquote>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://www.ietf.org/rfc/rfc5246.txt">RFC 5246</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/mrpre/article/details/77868669">TLS/SSL
+会话复用</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://medium.com/@ethicalevil/tls-handshake-protocol-overview-a39e8eee2cf5">TLS
+1.2 hand shake</a></li>
+</ol>
+</blockquote>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" rel="tag">网络协议</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2019/07/13/wireshark/tcp_protocol/">TCP协议</a><a class="next" href="/blog/2019/07/07/wireshark/ip_protocol/">IP协议</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

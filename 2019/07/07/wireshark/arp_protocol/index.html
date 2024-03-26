@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>ARP协议 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">ARP协议</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">ARP协议</h1><div class="post-meta">2019-07-07<span> | </span><span class="category"><a href="/blog/categories/wireshark/">wireshark</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 2.7k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 9</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-number">1.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#arpaddress-resolution-protocol"><span class="toc-number">2.</span> <span class="toc-text">ARP（Address Resolution
+Protocol）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">2.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">协议格式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">抓包分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cache-validation-%E6%8A%A5%E6%96%87"><span class="toc-number">3.1.</span> <span class="toc-text">cache validation 报文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gratuitous-arp"><span class="toc-number">3.2.</span> <span class="toc-text">Gratuitous ARP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rarp"><span class="toc-number">3.3.</span> <span class="toc-text">RARP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><h1 id="目的">目的</h1>
+<ol type="1">
+<li>学习 ARP 协议原理，掌握 ARP 请求数据报以及响应数据包的各自特点</li>
+<li>学会使用 Wireshark 分析 ARP
+数据报，掌握请求以及响应数据报的分析方法以及各自的特点。</li>
+<li>分析免费 ARP 的特点，并与正常 ARP 请求的数据报作对比</li>
+</ol>
+<h1 id="arpaddress-resolution-protocol">ARP（Address Resolution
+Protocol）</h1>
+<h2 id="简介">简介</h2>
+<p>ARP 的全称是 Address Resolution Protocol，直译过来是
+<strong>地址解析协议</strong>。对应的 RFC 文档是 <a
+target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc826">RFC826</a>。它的作用是把 IP
+地址转换为 MAC 地址。为什么需要做这件事呢？</p>
+<p>这是因为 TCP/IP 网络协议栈是分层的，每层负责不同的功能。IP 层（layer
+3）负责路由寻路，换句话说，如果目的机器和客户端不在同一个网络，IP
+层会穿过错综复杂的中间网络（互联网）找到目的机器所在的网络。</p>
+<p>当报文在某一个网络中传播时（可能源机器和目的机器本来就在同一个网络，也可能报文在路由过程中执行下一跳步骤），IP
+层的功能就没有用了，这时候起作用的是 2
+层网络（链路层），大多数情况下就是以太网。以太网负责把多个机器连到一起，组成一个最小单位的局域网。在以太网中，不同机器的标识是
+MAC 地址，MAC 地址是机器在生产的时候厂商为机器设定的。</p>
+<p>有了 MAC 地址，同一个以太网络上的两台机器才能够通信。机器 A
+需要知道机器 B 的 MAC
+地址，才能发送以太网帧；交换机收到报文之后，根据目的 MAC
+地址决定应该从哪个端口发送出去；目的机器读取报文的 MAC
+地址才能知道报文是不是要发给自己的。</p>
+<p>最开始的时候，机器 A 只知道目的地址的 IP（用户用某种方式输入 IP
+地址，或者通过 DNS 解析出来 IP 地址），不知道对方的 MAC
+地址。这时候，机器 A 会发送 ARP 报文，去查询机器 B 的 MAC 地址，拿到 MAC
+地址，就能完成通信的过程。</p>
+<p>ARP 协议的内容，以及怎么拿到 MAC 地址就是这篇文章接下来要讲解的。</p>
+<h2 id="原理">原理</h2>
+<ol type="1">
+<li>机器 A 想和同一个以太网络的机器 B 通信，A 会现在自己的 ARP 表中查找
+B 的 MAC
+地址，如果能找到就直接发送以太网帧；如果没有找到，就跳到第二步</li>
+<li>机器 A 发送 ARP 请求报文去查询机器 B 的 MAC
+地址，这是个以太网广播报文，因此交换机会广播到网络中所有的机器</li>
+<li>各个主机接收到 ARP 请求报文，如果发现 ARP 报文中询问的 IP
+地址和自己不同，则直接丢弃；机器 B 发现 ARP 报文中询问的 IP
+地址是自己的主机地址，则生成一个 ARP 应答报文，把自己的 MAC
+地址填到报文中，发送给机器
+A，这个报文是单播报文，不会发送给其他主机；同时机器 B 也会把机器 A 的
+ARP 记录缓存起来</li>
+<li>机器 A 接收到 B 发来的 ARP 应答，读取报文中 B 的 MAC 地址，使用这个
+MAC 地址和机器 B 进行后续的通信，同时把它缓存到系统中</li>
+</ol>
+<h2 id="协议格式">协议格式</h2>
+<p>ARP 报文格式如下图所示，对于 IP 地址转换为 MAC 地址来说，ARP
+报文长度为 28 字节。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/arpformat.png"
+alt="ARP Format" />
+<figcaption aria-hidden="true">ARP Format</figcaption>
+</figure>
+<p>各个字段的含义为：</p>
+<ul>
+<li><code>Hardware Type</code>：传输 ARP
+报文的物理网络类型，最常见的是以太网类型，对应的值是 1。这个字段的长度是
+2 字节</li>
+<li><code>Protocol Type</code>：网络报文类型，字段长度是 2
+字节。最常用的是 IPv4 报文，对应的值是 2048（十六进制为
+0x0800，这和以太网帧中帧类型字段使用的 IP
+报文类型相同，这是有意设计的）</li>
+<li><code>Hardware Address Length</code>（Hardware
+size）：物理地址长度，字段长度是 1 比特。ARP 协议报文中物理地址（MAC
+地址）有多少比特，对于大部分网络来说，这个值是 6（因为 MAC 地址是 6
+个字节，48 比特长）</li>
+<li><code>Protocol Address Length</code>（Protocol
+size）：网络地址长度，字段长度是 1 比特。表示 ARP 协议报文中网络地址（IP
+地址）有多少比特，对于大部分网络来说，这个值是 4（因为 IPv4 地址是 4
+个字节，32 比特）</li>
+<li><code>Opcode</code>：ARP 报文的类型，接下来我们会看到几种不同的 ARP
+报文。这个字段占用 2 个比特，值为 1 代表 ARP 请求报文，值为 2 代表 ARP
+应答报文，3 代表 RARP 请求报文，4 代表 RARP 应答报文</li>
+<li><code>Sender Hardware Address</code>：当前 ARP
+报文的发送方的物理地址（MAC 地址）</li>
+<li><code>Send Protocol Address</code>：当前 ARP
+报文发送发的网络地址（IPv4 地址）</li>
+<li><code>Target Hardware Address</code>：当前 ARP
+报文接收方的物理地址（MAC 地址），如果是 ARP
+情况，这个字段为空（因为发送方正是因为不知道对方的 MAC 地址，才会使用
+ARP 来解析）</li>
+<li><code>Target Protocol Address</code>：当前 ARP
+报文接收方的网络地址（IPv4 地址）</li>
+</ul>
+<p>需要注意的是，虽然 ARP 协议目前最常用的场景是把 IP 地址转换为 MAC
+地址，但是它设计之初却是为了更一般的场景。它的硬件类型、协议类型就是为了指明要转换地址的双方；而硬件地址长度和协议地址长度指定双方的地址长度（每种协议的地址长度可以会发生变化），其对应的就是头部最后面四个地址长度。</p>
+<p>也就是说，ARP
+本身可以转换其他硬件地址和网络地址，而且允许它们的地址长度是可变的。这导致
+ARP 协议现在看来是有点冗余的，毕竟 IPv4 和 MAC
+地址长度都是固定的，没有必要在协议中指定。</p>
+<p>ARP 发送出去会被封装在以太网帧里，ARP 报文中有发送端的 MAC
+地址，而以太网帧的报文头部也包含了发送端的 MAC
+地址，也就是说报文中有完全重复的信息。</p>
+<h1 id="抓包分析">抓包分析</h1>
+<p>下面是一对 ARP 请求与响应包</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/packet.png"
+alt="Packets" />
+<figcaption aria-hidden="true">Packets</figcaption>
+</figure>
+<p>报文列表的 <code>Info</code> 字段，对应的内容是：</p>
+<blockquote>
+<p>Who has 10.0.0.254? Tell 10.0.0.6</p>
+<p>10.0.0.254 is at 00：00：39：cf：d9：cd</p>
+</blockquote>
+<p>这是 wireshark 帮我们解析 ARP
+报文，并用英语表达出来。这句话生动地概括了 ARP
+请求的意思：<strong>谁知道 10.0.0.254 的物理地址？告诉
+10.0.0.6</strong>. ARP 响应的意思：<strong>10.0.0.254 的物理地址是
+00：00：39：cf：d9：cd</strong>.</p>
+<p>第一个包（请求包）：</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/arp_request.png"
+alt="First" />
+<figcaption aria-hidden="true">First</figcaption>
+</figure>
+<ol type="1">
+<li>数据帧大小 42 字节，全部被捕获</li>
+<li>以太网源地址为本地 MAC 地址，目的地址为 全 1 的广播地址，类型为
+ARP</li>
+<li>此报文为 ARP request，物理网络类型：以太网，请求 IP: 10.0.0.254 的
+MAC 地址</li>
+</ol>
+<p>第二个包（响应包）：</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/wireshark/%E8%BF%9B%E9%98%B6/arp_reply%20.png"
+alt="Second" />
+<figcaption aria-hidden="true">Second</figcaption>
+</figure>
+<ol type="1">
+<li>数据帧大小 60 字节，全部被捕获</li>
+<li>以太网目的地址为本机地址，源地址即为所查询 IP 的主机的 MAC 地址</li>
+<li>此报文为 ARP 响应报文，物理网络类型：以太网，目的 IP 及 MAC
+均对应我的主机，源 IP 为我主机请求 IP，源 MAC 即为 该 IP 对应 MAC
+地址。</li>
+</ol>
+<h2 id="cache-validation-报文">cache validation 报文</h2>
+<p>抓包的时候还看到了有一对 ARP 报文，它们是从机器 B 发来查询机器 A MAC
+地址的。但 ARP 请求报文以太网帧的目的地址不是广播，而是机器 A 的 MAC
+地址，原因是为了<strong>验证缓存的有效性</strong>！具体可查看下面的参考链接，</p>
+<h2 id="gratuitous-arp">Gratuitous ARP</h2>
+<p>除了标准的 ARP 之外，还有一种特殊的 ARP 报文，称为 Gratuitous
+ARP（免费 ARP）。这个报文也是广播报文，它的特殊性在于，它的报文中发送端
+IP 地址和接收端 IP 地址都被设置为发送该报文的主机
+IP。为什么要有这样一个特殊的报文呢？因为它有用，比如：</p>
+<ul>
+<li>检测 IP 冲突。如果免费 ARP
+请求接收到应答，说明当前网络上有另外一个和发送机器有相同 IP 的主机</li>
+<li>可以用来更新网络中当前机器的 ARP 缓存。如果机器重新配置了 IP
+地址，那么免费 ARP 报文能够把新的 IP-MAC
+匹配关系广播到网络中，接收到报文的机器更新自己的 ARP
+缓存记录，这样就不会有因为 ARP 缓存失效导致的网络问题</li>
+</ul>
+<p>如果机器 A 重新配置了 IP 地址，那么 MAC 与 IP
+的对应关系就发生了变化，网络中保存的旧 ARP
+表项都失效，无法继续使用，会导致 ping 错误。Linux 系统中可以使用
+<code>arping</code> 命令行来发送 Gratuitous
+ARP，让网络中所有主机更新当前机器的 ARP 记录。</p>
+<h2 id="rarp">RARP</h2>
+<p>在抓包测试 ARP 协议时，抓到了 RARP
+的包，于是经过一番查阅后，简要介绍一一下 RARP
+协议（首先你要知道，它已经过时了）。</p>
+<p>RARP（Reverse Address Resolution
+Protocol）是一个<strong>过时</strong>的被局域网中的客户机用来向网关路由器的
+ARP 表请求自己的 IPv4 地址的网络协议。网络管理员在网关路由器上创建了 ARP
+表，用来映射 MAC 地址与 IP 地址。</p>
+<p>当一台新的机器被创建或任何没有内存存储自己的 IP 地址的机器需要一个 IP
+地址供自己使用时，这台机器（称其为 A）发送 RARP
+广播包，其中发送方和接收方的 MAC 都是它自己的 MAC 地址。</p>
+<p>在局域网中，有一台主机被单独配置为 RARP
+服务器，它负责回应这种广播包。RARP 服务器收到广播包之后，在 ARP
+表中查找，如果有匹配的表项，则将 IP 地址放在返回包中，返回给 A。</p>
+<p>RARP 在如今的网络中已经不被使用，因为有更加高效的协议比如：
+BOOTP（Boostrap Protocol） 和 DHCP。 RARP 可以满足主机 IP
+地址配置的部分要求，但是不能完全满足包括但不限于以下配置：网络掩码，网关地址，静态路由，DNS
+服务器，以及私有的，公有的 option 功能。 RARP
+是二层协议，无法穿透子网，DHCP 可以穿透子网。</p>
+<h1 id="参考资料">参考资料</h1>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://cizixs.com/2017/07/31/arp-protocol/">ARP
+协议解析</a>（极力推荐）</li>
+</ul>
+</blockquote>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" rel="tag">网络协议</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2019/07/07/wireshark/ip_protocol/">IP协议</a><a class="next" href="/blog/2019/07/07/wireshark/basic_funciton/">二. Wireshark的基本功能</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

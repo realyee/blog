@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>机器学习概述 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">机器学习概述</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">机器学习概述</h1><div class="post-meta">2021-07-15<span> | </span><span class="category"><a href="/blog/categories/ml/">ml</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.5k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 6</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="toc-number">1.</span> <span class="toc-text">发展历史</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#alml-%E5%92%8C-dl"><span class="toc-number">1.1.</span> <span class="toc-text">AL、ML 和 DL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">机器学习算法分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#supervised-learning"><span class="toc-number">2.1.</span> <span class="toc-text">Supervised learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unsupervised-learning"><span class="toc-number">2.2.</span> <span class="toc-text">Unsupervised learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#semi-supervised-learning"><span class="toc-number">2.3.</span> <span class="toc-text">Semi-Supervised Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reinforcement-learning"><span class="toc-number">2.4.</span> <span class="toc-text">Reinforcement learning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E6%9C%AF%E8%AF%AD"><span class="toc-number">3.</span> <span class="toc-text">基本概念术语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E7%B1%8D%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">书籍资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><p>本文主要介绍机器学习的概念、分类与相关学习资料</p>
+<h2 id="发展历史">发展历史</h2>
+<ol type="1">
+<li><p><strong>machine learning</strong> as a "<strong>field of
+study</strong> that gives computers the ability to learn without being
+explicitly programmed --Arthur Samuel</p></li>
+<li><p><strong>Well-Posed Learning Problems</strong></p>
+<p>A <strong>computer</strong> program is said to <strong>learn</strong>
+from experience E with respect to some class of tasks T and performance
+measure P, if its performance at tasks in T, as measured by P, improves
+with experience E. --Tom Mitchell</p></li>
+</ol>
+<h3 id="alml-和-dl">AL、ML 和 DL</h3>
+<p>AI is really a broad term and somewhat this also causes every company
+to claim their product has AI these days. Then ML is a subset of AI, and
+consists of the more advanced techniques and models that enable
+computers to figure things out from the data and deliver AI
+applications. ML is the science of getting computers to act without
+being explicitly programmed.</p>
+<p>Finally, DL is a newer area of ML that that uses multi-layered
+artificial neural networks to deliver high accuracy in tasks such as
+object detection, speech recognition, language translation and other
+recent breakthroughs that you hear in the news.</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/2021020816127886102281.png"
+alt="发展历程" />
+<figcaption aria-hidden="true">发展历程</figcaption>
+</figure>
+<h2 id="机器学习算法分类">机器学习算法分类</h2>
+<p>根据训练数据是否拥有标记信息，学习任务可大致划分为两大类：“监督学习”（supervised
+learning）和“无监督学习”（unsupervised
+learning），分类和回归是前者的代表，而聚类则是后者的代表.</p>
+<ol type="1">
+<li>Supervised learning Teach the computer how to do something</li>
+<li>Unsupervised learning Let it learning by itself</li>
+</ol>
+<p>Others:</p>
+<ul>
+<li>Reinforcement learning</li>
+<li>Recommender systems</li>
+</ul>
+<p>The classification of Supervised Learning and Unsupervised Learning
+are based on the forms of the data you get.</p>
+<h3 id="supervised-learning">Supervised learning</h3>
+<p>Give the algorithm a data set in which the "right answer" （label）
+were given. The task of the algorithm is to learn to produce more of
+this right answer througth learning the given data set.</p>
+<p>给定有标签的数据集，通过它学习输入与输出的对应关系。就像刷题一样，自己做题，然后根据给的答案（label）来不断调整自己的方法和思路，最终作出正确答案。</p>
+<p>监督学习目前使用较为广泛，主要分为两类：</p>
+<ol type="1">
+<li><p>Regression problem</p>
+<p>预测连续的输出值（例如：价格、高度、时间等）
+根据数据样本上抽取的特征，预测连续值结果，如：房价多少，得分多少，GDP
+多少</p>
+<p>回归问题是在做计算题</p></li>
+<li><p>Classification problem</p>
+<p>预测<strong>离散</strong>的输出值（例如：对错、好坏、a、b 或 c 等）
+根据数据样本上抽取出的特征，判定其属于有限个类别中的哪一个，比如：垃圾邮件识别（结果类别：yes
+or
+no），文本情感褒贬识别（结果类别：褒、贬），图像内容识别（结果类别：猫，狗，人，其他）</p>
+<p>分类问题是在做选择题</p>
+<p>注: 逻辑回归实际上是分类问题</p></li>
+</ol>
+<h3 id="unsupervised-learning">Unsupervised learning</h3>
+<p>We‘re given data that looks different, and doesn't havs any labels or
+that all have the same label or really no labels. We expect the model
+find some structure in the data.</p>
+<p>给定数据集，没有标签，通过程序自己去挖掘数据具有的特征，从而学得模型。</p>
+<p>无监督学习主要以聚类问题为主</p>
+<ol type="1">
+<li><p>Clustering algorithm</p>
+<p>Break the data into some kinds of separate clusters (such as google
+new sort tons of informations into separate clusters、Organize computing
+clusters、Social network analysis、Market segmentation、Astronomical
+data analysis etc)</p>
+<p>聚类算法：将数据分成几类，根据数据样本抽取出的特征，挖掘数据的关联、聚合模式。</p></li>
+<li><p>Cocktail party problem</p>
+<p>Separate the different things from different sources</p></li>
+</ol>
+<h3 id="semi-supervised-learning">Semi-Supervised Learning</h3>
+<p>Semi-supervised learning falls between unsupervised learning (with no
+labeled training data) and supervised learning (with only labeled
+training data). It combines a small amount of labeled data with a large
+amount of unlabeled data during training.</p>
+<h3 id="reinforcement-learning">Reinforcement learning</h3>
+<p>强化学习是从环境到行为映射的学习，它研究基于环境而行动，以取得最大化的预期收益，例如：游戏如何得最高分，机器人完成任务。</p>
+<h2 id="基本概念术语">基本概念术语</h2>
+<p>下面以使用范围较广的监督学习为例子，介绍机器学习的概念</p>
+<p>数据集</p>
+<ul>
+<li>训练集 有正确答案的，被标记的，用来学习，归纳的数据集。</li>
+<li>测试集 没有正确答案的，没有标记的，用来测试模型的优劣的数据集。</li>
+</ul>
+<p>对于非监督学习，训练集和测试集就没与什么区别了，只是使用时的目的不一样而已。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/16132680505121.jpg"
+alt="16132680505121" />
+<figcaption aria-hidden="true">16132680505121</figcaption>
+</figure>
+<p>上图中数据的每一行，叫做一个示例（instance）、样例（example）、样本（sample）</p>
+<p>前三列每一列的表头叫做：属性（attribute）、特征（feature）</p>
+<p>每个样本的每一列上的值叫做：属性值、特征值</p>
+<p>所有的属性构成一个属性空间，所有的样本构成一个样本空间，输入‘X’可能取值的集合就是输入空间（input
+space）</p>
+<p>属性向量：每一个属性有一个列向量，这些列向量构建: [x1,x2,..xn]
+成为一个特征向量</p>
+<p>机器学习的整个流程：根据数据的类型，特点等，采用不同学习方法（监督与无监督）中不同的学习算法（learning
+algorithm）来进行训练，从而得到一个模型，然后对这个模型进行测试，然后改进、迭代。</p>
+<p>模型/假设(hypothesis)/学习器(learner):估计函数，对规律和模式的预测
+学习机（learner）：使用的学习算法 真相（ground-truth）：标签、标准答案
+样本（sample） =
+属性（attribute）/特征（feature）+标记/标签（label）</p>
+<p>泛化能力：模型适用于新样本的能力，称为“泛化”（generalization）能力，具有强泛化能力的模型能很好地适用于整个样本空间，于是，尽管训练集通常只是样本空间的一个很小的采样，我们仍希望它能很好地反映出样本空间的特性。</p>
+<p>归纳偏好：机器学习算法在学习过程中对某种类型假设的偏好，称为“归纳偏好”（inductive
+bias），或简称为“偏好” “奥卡姆剃刀”（Occam's
+razor）是一种常用的、自然科学研究中最基本的原则，即“若有多个假设与观察一致，则选最简单的那个”</p>
+<h2 id="书籍资料">书籍资料</h2>
+<ol type="1">
+<li>Prof Andrew Ng Machine Learning. Stanford University</li>
+<li>周志华，机器学习，清华大学出版社，2016</li>
+<li>Python 数据分析与挖掘实战</li>
+<li>面向机器智能的 tensorflow 实践</li>
+<li>机器学习系统设计</li>
+<li>tensorflow 技术解析与实战</li>
+<li><a
+target="_blank" rel="noopener" href="http://scikit-learn.org/stable/index.html">Scikit-learn</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://developers.google.com/machine-learning/crash-course">Google
+Crash-Course</a></li>
+</ol>
+<h2 id="参考资料">参考资料</h2>
+<blockquote>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://www.coursera.org/learn/machine-learning">Machine
+Learning by Stanford University | Coursera</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/MLbook2016.htm">周志华
+机器学习</a></li>
+</ol>
+</blockquote>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2021/07/18/ml/3.sample_evaluation/">机器学习样本评估与选择</a><a class="next" href="/blog/2021/07/15/ml/1.intro_regression/">机器学习基本概念</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

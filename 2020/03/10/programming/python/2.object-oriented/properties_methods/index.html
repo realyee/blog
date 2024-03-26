@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Python class | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Python class</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Python class</h1><div class="post-meta">2020-03-10<span> | </span><span class="category"><a href="/blog/categories/python/">python</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.7k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 6</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">类的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AF%E8%AF%AD-%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">术语 —— 实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E6%98%AF%E4%B8%80%E4%B8%AA%E7%89%B9%E6%AE%8A%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">类是一个特殊的对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%B1%9E%E6%80%A7%E5%92%8C%E5%AE%9E%E4%BE%8B%E5%B1%9E%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">类属性和实例属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">2.1.</span> <span class="toc-text">概念和使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E8%8E%B7%E5%8F%96%E6%9C%BA%E5%88%B6%E7%A7%91%E6%99%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 属性的获取机制（科普）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E6%96%B9%E6%B3%95%E5%92%8C%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">类方法和静态方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E6%96%B9%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 类方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 方法综合案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95%E7%B1%BB%E6%96%B9%E6%B3%95%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">实例方法、类方法、静态方法</span></a></li></ol></div></div><div class="post-content"><h2 id="类的结构">类的结构</h2>
+<h3 id="术语-实例">术语 —— 实例</h3>
+<ol type="1">
+<li>使用面向对象开发，<strong>第 1 步</strong> 是设计
+<strong>类</strong></li>
+<li>使用<code>类名()</code> 创建对象，创建对象的动作有两步:
+<ol type="1">
+<li>在内存中为对象 <strong>分配空间</strong></li>
+<li>调用初始化方法 <code>__init__</code> 为
+<strong>对象初始化</strong></li>
+</ol></li>
+<li>对象创建后，<strong>内存</strong> 中就有了一个对象的
+<strong>实实在在</strong> 的存在 —— <strong>实例</strong></li>
+</ol>
+<p>因此，通常也会把：</p>
+<ol type="1">
+<li>创建出来的 <strong>对象</strong> 叫做 <strong>类</strong> 的
+<strong>实例</strong></li>
+<li>创建对象的 <strong>动作</strong> 叫做 <strong>实例化</strong></li>
+<li><strong>对象的属性</strong> 叫做 <strong>实例属性</strong></li>
+<li><strong>对象调用的方法</strong> 叫做 <strong>实例方法</strong></li>
+</ol>
+<p>在程序执行时：</p>
+<ol type="1">
+<li>对象各自拥有自己的 <strong>实例属性</strong></li>
+<li>调用对象方法，可以通过 <code>self</code>
+<ul>
+<li>访问自己的属性</li>
+<li>调用自己的方法</li>
+</ul></li>
+</ol>
+<p><strong>结论</strong></p>
+<ul>
+<li><strong>每一个对象</strong> 都有自己
+<strong>独立的内存空间</strong>，<strong>保存各自不同的属性</strong></li>
+<li><strong>多个对象的方法</strong>，<strong>在内存中只有一份</strong>，在调用方法时，<strong>需要把对象的引用</strong>
+传递到方法内部</li>
+</ul>
+<h3 id="类是一个特殊的对象">类是一个特殊的对象</h3>
+<blockquote>
+<p><code>Python</code> 中 <strong>一切皆对象</strong>：</p>
+<ul>
+<li><code>class AAA:</code> 定义的类属于 <strong>类对象</strong></li>
+<li><code>obj1 = AAA()</code> 属于 <strong>实例对象</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>在程序运行时，<strong>类</strong> 同样
+<strong>会被加载到内存</strong></li>
+<li>在 <code>Python</code> 中，<strong>类</strong> 是一个特殊的对象 ——
+<strong>类对象</strong></li>
+<li>在程序运行时，<strong>类对象</strong> 在内存中
+<strong>只有一份</strong>，使用 <strong>一个类</strong> 可以创建出
+<strong>很多个对象实例</strong></li>
+<li>除了封装<strong>实例</strong>的<strong>属性</strong>和<strong>方法</strong>外，<strong>类对象</strong>还可以拥有自己的<strong>属性</strong>和<strong>方法</strong>
+<ol type="1">
+<li><strong>类属性</strong></li>
+<li><strong>类方法</strong></li>
+</ol></li>
+<li>无论是在对象的方法里面， 还是在类外面都通过 <strong>类名.</strong>
+的方式可以 <strong>访问类的属性</strong> 或者
+<strong>调用类的方法</strong></li>
+</ul>
+<h2 id="类属性和实例属性">类属性和实例属性</h2>
+<h3 id="概念和使用">概念和使用</h3>
+<ul>
+<li><strong>类属性</strong> 就是给 <strong>类对象</strong> 中定义的
+<strong>属性</strong></li>
+<li>通常用来记录 <strong>与这个类相关</strong> 的特征</li>
+<li><strong>类属性</strong> <strong>不会用于</strong>记录
+<strong>具体对象的特征</strong></li>
+</ul>
+<p><strong>示例需求</strong></p>
+<ul>
+<li>定义一个 <strong>工具类</strong></li>
+<li>每件工具都有自己的 <code>name</code></li>
+<li><strong>需求</strong> —— 知道使用这个类，创建了多少个工具对象</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Tool</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="comment"># 使用赋值语句定义类属性, 记录创建工具对象的总数</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name</span>):</span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 针对了类属性做一个计数 + 1</span></span><br><span class="line">        Tool.count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">tool1 = Tool(<span class="string">&#x27;斧头&#x27;</span>)</span><br><span class="line">tool1 = Tool(<span class="string">&#x27;榔头&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 知道使用 Tool 类创建了多少对象</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;现在创建了 <span class="subst">&#123;Tool.count&#125;</span> 个工具&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>note：Python 中的类属性类似于 C++
+中的静态属性，属于类，不属于对象，且只有一份</p>
+<h3 id="属性的获取机制科普">2.2 属性的获取机制（科普）</h3>
+<ul>
+<li>在 <code>Python</code> 中 <strong>属性的获取</strong> 存在一个
+<strong>向上查找机制</strong></li>
+<li>因此，要访问类属性有两种方式：
+<ol type="1">
+<li><strong>类名.类属性</strong></li>
+<li><strong>对象.类属性</strong> （不推荐）</li>
+</ol></li>
+</ul>
+<p><strong>注意</strong></p>
+<ul>
+<li>如果使用 <code>对象.类属性 = 值</code> 赋值语句，只会
+<strong>给对象添加一个属性</strong>，而不会影响到
+<strong>类属性的值</strong></li>
+</ul>
+<h2 id="类方法和静态方法">类方法和静态方法</h2>
+<h3 id="类方法">3.1 类方法</h3>
+<ul>
+<li>类属性 就是针对 <strong>类对象</strong> 定义的属性
+<ul>
+<li>使用 <strong>赋值语句</strong> 在 <code>class</code>
+关键字下方可以定义 <strong>类属性</strong></li>
+<li><strong>类属性</strong> 用于记录 <strong>与这个类相关</strong>
+的特征</li>
+</ul></li>
+<li>类方法 就是针对 <strong>类对象</strong> 定义的方法
+<ul>
+<li>在 <strong>类方法</strong> 内部可以直接访问 <strong>类属性</strong>
+或者调用其他的 <strong>类方法</strong></li>
+</ul></li>
+</ul>
+<p><strong>语法如下</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">类方法名</span>(<span class="params">cls</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>类方法需要用 <strong>修饰器</strong> <code>@classmethod</code>
+来标识，<strong>告诉解释器这是一个类方法</strong></li>
+<li>类方法的第一个参数应该是 <code>cls</code>
+<ul>
+<li>由 <strong>哪一个类</strong> 调用的方法，方法内的 <code>cls</code>
+就是 <strong>哪一个类的引用</strong></li>
+<li>这个参数和 <strong>实例方法</strong> 的第一个参数: <code>self</code>
+类似</li>
+<li><strong>提示</strong> 使用其他名称也可以，不过习惯使用
+<code>cls</code></li>
+</ul></li>
+<li>通过 <strong>类名.</strong> 调用
+<strong>类方法</strong>，<strong>调用方法时</strong>，不需要传递
+<code>cls</code> 参数</li>
+<li>在方法内部
+<ul>
+<li>可以通过 <code>cls.</code> <strong>访问类的属性</strong></li>
+<li>也可以通过 <code>cls.</code> <strong>调用其他的类方法</strong></li>
+</ul></li>
+</ul>
+<p><strong>示例需求</strong></p>
+<ul>
+<li>定义一个 <strong>工具类</strong></li>
+<li>每件工具都有自己的 <code>name</code></li>
+<li><strong>需求</strong> —— 在 <strong>类</strong> 封装一个
+<code>show_tool_count</code>
+的类方法，输出使用当前这个类，创建的对象个数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Tool</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用赋值语句定义类属性, 记录创建工具对象的总数</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name</span>):</span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 类属性 count ++ 来记录对象的数目</span></span><br><span class="line">        Tool.count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">total_count</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="keyword">return</span> cls.count</span><br><span class="line"></span><br><span class="line">tool1 = Tool(<span class="string">&#x27;斧头&#x27;</span>)</span><br><span class="line">tool1 = Tool(<span class="string">&#x27;榔头&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 知道使用 Tool 类创建了多少对象</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;现在创建了 <span class="subst">&#123;Tool.total_count()&#125;</span> 个工具&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="静态方法">静态方法</h3>
+<ul>
+<li>在开发时，如果需要在 <strong>类</strong> 中封装一个方法，这个方法：
+<ul>
+<li>既 <strong>不需要</strong> 访问 <strong>实例属性</strong> 或者调用
+<strong>实例方法</strong> —— 即：不是实例方法</li>
+<li>也 <strong>不需要</strong> 访问 <strong>类属性</strong> 或者调用
+<strong>类方法</strong> —— 即：不是类方法</li>
+</ul></li>
+<li>这个时候，可以把这个方法封装成一个 <strong>静态方法</strong></li>
+</ul>
+<p><strong>语法如下</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@staticmethod</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">静态方法名</span>():</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>静态方法</strong> 需要用 <strong>修饰器</strong>
+<code>@staticmethod</code>
+来标识，<strong>告诉解释器这是一个静态方法</strong></li>
+<li>通过 <strong>类名.</strong> 调用 <strong>静态方法</strong>，
+不需要创建实例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 狗对象计数</span></span><br><span class="line">    dog_count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>():</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 不需要访问实例属性也不需要访问类属性的方法</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;狗在跑...&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name</span>):</span><br><span class="line">        self.name = name</span><br></pre></td></tr></table></figure>
+<h3 id="方法综合案例">3.3 方法综合案例</h3>
+<p><strong>需求</strong></p>
+<ol type="1">
+<li>设计一个 <code>Game</code> 类</li>
+<li>属性：
+<ul>
+<li>定义一个 <strong>类属性</strong> <code>top_score</code> 记录游戏的
+<strong>历史最高分</strong></li>
+<li>定义一个 <strong>实例属性</strong> <code>player_name</code> 记录
+<strong>当前游戏的玩家姓名</strong></li>
+</ul></li>
+<li>方法：
+<ul>
+<li><strong>静态方法</strong> <code>show_help</code>
+显示游戏帮助信息</li>
+<li><strong>类方法</strong> <code>show_top_score</code>
+显示历史最高分</li>
+<li><strong>实例方法</strong> <code>start_game</code>
+开始当前玩家的游戏</li>
+</ul></li>
+<li>主程序步骤
+<ul>
+<li><ol type="1">
+<li>查看帮助信息</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>查看历史最高分</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>创建游戏对象，开始游戏</li>
+</ol></li>
+</ul></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Game</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    top_score = <span class="number">521</span>  <span class="comment"># record the highest score ever</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name</span>):</span><br><span class="line">        self.player_name = name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">start_game</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;self.player_name&#125;</span> start the game&quot;</span>, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_help</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;there is some help information for you:\nbulabulabula...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_top_score</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;top score is <span class="subst">&#123;cls.top_score&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    Game.show_help()</span><br><span class="line">    Game.show_top_score()</span><br><span class="line">    xiaoming = Game(<span class="string">&#x27;xiaoming&#x27;</span>)</span><br><span class="line">    xiaoming.start_game()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>静态方法和类方法调用的时候都是直接使用<code>类名.</code>
+来调用，只有实例方法使用<code>对象名.</code> 调用。</p>
+<h2 id="实例方法类方法静态方法">实例方法、类方法、静态方法</h2>
+<p>普通实例方法，第一个参数需要是 self，它表示一个具体的实例本身。
+如果用了 staticmethod，那么就可以无视这个
+self，而将这个方法当成一个普通的函数使用。 而对于
+classmethod，它的第一个参数不是 self，是 cls，它表示这个类本身。</p>
+<p>推荐阅读： <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/lihao21/article/details/79762681">Python
+实例方法、类方法和静态方法</a></p>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2020/03/15/misc/hexo_vscode/">vscode 添加 hexo yaml snippet</a><a class="next" href="/blog/2020/03/05/websec/sql_injection/pseudo_static_injection/">伪静态静态注入</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

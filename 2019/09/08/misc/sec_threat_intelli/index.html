@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>安全威胁情报 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">安全威胁情报</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">安全威胁情报</h1><div class="post-meta">2019-09-08<span> | </span><span class="category"><a href="/blog/categories/misc/">misc</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 4k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 13</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E7%AE%80%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">安全威胁情报简述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%85%E6%8A%A5%E6%8C%89%E6%9D%A5%E6%BA%90%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">情报按来源分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%BA%90%E7%94%BB%E5%83%8F"><span class="toc-number">1.2.</span> <span class="toc-text">攻击源画像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5"><span class="toc-number">1.3.</span> <span class="toc-text">安全威胁情报</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-number">1.4.</span> <span class="toc-text">常见误区</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5-%E7%8E%B0%E4%BB%8A%E5%8F%91%E5%B1%95"><span class="toc-number">2.</span> <span class="toc-text">安全威胁情报-现今发展</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%90%E6%B8%90%E5%AE%8C%E5%96%84%E7%9A%84%E6%83%85%E6%8A%A5%E4%BD%93%E7%B3%BB"><span class="toc-number">2.1.</span> <span class="toc-text">逐渐完善的情报体系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E4%B8%9A%E6%A0%87%E5%87%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">行业标准</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E5%81%9A%E6%B3%95"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">常规做法</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5-%E4%BC%81%E5%AE%89%E5%BB%BA%E8%AE%BE"><span class="toc-number">3.</span> <span class="toc-text">安全威胁情报-企安建设</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5"><span class="toc-number">3.1.</span> <span class="toc-text">为什么需要威胁情报？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E5%B1%82%E9%9D%A2"><span class="toc-number">3.1.1.</span> <span class="toc-text">技术层面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%81%E4%B8%9A%E5%B1%82%E9%9D%A2"><span class="toc-number">3.1.2.</span> <span class="toc-text">企业层面</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E9%81%AD%E5%8F%97%E6%94%BB%E5%87%BB%E4%B9%8B%E5%89%8D%E6%8F%90%E5%89%8D%E9%98%B2%E8%8C%83"><span class="toc-number">3.1.2.1.</span> <span class="toc-text">在遭受攻击之前，提前防范</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%81%E5%8A%BF%E6%84%9F%E7%9F%A5"><span class="toc-number">3.1.2.2.</span> <span class="toc-text">态势感知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%BA%90%E7%94%BB%E5%83%8F%E6%94%BB%E5%87%BB%E6%BA%AF%E6%BA%90"><span class="toc-number">3.1.2.3.</span> <span class="toc-text">攻击源画像，攻击溯源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%92%91%E5%AE%89%E5%85%A8%E5%86%B3%E7%AD%96"><span class="toc-number">3.1.2.4.</span> <span class="toc-text">支撑安全决策</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E6%A0%B7%E4%BB%8E%E7%99%BD%E5%B8%BD%E5%AD%90%E9%BB%91%E5%AE%A2%E8%BD%AC%E4%B8%BA%E6%83%85%E6%8A%A5%E5%91%98"><span class="toc-number">3.2.</span> <span class="toc-text">怎样从白帽子黑客转为情报员？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%85%E6%8A%A5%E6%8C%89%E4%BC%98%E5%85%88%E7%BA%A7%E5%88%86%E7%B1%BB"><span class="toc-number">3.3.</span> <span class="toc-text">情报按优先级分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tactical-intelligence%E6%88%98%E6%9C%AF%E6%83%85%E6%8A%A5"><span class="toc-number">3.3.1.</span> <span class="toc-text">Tactical
+intelligence（战术情报）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#operation-intelligence%E8%BF%90%E8%90%A5%E6%83%85%E6%8A%A5"><span class="toc-number">3.3.2.</span> <span class="toc-text">Operation
+Intelligence（运营情报）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strategy-intelligence%E6%88%98%E7%95%A5%E6%83%85%E6%8A%A5"><span class="toc-number">3.3.3.</span> <span class="toc-text">Strategy
+intelligence（战略情报）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A8%81%E6%83%85%E6%8A%A5-%E6%83%85%E6%8A%A5%E7%A0%94%E5%88%A4"><span class="toc-number">4.</span> <span class="toc-text">安全威情报-情报研判</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E7%AD%94%E7%8E%AF%E8%8A%82"><span class="toc-number">5.</span> <span class="toc-text">问答环节</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol></div></div><div class="post-content"><p>本文主要参考漏洞银行丨安全威胁情报-g3on
+的分享，感谢漏洞银行平台以及大咖的分享。</p>
+<p>2018 年 10 月 10 号我国第一部关于网络安全的标准：<a
+target="_blank" rel="noopener" href="http://www.gb688.cn/bzgk/gb/newGbInfo?hcno=971636AF85AD7158EA50BB428F67C803"><code>网络安全威胁信息格式规范</code></a>正式发布.</p>
+<h1 id="安全威胁情报简述">安全威胁情报简述</h1>
+<p>主要讲述安全情报是什么。</p>
+<h2 id="情报按来源分类">情报按来源分类</h2>
+<p>这里是对情报按照信息的来源分类，按照信息的来源分类是从情报收集之前，技术操作层面来讲的。</p>
+<p>后面我们会讲到按照信息产生的情报的优先级/重要性来分类，那时便是从分析得到情报之后，技术层、管理层所需要做的响应来讲的。</p>
+<p>主要有：<strong>资产情报</strong>、<strong>事件情报</strong>、<strong>漏洞情报</strong>、<strong>威胁情报</strong>四种</p>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/threat_intelligence/sec_intellig_classifi.png" /></p>
+<p><strong>资产情报</strong></p>
+<p>内部情报，基础数据情报</p>
+<p>企业自身的数据 SOC，SIEM 数据日志、日志管理器等威胁数据</p>
+<p>非安全设备日志：比如说系统运行的日志、网络设备的日志、VPN 的日志</p>
+<p>安全设备日志：比如说防火墙、IDS、WAF 的日志</p>
+<p>传感器日志：用来事实探测情况的日志，比如说蜜罐的日志、网络传感器等等</p>
+<p><strong>事件情报</strong></p>
+<p>事件情报是对已经发生的安全事件的报道</p>
+<p>WannaCry 病毒，xx 住房信息泄露</p>
+<p><strong>漏洞情报</strong></p>
+<p>CVE、Nday、解析漏洞等各种软硬件爆出来的漏洞</p>
+<p><strong>威胁情报</strong></p>
+<p>OSINT，可以去：聚合分析情报圈、威胁情报平台、共享威胁情报等收集</p>
+<p>未公开的数据（暗网，黑产/灰产的社区/群/论坛、黑客黑产社交社区等）</p>
+<h2 id="攻击源画像">攻击源画像</h2>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/threat_intelligence/sample_figure.png" /></p>
+<p>你经常在某宝上搜索某些商品，如：兰蔻，香奈儿，你也总是在某宝买流量等。某宝/搜索引擎对你在互联网上留下的种种数据进行收集、分析，然后生成一个针对你的画像。它们在这个画像上贴上了一系列的标签，然后根据这个画像对你进行精准的分析以及营销。</p>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/threat_intelligence/attacker_figure.png" /></p>
+<p>描述攻击源以及攻击基础设施、技术风格、惯用手法等标识</p>
+<p>通过你所收集到的信息，你可以推测 attacker
+的攻击能力、攻击来源/地址，根据它攻击的方式可以推测其攻击习惯。</p>
+<h2 id="安全威胁情报">安全威胁情报</h2>
+<p>有人说安全威胁情报是：社工信息库的对撞、抓取的木马活动，有人说是：就是加
+n 多的群：telegram、qq、wechat，还有企业一些监控系统上的数据。</p>
+<p>SANS：</p>
+<p>针对安全威胁、威胁者、利用、恶意软件、漏洞和危害指标、所收集的用于评估的应用的数据集</p>
+<p>ISight：</p>
+<p>网络威胁情报是关于已经收集、分析、分发的，针对攻击者和其动机的目的手段，用于帮助所有安全级别的和业务员工用于保护其企业核心资产的知识</p>
+<p>威胁数据--&gt;SIEM（安全信息与事件管理 security information and event
+management）--&gt;安全保障</p>
+<p>什么你不知道 SIEM 是什么，嗯，我也不知道 emm，看看下面链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.aqniu.com/learn/30040.html">SIEM
+是什么？它是怎么运作的？又该如何选择正确的工具？</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f7330951e1ef">什么是
+SIEM？</a></p>
+<h2 id="常见误区">常见误区</h2>
+<p><strong>漏洞情报就是威胁情报 WRONG</strong></p>
+<p>威胁企业的不只只漏洞情报一个方面，还有比如：钓鱼邮件、员工的个人信息、密码习惯等。</p>
+<p>漏洞情报是一个知己，是一个了解内部情况，排查内部问题的过程</p>
+<p>威胁情报是知彼，为企业提供对方可能的攻击手段、规模的，用来提前为企业做好威胁防范。</p>
+<p>从前面的分类我们可以看出，二者属于平行关系</p>
+<p><strong>威胁信息=威胁情报 WRONG</strong></p>
+<p>现在互联网这么发达，我们无论是从 OSINT
+抓取，或者从暗网上获取信息都是很简单方便的（注：暗网的搜索引擎有很多哦），但是威胁情报不仅仅是收集信息/数据，它是一个完整的流程：信息的收集、处理、分析。而其核心则在于信息分析。因为信息分析保证了情报的精准度，相关性，时效性和完整性。</p>
+<p>你需要信息来产生情报，但是信息并不是情报。信息有时候会将企业安全人员或决策层指向一个错误的方向，而情报是经过处理分析的，它可以协助你规划，并且提供一个正确的方向。因此，<strong>威胁信息不等同于威胁情报，威胁信息只是原材料，真假好坏，需要我们进行精细化地处理、分析，去伪存真，提纯精炼，从而形成成品，也就是威胁情报</strong></p>
+<p><strong>威胁情报就是信息收集 WRONG</strong></p>
+<p>信息收集只是你构成威胁情报的第一步。当我们获取到分析出来的真正的威胁情报时，企业需要根据它去执行/操作。如果一条威胁情报没有可操作性的话，那么这条情报就没什么用处（至少在目前是没有什么用处的）。因为这样的情报没有办法为企业带来业务利益，没有为企业的
+SOC、SIEM 提供一些比较有利的帮助。</p>
+<h1 id="安全威胁情报-现今发展">安全威胁情报-现今发展</h1>
+<p>了解当下的安全情报收集平台，进一步了解安全威胁情报的基础以及核心内容</p>
+<h2 id="逐渐完善的情报体系">逐渐完善的情报体系</h2>
+<h3 id="行业标准">行业标准</h3>
+<p>CybOX、STIX 和 TAX 等 《网络安全威胁信息格式规范》</p>
+<h4 id="常规做法">常规做法</h4>
+<p>渗透黑客、诈骗犯社区（比如：在黑产/灰产的群）
+漏洞平台、漏洞库、安全社区 针对性漏洞、代码研究 国内厂商：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://x.threatbook.cn/">微步 X 情报社区</a></p></li>
+<li><p>360 威胁情报中心</p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://threathunter.cn">威胁猎人</a>（监控黑产/灰产）</p></li>
+<li><p>X-Force Exchange</p></li>
+<li><p>NOSEC 大数据平台</p></li>
+<li><p>云端产品-瀚思</p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://redqueen.tj-un.com/IntelHome.html">redqueen</a></p></li>
+</ul>
+<p>信息数据繁杂，我们从中检索比较困难，我们跟踪信息慢</p>
+<p>最主要的是：一些企业对于建设威胁情报系统的不重视，可能觉得建设安全情报威胁系统成本比较高或者领导不重视，那么我们就可以借助发展比较好的平台来跟踪、获取情报。</p>
+<p>这些平台有大量专业人员提供情报，它们通过大数据，深度学习配合人工的方式，进行捕获、关联、可视化这些信息，并且分析矩阵这些数据。对于没有企业安全威胁情报系统的安全人员，可以使用这些平台来缩短检测和响应所花费的时间，并且可以将这些平台提供的
+API 扩展到企业的安全工具当中。</p>
+<h1 id="安全威胁情报-企安建设">安全威胁情报-企安建设</h1>
+<p>讲述安全威胁情报在企业当中的应用</p>
+<h2 id="为什么需要威胁情报">为什么需要威胁情报？</h2>
+<h3 id="技术层面">技术层面</h3>
+<ol type="1">
+<li><p>现有的安全日志分析思维往往受制与安全日志，也就是说我们很多时候遇到了安全事件往往就是直接从安全日志入手去分析，这样的话其实不能很好地觉察出来攻击者真正的目的</p></li>
+<li><p>通过威胁情报可以进行攻击源画像，了解攻击者的目标、身份、攻击手段，更加准确地进行应急响应。</p>
+<p>比如：用户画像为一个脚本小子和用户画像为一个专业的攻击组织，我们所需要做出的应急响应显然差异很大。通过画像，我们可以更加精确、及时、恰当的做出应急响应。</p></li>
+<li><p>攻击溯源，化被动为主动，甚至可以对攻击者进行反制。</p></li>
+</ol>
+<h3 id="企业层面">企业层面</h3>
+<h4 id="在遭受攻击之前提前防范">在遭受攻击之前，提前防范</h4>
+<p>减少不确定性、预测潜在威胁，形成并组织一个安全预警机制，在攻击到达前就已经知晓</p>
+<p>除企业内部信息外，引入外部威胁情报可降低自身风险不确定性</p>
+<p>基于内部数据，进行自查修复，减少内部潜在威胁；基于外部数据，建模预测外部潜在威胁</p>
+<h4 id="态势感知">态势感知</h4>
+<p>在攻击刚刚开始或进行中时，进行当前网络的态势感知，进行应急响应。在攻击者做了一些攻击后，按照常规思路，下一步该做什么，我们可以封锁他下一步要做的地方的资源信息等防止危害扩大，然后进行审查修复等。</p>
+<p>比如：在发现攻击者上传 WebShell
+之后，按照以往经验，就要进行内网渗透等操作，此时，可以关闭端口、隔离该机器与内网等，防止危害扩大，然后慢慢进行查找
+shell 等</p>
+<h4 id="攻击源画像攻击溯源">攻击源画像，攻击溯源</h4>
+<p>攻击溯源</p>
+<p>如果现在遭受了攻击，我们首先要去搞定的是这个攻击事件到底是个什么级别的事件，攻击者是简单的扫描，还是说执行了恶意的命令，还是拿到了机器的权限挂了
+shell，或者是以此机器为跳板进行了横向的渗透。对这些数据进行统计，我们可以初步确定源、目的地址、时间这些数据。</p>
+<p>我们可以使用威胁数据日志等来帮助我们确定攻击的范围、影响和对攻击者的初步了解，把这些零散的攻击威胁数据整理一下，我们可以还原出攻击的整个过程，用来帮我们了解我们的系统存在的被人利用的问题。最后就是利用威胁情报数据去查这个人的户口，看看这个人什么来头，在什么地方犯过什么案。</p>
+<p>攻击源画像</p>
+<p>比如：通过对一些日志的分析，我们还能获得一些攻击者的其他指纹类信息，比如工具集，使用的基础设施，是不是在其他地方犯过案等等，我们可以进行攻击源画像，甚至可以反击。</p>
+<h4 id="支撑安全决策">支撑安全决策</h4>
+<p>通过对外部威胁、内部威胁的评估做出进一步的安全决策。威胁情报驱动公司安全建设的方向与力度。</p>
+<ul>
+<li><p>威胁情报不再是料敌先机和被动防御更能防守反击</p>
+<p>在第一和第二的基础上，除了态势感知和提前防范，我们用威胁情报还可以进行防守反击，通过生成攻击源画像进行溯源，这样的话，我们利用威胁情报得到的就不仅仅是攻击者的身份、攻击手段等，而且我们通过生成的攻击源画像去反追攻击者，变被动为主动</p></li>
+</ul>
+<h2 id="怎样从白帽子黑客转为情报员">怎样从白帽子黑客转为情报员？</h2>
+<ul>
+<li><p>基本保密意识和反社工能力，善用搜索引擎和社工收集信息</p>
+<p>反社工能力，防止攻击者进行对你进行社工。社工能力：对个人的常用密码结构分析延伸，对个人邮箱的安全进行突破。</p></li>
+<li><p>热点制作与钓鱼，渗透入侵等技术手段获取敏感信息</p></li>
+<li><p>从海量数据中筛选分析真假数据，生成画像溯源威胁源</p></li>
+<li><p>战术开发，战略规划</p>
+<p>根据生成的情报快速指定攻击/防御方案。</p></li>
+</ul>
+<h2 id="情报按优先级分类">情报按优先级分类</h2>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/threat_intelligence/intell_classifi.png" /></p>
+<p>对收集到的情报进行贴标签、画像，然后分级</p>
+<h3 id="tactical-intelligence战术情报">Tactical
+intelligence（战术情报）</h3>
+<ul>
+<li><p>Found Threat Events as well as to Confirm or Priority
+Alarms</p></li>
+<li><p>C&amp;C Intelligence,IP Intelligence</p></li>
+</ul>
+<p>Tactical intelligence
+是面向安全运维人员的情报，发现威胁事件以及对报警确认或优先级排序，比如说一些
+IP 信息的情报和一些 C&amp;C
+失陷检测的情报，这种情报其实是用来帮助安全运维人员快速判定攻击的情况和初步了解攻击者信息的情报。</p>
+<p>网络安全员用于印证进入 SOC 的事件，用低级 CTI
+阻止恶意活动袭击网络或者支持检测和响应任务。</p>
+<h3 id="operation-intelligence运营情报">Operation
+Intelligence（运营情报）</h3>
+<ul>
+<li><p>Important Security Incidents Analysis</p></li>
+<li><p>Finding Attack Related Clues From Attackers Tactical
+Initiatives</p></li>
+<li><p>Alarm Confirmation, Attack Impact Range, Tactical Methods, Attack
+Purpose, etc.</p></li>
+</ul>
+<p>运营情报是给威胁情报分析师或者说安全事件响应人员使用的，目的是对已知的重要安全事件做分析（报警确认、攻击影响范围、攻击链以及攻击目的、技战术方法等）或者利用已知的攻击者技术能力和战术手法主动的查找攻击相关线索。</p>
+<p>威胁情报分析师审查并分析收集来的对手及其技术、战术和规程（TTP）信息分析部署针对于企业运行环境，威胁源行动模式及能力、机会和意图的情报产品</p>
+<h3 id="strategy-intelligence战略情报">Strategy
+intelligence（战略情报）</h3>
+<ul>
+<li>Attackers Organization, Tactical Abilities, Control Resources,
+etc.</li>
+</ul>
+<p>公司（或国家）管理层综合关联分析网络威胁、网络风险和商业风险的落脚点帮助高管和董事会看清可能对公司造成金融、运营和信誉影响的网络风险，指导企业或国家的安全投入、投入重点，从而驱动更睿智的安全投资，得出更具风险前瞻的决策</p>
+<h1 id="安全威情报-情报研判">安全威情报-情报研判</h1>
+<p>通过情报研判的思维和手段增加安全威胁情报收集与分析的多样性。</p>
+<p>我们来看一下一些主流的情报分析平台：<a
+target="_blank" rel="noopener" href="https://redqueen.tj-un.com/IntelHome.html">redqueen</a>、<a
+target="_blank" rel="noopener" href="https://threathunter.cn">威胁猎人</a>、<a
+target="_blank" rel="noopener" href="https://x.threatbook.cn/">微步 X 情报社区</a> 等</p>
+<p><img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/threat_intelligence/intellig_integration.png" /></p>
+<p>情报研判属于公安或者网安专门用于经济犯罪情报侦组手段</p>
+<p>情报带来更多的转变是攻防思路的变化</p>
+<p>对目标进行：</p>
+<ul>
+<li>信息数据进行梳理</li>
+<li>控掘数据关联规律，分析周边之间联系</li>
+<li>生成方案情报产品</li>
+</ul>
+<h1 id="问答环节">问答环节</h1>
+<p><strong>Web 安全与安全威胁情报的关系是？</strong></p>
+<p>Web 安全与安全威胁情报有些不相关，如果将漏洞情报和事件情报算作 Web
+安全的话，那么 Web 安全算是安全威胁情报的一部分吧。</p>
+<p><strong>安全情报过于庞大和复杂，真假难辨，如何处理？</strong></p>
+<p>我们拿到数据之后一般先从常见的几个指标进行分析</p>
+<ol type="1">
+<li>网络：IP、URL、域名</li>
+<li>主机：文件哈希，动态链接库，注册表</li>
+<li>电子邮件：发件人的邮箱、附件、连接</li>
+</ol>
+<p><strong>安全威胁情报，未来的发展趋势是什么？</strong></p>
+<p>更偏向于机器学习
+AI，现在所谓的安全威胁情报主要是基于大数据的，通过大数据挖掘分析，以后，有望通过
+AI
+来提高安全威胁情报的分析能力，缩短信息到情报的转化周期，提高情报的质量。</p>
+<p><strong>安全威胁情报与数字取证有关系吗？</strong></p>
+<p>安全威胁情报与数字取证有关系，你收集完数据过后，是需要分析的。有些收集来的数据就是经过电子取证的。</p>
+<p><strong>注：</strong></p>
+<p>国外的威胁情报平台比较好，因为国外的一些病毒公司之间的病毒样本会相互交流的，安全威胁情报是相互分享的。而国内环境比较封闭，所以比较偏向于用国外的平台进行收集。此外，网上有很多开源的威胁情报收集工具可以使用。</p>
+<p>书籍推荐：</p>
+<p><a
+target="_blank" rel="noopener" href="https://book.douban.com/subject/26829992/">情报研究与分析入门</a></p>
+<h2 id="参考资料">参考资料</h2>
+<blockquote>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27234086#">威胁情报在安全运营环节的应用（DEFCON
+GROUP 010）</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/av36144228/">漏洞银行丨安全威胁情报-g3on
+b 站</a></li>
+</ol>
+</blockquote>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2019/09/13/misc/threat_intellig/">威胁情报</a><a class="next" href="/blog/2019/09/05/websec/vuln_dig/">漏洞挖掘之路</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

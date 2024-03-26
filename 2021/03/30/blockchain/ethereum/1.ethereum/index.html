@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>以太坊入门 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">以太坊入门</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">以太坊入门</h1><div class="post-meta">2021-03-30<span> | </span><span class="category"><a href="/blog/categories/blockchain/">blockchain</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.4k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 5</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ethereum"><span class="toc-number">1.</span> <span class="toc-text">Ethereum</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.1.</span> <span class="toc-text">introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#smart-contract"><span class="toc-number">1.2.</span> <span class="toc-text">Smart Contract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#account"><span class="toc-number">1.3.</span> <span class="toc-text">Account</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A6%E6%88%B7%E7%BB%84%E6%88%90"><span class="toc-number">1.3.1.</span> <span class="toc-text">账户组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A6%E6%88%B7%E5%85%B3%E7%B3%BB"><span class="toc-number">1.3.2.</span> <span class="toc-text">账户关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wallet"><span class="toc-number">1.4.</span> <span class="toc-text">wallet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#transaction"><span class="toc-number">1.5.</span> <span class="toc-text">Transaction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%BE%97-ether-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.1.</span> <span class="toc-text">获得 Ether 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%96%E7%9F%BF"><span class="toc-number">1.5.2.</span> <span class="toc-text">挖矿</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gas"><span class="toc-number">1.6.</span> <span class="toc-text">Gas</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%BD%91%E7%BB%9C"><span class="toc-number">1.7.</span> <span class="toc-text">以太坊网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E5%BA%94%E7%94%A8-dapp"><span class="toc-number">1.8.</span> <span class="toc-text">去中心化应用 Dapp</span></a></li></ol></li></ol></div></div><div class="post-content"><h1 id="ethereum">Ethereum</h1>
+<h2 id="introduction">introduction</h2>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/web3js_eth.png"
+alt="web3js_eth" />
+<figcaption aria-hidden="true">web3js_eth</figcaption>
+</figure>
+<p>There are a JavaScript library for developers which is web3.js，as
+some kind of portal or window of Ethereum network，can be usedd to send
+money，store data，deploy contracts or do essential what ever we want to
+do on the network</p>
+<p>There are two options for consumers, which are Metamask(a broswer
+extension)、Mist Broswer(early beta)</p>
+<h2 id="smart-contract">Smart Contract</h2>
+<p>以太坊的核心是智能合约，智能合约就是一段可以通过人或者另一个合约发送消息来执行特定的操作的代码。</p>
+<p>什么是智能合约 以太坊上的程序，是代码和数据（状态）的集合。
+准图灵完备</p>
+<p>典型应用：代币：EOS，游戏：迷恋猫</p>
+<p>编程语言：Solidity Solidity 是一种用于编写智能合约的高级语言，运行在
+Ethereum 虚拟机（以太坊虚拟机，EVM）之上 Solidity 语言的语法接近于
+JavaScript，是一种面向对象的语言静态语言， <code>.sol</code> 后缀。</p>
+<p>Solidity 是一种图灵完备的编程语言，所以编程的方式与
+Java、C++类似。不过 Solidity
+语言中并没有类的概念，但有一个合约的概念，用关键字 contract 表示。</p>
+<h2 id="account">Account</h2>
+<p>地址(Address)：20 字节 状态(State)</p>
+<p>账户分类：</p>
+<p>外部账户(EOA) Externally owned account 合约账户:
+当合约的字节码被部署到区块链时，便会有一个特定的地址来标识合约，这个地址便成为合约账户。</p>
+<p>从 EVM 角度来说，这两个账户是一样的，但是他们还是有一些区别。</p>
+<h3 id="账户组成">账户组成</h3>
+<p>三个部分都是以 16 进制存储</p>
+<p>当我们在 Metamask 上面创建一个账户时，有三个主要组成部分:
+三个部分都是以 16 进制存储</p>
+<ol type="1">
+<li>Account Address Account Address is a unique identifier，like a email
+address or unique username.
+一个账户适用于所有的以太坊网络，但是一个账户在不同网络中的以太币数量与该网络绑定的，即:
+某个网络认为该地址有一定 ether， 另一个网络却认为它没有。</li>
+<li>Public Key</li>
+<li>Private Key</li>
+</ol>
+<p>私钥、公钥和地址是如何生成的？ 大体来说，地址的生成的流程是：私钥
+-&gt; 公钥 -&gt; 地址。因此地址的生成需要三步：</p>
+<p>生成一个随机的私钥（32 字节） 通过私钥生成公钥（64 字节）
+通过公钥得到地址（20 字节）</p>
+<p>私钥推导公钥 私钥是一组 64 位的 16
+进制字符，通过私钥我们能够访问一个账户。以太坊的私钥生成是通过 secp256k1
+椭圆曲线算法生成的，secp256k1 是一个椭圆曲线算法，同比特币。</p>
+<p>公钥推导地址
+和比特币相比，在私钥生成公钥这一步其实是一样的，区别在公钥推导地址第一部分，以太坊中非圧缩型公钥的处理就简单粗暴很多了，下图为
+Public Key 生成 Address 的过程。</p>
+<p>以太坊地址生成的过程 第一步：私钥 (private key)</p>
+<p>伪随机数产生的 256bit 私钥示例(256bit 16 进制 32 字节)</p>
+<p>18e14a7b6a307f426a94f8114701e7c8e774e7f9a47e2c2035db29a206321725</p>
+<p>第二步：公钥 (public key)</p>
+<ol type="1">
+<li>采用椭圆曲线数字签名算法 ECDSA-secp256k1 将私钥（32
+字节）映射成公钥（65 字节）（前缀 04+X 公钥+Y 公钥）：</li>
+</ol>
+<p>04 　　
+50863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352 　　
+2cd470243453a299fa9e77237716103abc11a1df38855ed6f2ee187e9c582ba6</p>
+<pre><code>   2. 拿公钥（非压缩公钥）来hash，计算公钥的 Keccak-256 哈希值（32bytes）：</code></pre>
+<p>fc12ad814631ba689f7abe671016f75c54c607f082ae6b0881fac0abeda21781</p>
+<pre><code>   3. 取上一步结果取后20bytes即以太坊地址：</code></pre>
+<p>1016f75c54c607f082ae6b0881fac0abeda21781</p>
+<p>第三步：地址 (address)</p>
+<p>0x1016f75c54c607f082ae6b0881fac0abeda21781</p>
+<h3 id="账户关系">账户关系</h3>
+<p>消息只能由外部账户(EOA)
+发起。未激活状态下，合约账户不能主动创建交易，只能被动触发。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/2020561588727456628.png"
+alt="account relationship" />
+<figcaption aria-hidden="true">account relationship</figcaption>
+</figure>
+<h2 id="wallet">wallet</h2>
+<p>Geth(Go)、Mist、MetaMask</p>
+<h2 id="transaction">Transaction</h2>
+<p>作为后续做项目的准备，首先我们可以索取一些测试 Ether
+到自己的钱包中，一些可以获得测试 Ether 的网址如下:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://faucet.ropsten.be/</span><br><span class="line">https://faucet.rinkeby.io/</span><br><span class="line">https://www.rinkeby.io/#faucet</span><br></pre></td></tr></table></figure>
+<h3 id="获得-ether-的原理">获得 Ether 的原理</h3>
+<ol type="1">
+<li><p>大致过程 我们提交自己的地址，最终便会发生一笔向我们转入 Ether
+交易， 其过程/原理如下: <img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/eth_transaction.png"
+alt="eth_transaction" /></p></li>
+<li><p>一个 Transaction object 的结构： <img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/eth_transaction_header.png"
+alt="eth_transaction_header" /></p></li>
+</ol>
+<p>v，r，s 由发送者私钥生成，进行数字签名。达到授权和认证的目的。</p>
+<ol type="1">
+<li>Transaction object 与以太网络 We send the transaction to one
+specific node in The Ethereum Network。That node will communicating the
+rest of nodes in the network。 The node have one entire copy of
+blockchain. 由于节点众多，有时候一个节点可能会同时接受多个交易。
+节点将同时收到的交易，打包成一个交易列表，也就是我们所称的
+“区块”，然后节点运行 validation logic，也就是挖矿(mining)</li>
+</ol>
+<h3 id="挖矿">挖矿</h3>
+<p>Anders discussion of blockchains and how they work is viewed as a
+'must watch' video</p>
+<h2 id="gas">Gas</h2>
+<p>交易手续费 Gas 费用：Gas 价格（用以太币计价）*Gas 数量</p>
+<p>合约越复杂(计算、内存占用等)，需要的 Gas
+越多。任何一个特定的合约需要的 Gas 数量永远都是固定的。</p>
+<p>愿意为这笔交易所付出的费用
+限制一个合约运行的工作量，避免阻塞整个网络。</p>
+<p>以太坊的单位：</p>
+<p>最小单位：1Wei（伟） 109 Wei=1 Gwei 1012 Wei=1 szabo（萨博） 1015
+Wei=1finey（芬尼） 10^18 Wei=1 Ether</p>
+<h2 id="以太坊网络">以太坊网络</h2>
+<p>主网、测试网络、私有链、模拟环境</p>
+<h2 id="去中心化应用-dapp">去中心化应用 Dapp</h2>
+<p>传统互联网应用 中心化，容易更新，数据完全掌控 去中心化应用
+去中心化，按规则运行</p>
+<p>去中心化应用架构 <img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/2020561588742276228.png"
+alt="Dapp structure" /></p>
+<p>参考推荐: <a
+target="_blank" rel="noopener" href="http://blog.luoyuanhang.com/2018/04/17/eth-basis-accounts-address-pubkey-prikey/">【Ethereum
+基础】：账户、地址、私钥和公钥</a> <a
+target="_blank" rel="noopener" href="https://stevenocean.github.io/2018/04/02/about-ethereum-keystore.html">以太坊账户管理之
+keystore 文件(科普)</a></p>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2021/03/30/blockchain/eth_vulns/eth_detection_tools/">以太坊智能合约漏洞检测工具漏洞覆盖总结</a><a class="next" href="/blog/2021/03/30/blockchain/ethereum/2.solidity_intro/">Smart Contract and Solidity</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

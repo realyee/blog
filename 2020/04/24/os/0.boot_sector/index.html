@@ -1,0 +1,429 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Boot Sector | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Boot Sector</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Boot Sector</h1><div class="post-meta">2020-04-24<span> | </span><span class="category"><a href="/blog/categories/os/">os</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 4.9k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 18</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mbr-%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">MBR 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mbr-%E7%89%B9%E7%82%B9"><span class="toc-number">2.1.</span> <span class="toc-text">MBR 特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mbr-layout"><span class="toc-number">2.2.</span> <span class="toc-text">MBR Layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%BA%E5%B7%A5%E5%BF%AB%E9%80%9F%E5%88%92%E5%88%86-mbr"><span class="toc-number">2.3.</span> <span class="toc-text">人工快速划分 MBR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ebr"><span class="toc-number">3.</span> <span class="toc-text">EBR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pbr"><span class="toc-number">4.</span> <span class="toc-text">PBR</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dbr"><span class="toc-number">4.1.</span> <span class="toc-text">DBR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dbr-layout"><span class="toc-number">4.2.</span> <span class="toc-text">DBR Layout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><h2 id="introduction">Introduction</h2>
+<blockquote>
+<p>A boot sector is the sector of a persistent data storage device (e.g.
+hard disk, floppy disk, optical disc, etc.) which contains machine code
+to be loaded into random-access memory (RAM) and then executed by a
+computer system's built-in firmware -- Wikipedia</p>
+</blockquote>
+<h2 id="mbr-简介">MBR 简介</h2>
+<p>引导扇区（Boot Sector），又称之为引导块（Boot
+Block)是硬盘、软盘或其它数据存储设备上的一个包含引导代码的区域，这些代码可以由计算机系统的内置固件(firmware)加载到内存中直接运行。主要有两种类型：MBR
+和 PBR（VBR）。</p>
+<p>主引导记录(MBR, Master Boot Record)：</p>
+<blockquote>
+<p>The Master Boot Record (MBR) is the information in the first sector
+of any hard disk or diskette that identifies how and where an operating
+system is located so that it can be boot (loaded) into the computer's
+main storage or random access memory.</p>
+</blockquote>
+<p>主引导记录 MBR 是存储在主引导扇区 MBS
+里面的数据内容，因此常常将二者混为一谈，慢慢地主引导扇区 MBS
+的概念就有些淡化了，就干脆叫做 MBR 扇区了。同理，PBR 与 PBS
+的关系也类似。</p>
+<p>所以你现在往往可以看到这样的 MBR 解释：</p>
+<blockquote>
+<p>A master boot record (MBR) is a special type of boot sector at the
+very beginning of partitioned computer mass storage devices like fixed
+disks or removable drives intended for use with IBM PC-compatible
+systems and beyond. -- Wikipedia</p>
+</blockquote>
+<p>对于传统的 PC 机硬盘而言，每个硬盘的 0 柱面 0 磁头 1 扇区都有一个
+Master Boot Sector (MBS 主引导扇区), 也就是该硬盘的 MBR
+所在的位置。硬盘的每个<strong>分区</strong>的第一个扇区则是该分区的分区引导扇区（Partition
+Boot Sector)，也就是该分区 PBR（Partition Boot Record) 所在的位置。MBR
+占用 512
+个字节，它用于硬盘启动时将系统控制权转给用户指定的、在分区表中登记了某个操作系统的分区的引导扇区。</p>
+<blockquote>
+<p>注：盘面号又称磁头号，每个盘面对应一个磁头。</p>
+</blockquote>
+<h3 id="mbr-特点">MBR 特点</h3>
+<ul>
+<li>MBR 的内容是在硬盘分区时由分区软件（如 FDISK）写入该扇区的</li>
+<li>MBR 不属于任何一个操作系统，不随操作系统的不同而不同，即使不同，MBR
+也不会夹带操作系统的性质，具有公共引导的特性，但安装某些多重引导功能的软件或
+LINUX 的 LILO 时有可能改写它</li>
+<li>MBR
+先于所有的操作系统被调入内存并发挥作用，然后才将控制权交给活动主分区内的操作系统。</li>
+<li>该扇区为隐藏扇区，实际上，0 磁头 0
+柱面的扇区均为隐藏扇区，一般的硬盘访问命令无法访问，因此 MBR
+分区表放在此处比较安全，不容易遭到破坏，同理，许多病毒也伺机隐藏在这里，不容易被查杀。</li>
+<li>对于 PC
+机以及兼容架构的系统而言，主引导记录只有存储在可引导设备的引导扇区里才能引导系统。这是这种系统架构的设计所规定的工作方式。</li>
+</ul>
+<h3 id="mbr-layout">MBR Layout</h3>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200417092542.png"
+alt="Structure of a classical generic MBR from Wikipedia" />
+<figcaption aria-hidden="true">Structure of a classical generic MBR from
+Wikipedia</figcaption>
+</figure>
+<p>中文版: <img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20204181587193302268.png"
+alt="标准 MBR 结构" /></p>
+<p>MBR 512 字节，主要由三部分构成:</p>
+<ol type="1">
+<li><p>引导程序代码(Bootstrap code)，最大占 446 字节</p>
+<p>最后 6 个字节为 四个字节的 Windows disk signature 和保留待用的两字节
+0x0000</p></li>
+<li><p>硬盘分区表 DPT(Disk Partition table for primary partitions)，占
+64 字节</p>
+<p>硬盘分区有很多用处。考虑到每个区可以安装不同的操作系统，因此主引导记录必须知道将控制权转交给哪个区。
+分区表的长度只有 64 个字节，里面又<strong>分成四项，每项 16
+个字节</strong>。所以，一个硬盘最多只能分四个一级分区，又叫做"主分区"。</p>
+<p>每个主分区的 16 个字节，由 6
+个部分组成，详细组成在下面有写到。</p></li>
+<li><p>主引导扇区结束标志(Boot signature)</p>
+<p>也有称之为 BRID(boot record ID，引导记录标识) 的。 0xAA55
+是判别引导区是否有效合法的标志。“55AA” 标志通知系统：该 MBR
+扇区是否有效，如果该标志丢失或损坏，磁盘将会显示为未初始化。</p>
+<p>BRID 的主要作用就是判断该设备是否可以用于启动。BIOS
+按照“启动顺序”，把控制权转交给排在第一位的储存设备。这时，计算机读取该设备的第一个扇区，也就是读取最前面的
+512 个字节。如果这 512 个字节的最后两个字节是 0x55 和
+0xAA，表明这个设备可以用于启动；如果不是，表明设备不能用于启动，控制权于是被转交给“启动顺序”中的下一个设备。其实主引导记录的主要作用就是告诉计算机到硬盘的哪一个位置去找操作系统。</p></li>
+</ol>
+<p>winhex 定位到 MBR 的图(辅助理解):</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200418153411.png"
+alt="MBR hex" />
+<figcaption aria-hidden="true">MBR hex</figcaption>
+</figure>
+<h3 id="人工快速划分-mbr">人工快速划分 MBR</h3>
+<p>拿到一个 winhex 展示的 MBR 时，如何人工快速划分其结构？</p>
+<ol type="1">
+<li><p>确定 55AA 标志</p></li>
+<li><p>向上数四行，划分出 DPT，磁盘分区表。 数四行是因为 winhex
+等都是一行从 0x0-0xF， 16 个字节， 4 行正好是 64 字节， 即: DPT
+的大小</p></li>
+<li><p>完成 1，2 步后，再向上全部都是引导代码了。
+其中，向上两个字节，一般为空值， 0x0000 再向上四个字节，在本图中为 "7C
+95 5A 1F"，即：windows 磁盘签名</p></li>
+<li><p>接下来我们就要专注于磁盘分区表了</p>
+<p>磁盘分区表 DPT(64 字节) | 字节 | 长度 | 定义 | | :---------: | :---:
+|
+:-------------------------------------------------------------------------------------:
+| | 第 1 个字节 | 1 | <strong>0x00 表示非活动分区，0x80
+表示活动分区，四个分区最多有一个激活分区</strong> | | 第 2~4 字节 | 3 |
+该分区第一个扇区的物理位置 | | 第 5 个字节 | 1 |
+<strong>分区类型</strong> | | 第 6~8 字节 | 3 |
+该分区最后一个扇区的物理位置 | | 第 9-12 字节 | 4 |
+该分区第一个扇区的逻辑地址（也叫本分区之前的扇区数，Sector preceding
+Partition x(分区序号)） | | 第 13-16 字节 | 4 |
+<strong>该分区的扇区总数</strong> |</p>
+<p>根据硬盘分区表的格式，分析如下分区表的第一个分区： <img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200418172123.png"
+alt="20200418172123" /></p>
+<p>首先我们可以看到，</p>
+<p>第一个字节：0x00 代表非活动分区 第五个字节：分区类型 0x0C， 查<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Partition_type">分区标识对照表</a>可得其为:
+FAT32</p>
+<p>常见分区类型表(如果查不到，不代表没有，详细全面的类型表请看上一行的
+wiki 链接)： | Partition ID | type | | ------------ |
+---------------------- | | 0x00 | <strong>空，不允许使用</strong> | |
+0x04 | <strong>FAT16 格式（&lt;32M）</strong> | | 0x05 |
+<strong>扩展分区</strong> | | 0x06 | <strong>FAT16</strong> | | 0x0E |
+<strong>Win95 FAT16</strong> | | 0x0C | <strong>Win95 FAT32</strong> |
+|0x0B| <strong>FAT32 with CHS addressing</strong>| | 0x82 |
+<strong>Linux Native 分区</strong> | | 0x83 | <strong>Linux Swap
+分区</strong> | | 0x87 | <strong>NTFS</strong> | | 0xA6 | Open BSD | |
+0xA5 | FreeBSD |</p>
+<p><strong>计算该分区的字节数</strong>： 本分区总扇区数: 根据第 13-16
+字节，得知为 0x00017800(‭96256‬)，又因为每个扇区是 512 字节
+因此，该分区的大小：<code>(96256‬*512)/(2^10)=94KB</code></p>
+<p>最后的四个字节(第 13-16 字节)
+是主分区的扇区总数，决定了这个主分区的长度。也就是说，一个主分区的扇区总数最多不超过
+2 的 32 次方。，如果每个扇区为 512 个字节，就意味着单个分区最大不超过
+2TB。再考虑到扇区的逻辑地址也是 32
+位，所以单个硬盘可利用的空间最大也不超过 2TB。如果想使用更大的硬盘，只有
+2
+个方法：一是提高每个扇区的字节数，二是增加扇区总数。为了解决这些问题，人们发明了
+GPT 分区。</p></li>
+</ol>
+<p>至此，对 MBR 的分析基本结束。</p>
+<h2 id="ebr">EBR</h2>
+<p>随着硬盘越来越大，四个主分区已经不够了，需要更多的分区。但是通过主引导记录
+MBR 定义的硬盘分区表只能描述 4
+个分区，因此出于拓展的需要，规定有且仅有一个区可以被定义成"扩展分区"（Extended
+partition）。</p>
+<p>所谓"扩展分区"，就是指这个分区里面又分成多个分区。<strong>这种分区里面的分区，就叫做"逻辑分区"</strong>（logical
+partition）。</p>
+<p>扩展分区的第一个扇区，叫做"扩展引导记录"（Extended boot
+record，缩写为 EBR）。它里面<strong>也包含一张 64
+字节的分区表</strong>，<strong>但是最多只有两项（也就是两个逻辑分区）</strong>。</p>
+<p>那如果我们希望逻辑分区不止两个，怎么实现呢？
+我们往往采取类似于单链表的结构，其中四个主分区表项中的一个当做单链表的起始头，描述多余磁盘容量，即：扩展分区。该分区表项记录第一个逻辑分区的地址（第一个逻辑分区的
+EBR 的地址），而 EBR
+中两个分区表项：一项记录该逻辑分区(逻辑驱动器)的位置，另一项记录下一个逻辑分区的地址（第二个逻辑分区的
+EBR
+的地址），就这样一直链接下去，直到某个逻辑分区的分区表只包含它自身为止（即只有一个分区项）。因此，扩展分区可以包含无数个逻辑分区。</p>
+<p>系统在启动时按照分区链的链接顺序查找分区。当然，若分区链成环，结果就是：系统无法引导，构成硬盘逻辑锁</p>
+<p>关于 MBR， EBR 的逻辑结构：</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200422201415.png"
+alt="MBR&amp;EBR" />
+<figcaption aria-hidden="true">MBR&amp;EBR</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200422212959.png"
+alt="EBR" />
+<figcaption aria-hidden="true">EBR</figcaption>
+</figure>
+<p>默认情况下， Windows
+系统一般只划分一个主分区给系统，剩余的部分全部划入扩展分区,也就是这样：</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200821223428.png"
+alt="Windows partitions" />
+<figcaption aria-hidden="true">Windows partitions</figcaption>
+</figure>
+<p>这里有两点需要注意：</p>
+<ol type="1">
+<li>在 MBR 分区表中最多 4 个主分区或者 3 个主分区＋ 1
+个扩展分区，也就是说扩展分区只能有一个，然后可以再细分为多个逻辑分区。</li>
+<li>所有扩展分区开始位置的相对地址均从第 1 个扩展分区开始。</li>
+<li>计算扩展分区的绝对地址需从加上 EBR1 的绝对地址（物理扇区号）。</li>
+</ol>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200422201756.png"
+alt="EBR Address" />
+<figcaption aria-hidden="true">EBR Address</figcaption>
+</figure>
+<h2 id="pbr">PBR</h2>
+<blockquote>
+<p>The partition boot record is the first block of any bootable
+partition. It is also sometimes referred to as the Volume Boot Record
+(VBR)</p>
+</blockquote>
+<p>当然，卷与分区还是有区别的，参考 <a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/38843560">操作系统概念中，分区和卷的区别是什么？</a></p>
+<p>分区引导记录(Partition Boot Record), 又称分区引导扇区（Partition Boot
+Sector)，卷引导扇区(Volume Boot Sector), 卷引导记录(VBR, Volume Boot
+Record), 它是由 FORMAT 高级格式化命令写在各个分区开始处第一个扇区。</p>
+<p>当该分区为活动分区时，其 PBR 又称， DBR（DOS Boot Record，DOS
+引导记录）， OBR（OS Boot Record，操作系统引导记录）。除此之外，由于 DBR
+的内容与操作系统版本，文件系统有关，DBR 也可以被称之为 "Boot Sector
+文件系统名"，例如：“BOOT Sector FAT32”、“BOOT Sector NTFS”</p>
+<p>当然，有时候也会直接将所有分区（无论活动与否）PBR 都叫做
+DBR，了解即可。</p>
+<p>DBR 用来引导系统寻找激活分区根目录下的 NTLDR（XP）、bootmgr（Win7
+above）、grldr（Grub）、btldr.mbr（BootLink）等可用于引导操作系统的程序。每个分区都有引导扇区，但只有被设为活动分区的
+PBR 才能在引导过程中获得控制权，加载系统文件到内存。</p>
+<ul>
+<li>在对硬盘分区之后，每一个分区均有一个 DBR 与之对应。DBR
+位于每个分区的第一个扇区，大小为 512 字节。</li>
+<li>DBR 内容根据操作系统版本不同，磁盘类型不同而有所变化</li>
+<li>是可分区设备的每个分区内的第一个扇区。</li>
+</ul>
+<p>它可以有两个作用:</p>
+<ol type="1">
+<li>当其为活动分区的 PBR, 即：DBR 时，
+具有加载系统文件，从而引导操作系统的作用。而非活动分区的对应部分的意义是存储
+DBR 的备份</li>
+<li>作为任一个主分区的
+PBR，它负责管理某个具体的分区，存储着分区的相关信息。</li>
+</ol>
+<h3 id="dbr">DBR</h3>
+<p>主引导程序执行完 MBR
+中的引导代码后，将系统控制权交给活动分区的引导记录
+DBR，用来引导操作系统。</p>
+<ul>
+<li>每个分区被赋予一个盘符，即逻辑盘符</li>
+<li>每个分区逻辑扇区从“0”开始编号</li>
+<li>高级格式化程序将引导记录 DBR 写到“0”扇区，DOS 引导扇区，</li>
+</ul>
+<h3 id="dbr-layout">DBR Layout</h3>
+<p>操作系统引导记录 DBR（DOS Boot Record）通常位于硬盘的 1 柱面 0 磁道 1
+扇区，<strong>其逻辑扇区号为
+0</strong>，是操作系统可以直接访问的第一个扇区，因此，引导扇区又常常指
+DBR。</p>
+<p>以 Windows FAT32 DBR 为例分析：</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200422225145.png"
+alt="FAT32 DBR" />
+<figcaption aria-hidden="true">FAT32 DBR</figcaption>
+</figure>
+<p>依次包括以下部分：</p>
+<ol type="1">
+<li><p>跳转指令，让程序执行流程跳转到引导代码（3 个字节）</p>
+<p>开头的跳转指令可以用来区分文件系统：</p>
+<ol type="1">
+<li>FAT16 是 EB 3C 90</li>
+<li>FAT32 是 E8 58 90</li>
+<li>NTFS 是 EB 52 90</li>
+</ol></li>
+<li><p>厂商标识和系统版本号（03~0A）（也称为 OEM），8 个字节</p>
+<p>其内容由创建该文件系统的 OEM 厂商具体安排。</p></li>
+<li><p>磁盘参数块(0BH-59H 共占用 79 个字节)， 即: BPB，BIOS Parameter
+Block</p>
+<p>BPB 十分重要，由此可算出逻辑地址与物理地址。 <img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200422223052.png"
+alt="BPB" /></p>
+<ol type="1">
+<li><p>0BH ～ 0CH：<strong>每扇区字节数</strong></p>
+<p>每扇区字节数记录每个逻辑扇区的大小，其常见值为 512 字节，但 512
+字节并不是固定值。该值可以由程序定义，合法值包括 512、1024、2048 和 4096
+字节。</p></li>
+<li><p>0DH：每簇扇区数</p>
+<p>“簇”是 FAT12、FAT16 以及 FAT32
+文件系统下数据的最小存储单元，一个“簇”由一组连续的扇区组成。</p></li>
+<li><p>0EH ～ 0FH：<strong>DBR 保留扇区数</strong></p>
+<p>DBR 保留扇区数是指 DBR 本身占用的扇区以及其后保留扇区的总和，也就是
+DBR 到 FAT1 之间扇区总数，或者说是 FAT1 的开始扇区号（逻辑扇区号）。
+也称作 FAT
+表位置的偏移量，当然这里是相对于该分区的偏移量（没有包括该分区前面的部分）。
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200423090210.png"
+alt="示例" /> 保留扇区数 = FAT1 起始扇区 - 引导扇区（DBR）起始扇区 =
+622020802-622020798 = 4</p></li>
+<li><p>10H：<strong>FAT 表个数</strong> FAT 表个数描述了该文件系统有几个
+FAT 表，一般在 FAT 文件系统中都有两个 FAT，FAT1 和 FAT2。值默认为
+02</p></li>
+<li><p>11H ～ 12H:未用</p>
+<p>这个参数在 FAT16 中用来表示 FDT 中最大所能容纳的目录项数（Root
+Entries），一般为 0x0200=512，FAT32 没有固定的
+FDT，所以不用这个参数。</p></li>
+<li><p>13H ～ 14H：扇区总数</p>
+<p>这两个字节在 FAT16 中用来表示小于 32MB 的分区的扇区总数，FAT32
+的总是大于 32MB，所 以不用这个参数。</p></li>
+<li><p>15H：磁介质描述符</p>
+<p>介质描述符是描述磁盘介质的参数，根据磁盘性质的不同，取值不同。如<strong>硬盘为
+F8</strong>。</p></li>
+<li><p>16H ～ 17H：未用</p>
+<p>这两个字节在 FAT16 中用来表示每个 FAT 表包含的扇区数，FAT32
+未用。</p></li>
+<li><p>18H ～ 19H：每磁道扇区数</p>
+<p>这是逻辑 C/H/S 中的一个参数，其值一般为 63。</p></li>
+<li><p>1AH ～ 1BH：磁头数</p></li>
+<li><p>1CH ～ 1FH：<strong>隐藏扇区数</strong></p>
+<p>隐藏扇区数是指本分区之前（相对）使用的扇区数，<strong>该值与分区表中所描述的该分区的起始扇区号一致</strong>。对于主磁盘分区来讲，是
+MBR 到该分区 DBR 之间的扇区数；对于扩展分区中的逻辑分区来讲，是其 EBR
+到该分区 DBR 之间的扇区数。</p>
+<p>看不懂？ 接着看，下面有图。</p></li>
+<li><p>20H ～ 23H：扇区总数</p>
+<p>扇区总数是指分区的总扇区数，也就是 FAT32 分区的大小。</p></li>
+<li><p>24H ～ 27H：每个 FAT 扇区数</p>
+<p>这四个字节用来记录 FAT32 分区中每个 FAT 表占用的扇区数。</p></li>
+<li><p>28H ～ 29H：标志</p>
+<p>这两个字节用于表示 FAT32 是否可用，当其二进制最高位置 1 时，表示只有
+FAT1 可用，否则 FAT2 也可用。</p></li>
+<li><p>2AH ～ 2BH：版本。通常为 0。</p></li>
+<li><p>2CH ～ 2FH：<strong>根目录首簇号</strong></p>
+<p>分区在格式化为 FAT32 文件系统时，格式化程序会在数据区中指派一个簇作为
+FAT32 的根目录区的开始，并把该簇号记录在 BPB
+中。<strong>通常是把数据区的第一个簇分配给根目录使用，也就是 2
+号簇。值固定为 02</strong></p></li>
+<li><p>30H ～ 33H：文件系统信息扇区号。</p>
+<p>FAT32 文件系统在 DBR
+的保留扇区中安排了一个文件系统信息扇区，用以记录数据区中空闲簇的数量及下一个空闲簇的簇号。该扇区一般在分区的
+1 号扇区，也就是紧跟在 DBR 后的一个扇区。</p></li>
+<li><p>32H：DBR 备份扇区号</p>
+<p>FAT32 文件系统在 DBR 的保留扇区中安排了一个 DBR 的备份，一般在 6
+号扇区，也就是分区的第 7 个扇区。该备份扇区与原 DBR
+扇区的内容完全一样，如果原 DBR 遭到破坏，可以用备份扇区修复。值默认为
+06</p></li>
+<li><p>34H ～ 3FH:未用。这 12 个字节保留不用。</p></li>
+<li><p>40H:BIOS 驱动器号</p>
+<p>这是 BIOS 的 INT 13H 所描述的设备号码，一般从 80H 开始编号。</p></li>
+<li><p>41H:未用。这两个字节不使用，为 0。</p></li>
+<li><p>42H：扩展引导标记</p>
+<p>扩展引导标记 用来确认后面的三个参数是否有效，一般值为 29H。</p></li>
+<li><p>43H ～ 46H：卷列序号</p>
+<p>卷列序号是格式化程序在创建文件系统时生成的一组 4
+字节的随机数值。</p></li>
+<li><p>47H ～ 51H:卷标</p>
+<p>卷标是由用户在创建文件系统时指定的一个卷的名称，原来的系统把卷标记录在这个地址处，现在的系统已经不再使用这个地址记录卷标，而是由一个目录项来管理卷标。</p></li>
+<li><p>52H ～ 59H：<strong>文件系统类型</strong></p>
+<p>BPB 最后一个参数，直接用 ASCⅡ 码记录当前分区的文件系统类型。一般
+FAT32 的标识均填写为：<code>46 41 54 33 32 20 20 20</code></p></li>
+</ol></li>
+<li><p>DOS 引导程序（5A~1FD）420 字节</p>
+<p>其中 DOS 引导程序完成 DOS 系统文件（IO.SYS，MSDOS.SYS）的定位与装载
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200423091124.png"
+alt="DOS 引导程序" /></p></li>
+<li><p>结束标志 55AA</p></li>
+</ol>
+<p>对于采用 MBR 分区、FAT16 文件管理系统的硬盘而言，其大致结构如下:
+下图主要包含主引导记录和一个主分区的结构示例，其他分区的结构类似，不再展开。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200825171743.png"
+alt="20200825171743" />
+<figcaption aria-hidden="true">20200825171743</figcaption>
+</figure>
+<p>关于 FAT 在这里先简单提一下，后面有博文进行详细介绍。</p>
+<p>对使用 DOS 分区体系的磁盘进行数据恢复及取证时：</p>
+<ol type="1">
+<li>基于 DOS 分区系统磁盘大都起始于 MBR 扇区。MBR 只占用 1
+个扇区，与文件系统分区间有 62 个空闲扇区</li>
+<li>理论上 EBR
+只允许有两个分区表项，一个用于描述一个文件系统分区，另一个描述扩展分区。</li>
+<li>主分区表被破坏时，可使用 Winhex
+识别各个分区。也可计算主分区各个表项值，直接填入主分区表。</li>
+<li>不是所有系统对分区类型进行强制执行。比如将 FAT32 的类型值改为 Linux
+类型值，WinXP 依然可正常加载该分区。</li>
+<li>Windows 对类型值为隐藏类型分区严格执行，不进行加载。但可通过 Linux
+加载。</li>
+<li>有些版本只支持一个主文件系统分区表项。</li>
+<li>分区表链被破坏时，可以通过“55AA”重新定位分区表链中各个分区表的位置。</li>
+</ol>
+<h2 id="参考资料">参考资料</h2>
+<blockquote>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="http://glennastory.net/boot/pbr.html">Partition Boot Record
+(PBR)</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Master_boot_record">Master
+boot record</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Partition_type">Partition
+type</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/ww1473345713/article/details/51602825">Linux
+引导扇区(boot sector)的结构</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://jaydenz.github.io/2018/05/05/4.Linux%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/">Linux
+系统启动流程</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95#%E4%B8%BB%E5%BC%95%E5%AF%BC%E6%89%87%E5%8C%BA%E7%9A%84%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B">主引导记录</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.dddps.com/pc/hardware/125.html">硬盘分区 FAT32
+文件系统 DBR 详解及手工重建</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://whatis.techtarget.com/definition/Master-Boot-Record-MBR">Definition
+Master Boot Record (MBR)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lsgxeva/p/11183693.html">BIOS 将
+MBR 读入 0x7C00 地址处(x86 平台下)</a></li>
+</ol>
+</blockquote>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Boot/" rel="tag">Boot</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Computer/" rel="tag">Computer</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2020/04/25/os/3.fdt/">FDT 文件目录表</a><a class="next" href="/blog/2020/04/24/os/1.bootprocess/">The Booting Process of Computer</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

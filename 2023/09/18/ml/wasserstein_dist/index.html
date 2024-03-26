@@ -1,0 +1,463 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Delve into Wasserstein Distance, principles and implementation analysis | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Delve into Wasserstein Distance, principles and implementation analysis</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Delve into Wasserstein Distance, principles and implementation analysis</h1><div class="post-meta">2023-09-18<span> | </span><span class="category"><a href="/blog/categories/ml/">ml</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 3.3k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 18</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#wasserstein-distance"><span class="toc-number">1.</span> <span class="toc-text">Wasserstein distance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#definitions"><span class="toc-number">1.1.</span> <span class="toc-text">Definitions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#two-equavalent-formulas"><span class="toc-number">1.2.</span> <span class="toc-text">Two equavalent formulas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#three-intuitive-and-typical-examples"><span class="toc-number">1.3.</span> <span class="toc-text">Three intuitive and
+typical examples</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python-tools-for-implementation"><span class="toc-number">2.</span> <span class="toc-text">Python tools for
+implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#scipy-1d-wasserstein-distance"><span class="toc-number">2.1.</span> <span class="toc-text">scipy 1d Wasserstein
+distance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scipy.stats.wasserstein_distance-sourcecode-analysis"><span class="toc-number">2.2.</span> <span class="toc-text">scipy.stats.wasserstein_distance
+sourcecode analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#more-examples-and-tests-for-other-libraries"><span class="toc-number">3.</span> <span class="toc-text">More Examples and
+Tests for other libraries</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#scipy-use-cases"><span class="toc-number">3.1.</span> <span class="toc-text">scipy use cases</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wasserstein-p-distance"><span class="toc-number">3.2.</span> <span class="toc-text">Wasserstein-p distance</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#difference-between-implementations-of-scipy-potand-pyemd"><span class="toc-number">4.</span> <span class="toc-text">Difference
+between implementations of scipy， POT，and pyemd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#applications-in-machine-learning"><span class="toc-number">5.</span> <span class="toc-text">Applications in Machine
+Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#references-and-recommends"><span class="toc-number">6.</span> <span class="toc-text">References and Recommends</span></a></li></ol></div></div><div class="post-content"><h2 id="wasserstein-distance">Wasserstein distance</h2>
+<p>To understand Wasserstein distance fully, It's suggested to first
+recap the related background of probability theory, which can be seen in
+my another blog <a
+href="https://realyee.github.io/blog/2023/09/18/math/probabilities/wasserstein_bg/">Probabilities
+background for Wasserstein Distance</a></p>
+<p>Wasserstein distance (also called Wasserstein distance,, optimal
+transport) is a metric that quantifies the difference between two
+probability distributions, which is originally proposed in IJCV'2020
+《The Earth Mover's Distance as a Metric for Image Retrieval》. It is a
+normalized measure of the minimum cost of turning one distribution into
+the other, which can be used to measure the distance between two
+multi-dimensional distributions. The cost is determined by the
+<strong>amount</strong> of "mass" that needs to be moved and the
+<strong>distance</strong> it needs to be moved.</p>
+<h3 id="definitions">Definitions</h3>
+<p><span class="math display">\[
+\begin{equation}
+W\left(\mathbb{P}_r, \mathbb{P}_g\right)=\inf _{\gamma \in
+\Pi\left(\mathbb{P}_r, \mathbb{P}_g\right)} \mathbb{E}_{(x, y) \sim
+\gamma}[\|x-y\|]
+\end{equation}
+\]</span></p>
+<p><span class="math inline">\(\prod(\mathbb{P}_r,
+\mathbb{P}_g)\)</span> is the set of all joint distributions whose
+marginals are <span class="math inline">\(P_r\)</span> and <span
+class="math inline">\(P_g\)</span>. The objective is find a joint
+distribution <span class="math inline">\(\gamma \in \prod(\mathbb{P}_r,
+\mathbb{P}_g)\)</span> to minimizes the expectation of the distance
+between <span class="math inline">\(x\)</span> and <span
+class="math inline">\(y\)</span>. The distance <span
+class="math inline">\(||x-y||\)</span> can be defined as any distance
+metric, such as Euclidean distance, etc. The minimum expection is the
+Wasserstein distance between <span class="math inline">\(P_r\)</span>
+and <span class="math inline">\(P_g\)</span>.</p>
+<p>For Discrete variables, the Wasserstein distance can be defined
+as:</p>
+<p>Let</p>
+<p>$$ <span class="math display">\[\begin{equation}
+\begin{aligned}
+P &amp;=\{(\mathbf{p}_1, w_{p_1}),(\mathbf{p}_2, w_{p_2}),(\mathbf{p}_3,
+w_{p_3}), \cdots,(\mathbf{p}_M, w_{p_M})\}, \\
+
+Q &amp;=\{(\mathbf{q}_1, w_{q_1}),(\mathbf{q}_2, w_{q_2}),(\mathbf{q}_3,
+w_{q_3}), \cdots,(\mathbf{q}_N, w_{q_N})\},
+\end{aligned}
+\end{equation}\]</span> $$</p>
+<p>where <span class="math inline">\(p_i\)</span> is the <span
+class="math inline">\(i\)</span>-th point in <span
+class="math inline">\(P\)</span>, <span
+class="math inline">\(w_{p_i}\)</span> is the weight of <span
+class="math inline">\(p_i\)</span>, <span
+class="math inline">\(q_j\)</span> is the <span
+class="math inline">\(j\)</span>-th point in <span
+class="math inline">\(Q\)</span>, <span
+class="math inline">\(w_{q_j}\)</span> is the weight of <span
+class="math inline">\(q_j\)</span>. The <span
+class="math inline">\(d_{ij}\)</span> is the distance between <span
+class="math inline">\(P_i\)</span> and <span
+class="math inline">\(q_j\)</span>. The Wasserstein distance between
+<span class="math inline">\(P\)</span> and <span
+class="math inline">\(Q\)</span> is defined as:</p>
+<p><span class="math display">\[
+\begin{equation}
+\begin{aligned}
+&amp; \min \sum_{i=1}^M \sum_{j=1}^N d_{i j} f_{i j} \\
+\text { s.t } &amp; \\
+&amp; f_{ij} \ge 0,\quad i=1,2, \cdots, M ; j=1,2, \cdots, N \\
+&amp; \sum_{j=1}^N f_{ij} \leq w_{p_i}, i=1,2, \cdots, M \\
+&amp; \sum_{i=1}^M f_{ij} \leq w_{q_j}, j=1,2, \cdots, N \\
+&amp; \sum_{i=1}^M \sum_{j=1}^N f_{ij}=\min \left\{\sum_{i=1}^M w_{p_i},
+\sum_{j=1}^M w_{p_j}\right\}
+\end{aligned}
+\end{equation}
+\]</span></p>
+<p>EMD is proved to be distance
+(距离定义必须满足三点：正定性，齐次性，三角不等式) in the original
+paper. Note that the sum of weight of two difference distribution can be
+unequal.</p>
+<h3 id="two-equavalent-formulas">Two equavalent formulas</h3>
+<p>The above definitions is all about optimization. In <a
+target="_blank" rel="noopener" href="https://arxiv.org/pdf/2111.03570.pdf">Why the 1-Wasserstein
+distance is the area between the two marginal CDFs</a> and <a
+target="_blank" rel="noopener" href="https://arxiv.org/abs/1509.02237">On Wasserstein Two Sample
+Testing and Related Families of Nonparametric Tests</a>, Two equavalent
+formulas of 1-Wasserstein distance is proved, which are more easily to
+implement.</p>
+<p>For quantile function,</p>
+<p><span class="math display">\[
+\begin{equation}
+W_1(X, Y)=\int_{[0,1]}\left|F_X^{-1}(u)-F_Y^{-1}(u)\right| du
+\end{equation}
+\]</span></p>
+<p>For cumulative ditribution function,</p>
+<p><span class="math display">\[
+\begin{equation}
+W_1(u, v) = \int_{-\infty}^{+\infty} |U-V|
+\end{equation}
+\]</span></p>
+<p>1-Wasserstein distance is the area between the two marginal empirical
+CDFs</p>
+<h3 id="three-intuitive-and-typical-examples">Three intuitive and
+typical examples</h3>
+<ol type="1">
+<li><p>Computing the distance of point clouds with different
+distribution</p>
+<p>As show in the following figure, there are three point clouds with
+different distribution, which one is closest to the other two? Blue and
+red? Red and green? Green and blue?</p>
+<p>How to define a distance measure aligning with our intuition about
+the geometry and distance of the point cloud? The solution is Earth
+Mover's Distance (EMD)</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/dot_cloud_emd.png"
+alt="point cloud for EMD" />
+<figcaption aria-hidden="true">point cloud for EMD</figcaption>
+</figure></li>
+<li><p>Assume the two probability distribution as dirt and hole, EMD is
+the cost that needs to be done to move all the dirt to all the
+holes.</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/dirt_hole_emd.png"
+alt="Move the earth to the hole" />
+<figcaption aria-hidden="true">Move the earth to the hole</figcaption>
+</figure>
+<p>Let us call the above point clouds as sample set A, B, C, which can
+be regarded as a discrete probability distribution. For each sample
+<span class="math inline">\(x \in A\)</span>, there is <span
+class="math inline">\(p_x = \frac{1}{|A|}\)</span>, where |A| is the
+total number of points in sample set A. The distance between sample set
+A and B can be solved by the following linear program:</p>
+<blockquote>
+<p>recall probabilities：a probability mass function (pmf) is a function
+that gives the probability that a discrete random variable is exactly
+equal to some value. The probability density function (pdf) is used to
+describe probabilities for continuous random variables. It's
+counterpart.</p>
+</blockquote>
+<p>Each <span class="math inline">\(x \in A\)</span> corresponds to a
+pile of dirt with height <span class="math inline">\(p_x\)</span>, and
+each <span class="math inline">\(y \in B\)</span> corresponds to a hole
+with depth <span class="math inline">\(p_y\)</span>. The cost of moving
+a unit of dirt from x to y is the Euclidean distance between the two
+points, denoted as <span class="math inline">\(d(x, y)\)</span>. Let
+<span class="math inline">\(Z_{x,y}\)</span> represent the amount of
+dirt moved from <span class="math inline">\(x \in A\)</span> to <span
+class="math inline">\(y \in B\)</span>, then the constraints are as
+follows:</p>
+<ul>
+<li>Each <span class="math inline">\(Z_{x,y} \ge 0\)</span>, so dirt can
+only moves from x to y.</li>
+<li>Every pile <span class="math inline">\(x \in A\)</span> must vanish,
+i.e. for each fixed <span class="math inline">\(x \in A\)</span>, <span
+class="math inline">\(\sum_{y \in B} Z_{x,y} = p_x\)</span>.</li>
+<li>Every hole <span class="math inline">\(y \in B\)</span> must be
+completely filled, i.e. for each fixed <span class="math inline">\(y \in
+B\)</span>, <span class="math inline">\(\sum_{y \in B} Z_{x,y} =
+p_x\)</span></li>
+</ul>
+<p>The objective is to minimize the cost of moving the dirt, i.e. <span
+class="math inline">\(\sum_{x,y \in AxB}d(x,y)Z(x,y)\)</span>, subject
+to the linear constraints:</p>
+<p><span class="math display">\[
+\sum_{x, y \in A \times B}d(x, y)Z_{x,y} \\
+s.t \space
+\{
+     \begin{split}
+     &amp;Z_{x,y} \ge 0\\
+     &amp;\sum_{y \in B} Z_{x,y} = p_x\\
+     &amp;\sum_{x \in A} Z_{x,y} = p_y \\
+     \end{split}
+\}
+\]</span></p></li>
+</ol>
+<h2 id="python-tools-for-implementation">Python tools for
+implementation</h2>
+<p>Common used tools for Wasserstein distance implementation:</p>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://github.com/google/or-tools">google/or-tools:
+Google's Operations Research tools:</a>,</li>
+<li>scipy,
+<code>from scipy.stats import wasserstein_distance</code></li>
+<li><a target="_blank" rel="noopener" href="https://pythonot.github.io/index.html">POT: Python Optimal
+Transport — POT Python Optimal Transport 0.9.0 documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wmayner/pyemd">wmayner/pyemd: Fast EMD
+for Python: a wrapper for Pele and Werman's C++ implementation of the
+Earth Mover's Distance metric</a></li>
+</ol>
+<p>An online tools to calculate Wasserstein distance: <a
+target="_blank" rel="noopener" href="https://demonstrations.wolfram.com/MongeKantorovichTransportationProblem/">Monge-Kantorovich
+Transportation Problem - Wolfram Demonstrations Project</a></p>
+<h3 id="scipy-1d-wasserstein-distance">scipy 1d Wasserstein
+distance</h3>
+<p><code>scipy.stats.wasserstein_distance</code> applies to 1D
+Wasserstein and directly uses L1 norm as the distance metric.</p>
+<p>Definitions is the best way to learn: <a
+target="_blank" rel="noopener" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.wasserstein_distance.html#scipy-stats-wasserstein-distance">scipy.stats.wasserstein_distance
+— SciPy v1.11.1 Manual</a>:</p>
+<blockquote>
+<p>scipy.stats.wasserstein_distance(u_values, v_values, u_weights=None，
+v_weights=None) Compute the first Wasserstein distance between two 1D
+distributions.</p>
+<p>This distance is also known as the earth mover’s distance, since it
+can be seen as the minimum amount of “work” required to transform <span
+class="math inline">\(u\)</span> into <span
+class="math inline">\(v\)</span>, where “work” is measured as the amount
+of distribution weight that must be moved, multiplied by the distance it
+has to be moved.</p>
+</blockquote>
+<blockquote>
+<p>u_values, v_values array_like</p>
+<ul>
+<li>Values observed in the (empirical) distribution.</li>
+</ul>
+<p>u_weights, v_weights array_like, optional</p>
+<ul>
+<li>Weight for each value. If unspecified, each value is assigned the
+same weight. u_weights (resp. v_weights) must have the same length as
+u_values (resp. v_values). If the weight sum differs from 1, it must
+still be positive and finite so that the weights can be normalized to
+sum to 1.</li>
+</ul>
+</blockquote>
+<p>解释：</p>
+<ol type="1">
+<li><p>This function is for Wasserstein-1 distance, where the distance
+d(x,y) is the L1 norm, absolute value. It's only appliable to 1D
+distribution, which means 2D distribution should be flatten to
+1D.(especially for machine learning weights or images, which is 2D
+distribution or more)</p></li>
+<li><p>u_values, v_values are the values observed in the (empirical)
+distribution, which is the samples drawed from the distribution.</p>
+<p>Corresponding to the above example: the position coordinates of the
+point in the point cloud or the coordinates of dirt and holes.</p></li>
+<li><p>u_weights, v_weights correspond to the weight of each sample in
+all samples.</p>
+<p>Corresponding to the above example:</p>
+<ol type="1">
+<li><p>The weighted number of points at this position in the point cloud
+(because it is a fraction with weighted sum is 1, so it is called the
+weighted number)</p></li>
+<li><p>The weighted height, how much, and how deep the dirt and hole are
+at this position, that is, <span class="math inline">\(p_x\)</span>,
+<span class="math inline">\(p_y\)</span></p></li>
+<li><p>If not specified, the default weights are equal on average. If
+specified, it needs to be a positive integer and will be normalized to
+1</p></li>
+</ol></li>
+<li><p>Normally, The way to get wasserstein-1 distance is calculating
+the <strong>distance cost</strong> through u_values, v_values, calculate
+<strong>the quality or quantity</strong> through u_weights, v_weights,
+and then establish variables between each point from p to q samples to
+solve the linear minimum optimization problem.</p></li>
+</ol>
+<h3
+id="scipy.stats.wasserstein_distance-sourcecode-analysis">scipy.stats.wasserstein_distance
+sourcecode analysis</h3>
+<p>However, <strong>in the scipy function, the wasserstein distance is
+calculated using the empirical CDFs related definitions in Equation
+7</strong></p>
+<p>In function <code>scipy.stats.wasserstein_distance</code>, the
+function
+<code>_cdf_distance(1, u_values, v_values, u_weights, v_weights)</code>
+is called with <span class="math inline">\(p=1\)</span> as wasserstein-1
+distance.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">def _cdf_distance(p, u_values, v_values, u_weights=None, v_weights=None):</span><br><span class="line">    # validate whether it&#x27;s a distribution</span><br><span class="line">    u_values, u_weights = _validate_distribution(u_values, u_weights)</span><br><span class="line">    v_values, v_weights = _validate_distribution(v_values, v_weights)</span><br><span class="line"></span><br><span class="line">    # Sort u and v in ascending order and store the sorted indices</span><br><span class="line">    u_sorter = np.argsort(u_values)</span><br><span class="line">    v_sorter = np.argsort(v_values)</span><br><span class="line"></span><br><span class="line">    # concatenate the two samples and sort them in ascending order</span><br><span class="line">    all_values = np.concatenate((u_values, v_values))</span><br><span class="line">    all_values.sort(kind=&#x27;mergesort&#x27;)</span><br><span class="line"></span><br><span class="line">    # Compute the differences between pairs of successive values of u and v.</span><br><span class="line">    deltas = np.diff(all_values)</span><br><span class="line"></span><br><span class="line">    # Get the respective positions of the values of u and v among the values of</span><br><span class="line">    # both distributions.</span><br><span class="line">    u_cdf_indices = u_values[u_sorter].searchsorted(all_values[:-1], &#x27;right&#x27;)</span><br><span class="line">    v_cdf_indices = v_values[v_sorter].searchsorted(all_values[:-1], &#x27;right&#x27;)</span><br><span class="line"></span><br><span class="line">    # Calculate the CDFs of u and v using their weights, if specified.</span><br><span class="line">    if u_weights is None:</span><br><span class="line">        u_cdf = u_cdf_indices / u_values.size</span><br><span class="line">    else:</span><br><span class="line">        u_sorted_cumweights = np.concatenate(([0],</span><br><span class="line">                                              np.cumsum(u_weights[u_sorter])))</span><br><span class="line">        u_cdf = u_sorted_cumweights[u_cdf_indices] / u_sorted_cumweights[-1]</span><br><span class="line"></span><br><span class="line">    if v_weights is None:</span><br><span class="line">        v_cdf = v_cdf_indices / v_values.size</span><br><span class="line">    else:</span><br><span class="line">        v_sorted_cumweights = np.concatenate(([0],</span><br><span class="line">                                              np.cumsum(v_weights[v_sorter])))</span><br><span class="line">        v_cdf = v_sorted_cumweights[v_cdf_indices] / v_sorted_cumweights[-1]</span><br><span class="line"></span><br><span class="line">    # Compute the value of the integral based on the CDFs.</span><br><span class="line">    # If p = 1 or p = 2, we avoid using np.power, which introduces an overhead</span><br><span class="line">    # of about 15%.</span><br><span class="line">    if p == 1:</span><br><span class="line">        return np.sum(np.multiply(np.abs(u_cdf - v_cdf), deltas))</span><br><span class="line">    if p == 2:</span><br><span class="line">        return np.sqrt(np.sum(np.multiply(np.square(u_cdf - v_cdf), deltas)))</span><br><span class="line">    return np.power(np.sum(np.multiply(np.power(np.abs(u_cdf - v_cdf), p),</span><br><span class="line">                                       deltas)), 1/p)</span><br></pre></td></tr></table></figure>
+<p>To illustrate the above code, let's take a look at the following
+example,</p>
+<p><code>scipy.stats.wasserstein_distance(u_values=np.array([2, 10, 6]), v_values=np.array([12, 4, 2]))</code>
+with CDF figure as follows: <img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/emd_example.jpg"
+alt="emd_example" /></p>
+<ol type="1">
+<li><p>Find the cutoff point for CDF</p>
+<p><code>all_values = [2, 2, 4, 6, 10, 12]</code></p>
+<p>Merging the lists of u and v is equivalent to marking the positions
+of the values of two distribution on the coordinate axis, which is also
+the point of the Empircal CDF difference between the two
+distribution.</p></li>
+<li><p>Get the CDF of each distribution</p>
+<ol type="1">
+<li><p>sort the two distribution in ascending order,
+<code>u_values[u_sorter]=[2, 6, 10], v_values[v_sorter] = [2, 4, 12]</code></p></li>
+<li><p>find the number of samples less than <span
+class="math inline">\(x_i\)</span>, and than divide the size of
+distribution</p>
+<p><span class="math display">\[
+\begin{equation}
+F_n(x_t) = \frac{\text{number of elements in the samples} \le x_t}{n} =
+\frac{1}{n}\sum_{i=1}^n I_{x_i \le x_t},
+\end{equation}
+\]</span></p></li>
+</ol>
+<p><code>u_cdf_indices = [1, 1, 1, 2, 3], v_cdf_indices= [1, 1, 2, 2, 2]</code></p>
+<p>CDF = <code>u_cdf_indices / u_values.size</code></p>
+<p>number of elements less than <span class="math inline">\(x_i\)</span>
+=
+<code>u_values[u_sorter].searchsorted(all_values[:-1], 'right')</code>.
+Due to the discrete nature, scipy get the CDF of the cutoff points (CDF
+different places) through the above code (Actually, we can calculate the
+CDF value at any discrete coordinate, but it's unnecessary; we only need
+to compute it for the cutoff coordinates). For instance, for the 3rd
+cutoff element <span class="math inline">\(x_i = 4\)</span>, it find the
+number of elements less than <span class="math inline">\(x_i =
+4\)</span> in <code>u_values[u_sorter]</code>, which is the <span
+class="math inline">\(F_X(x_i=4) * size(u\_values)\)</span>.</p>
+<p>Although the cutoff point coordinate can be repeated, the distance
+between the two repeated points is 0, so it does not affect the
+calculation of the distance.</p></li>
+<li><p>Get the CDF value differences of two distribution as the
+probability 'mass' in <span class="math inline">\(x\)</span>.</p>
+<p><code>np.abs(u_cdf - v_cdf)</code>: the difference of empirical CDF
+values at the cutoff points, which is the probability 'mass' in <span
+class="math inline">\(x\)</span>.</p></li>
+<li><p>Get the distance to move from <span
+class="math inline">\(u_i\)</span> to <span
+class="math inline">\(v_i\)</span>.</p>
+<p><code>deltas = np.diff(all_values)</code>: the distance between two
+cutoff points, which is the distance to move from <span
+class="math inline">\(u_i\)</span> to <span
+class="math inline">\(v_i\)</span>.</p></li>
+<li><p>Sum the multiplication of the above two values in terms of <span
+class="math inline">\(x\)</span></p>
+<p>For instance, when <span class="math inline">\(4 \le x_i \lt
+6\)</span>,</p>
+<p><span class="math inline">\(F_X(4)\)</span> = u_cdf(<span
+class="math inline">\(X \le x_i\)</span>) = u_cdf[2] = 1</p>
+<p><span class="math inline">\(F_Y(4)\)</span> = v_cdf(<span
+class="math inline">\(Y \le x_i\)</span>) = v_cdf[2] = 2$</p>
+<p><code>delta[2] =all_values[3] - all_values[2] =6-4=2</code></p>
+<p>According to Equation 7, the distance to move from <span
+class="math inline">\(u_i\)</span> to <span
+class="math inline">\(v_i\)</span> in <span
+class="math inline">\(F(4)\)</span> is <span
+class="math inline">\(2*|1-2| = 2\)</span>.</p></li>
+</ol>
+<p>Recommend for Corresponding Python code: <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44589540/article/details/129720028">Python
+计算累积分布函数 CDF 并绘图_python cdf 函数-CSDN 博客</a></p>
+<h2 id="more-examples-and-tests-for-other-libraries">More Examples and
+Tests for other libraries</h2>
+<h3 id="scipy-use-cases">scipy use cases</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from scipy.stats import wasserstein_distance</span><br><span class="line"></span><br><span class="line">def wassersteindist(n):</span><br><span class="line">    a = np.random.randn(n)</span><br><span class="line">    b = np.random.randn(n)</span><br><span class="line">    w = wasserstein_distance(a,b)</span><br><span class="line">    return w</span><br><span class="line"></span><br><span class="line">print(np.mean([wassersteindist(100) for r in range(1000)]))</span><br><span class="line">print(np.mean([wassersteindist(1000) for r in range(1000)]))</span><br><span class="line">print(np.mean([wassersteindist(10000) for r in range(1000)]))</span><br><span class="line"># OUTPUT</span><br><span class="line"># 0.17644314409413253</span><br><span class="line"># 0.05818221578545196</span><br><span class="line"># 0.018522773678086024</span><br></pre></td></tr></table></figure>
+<p>解读：np.random.randn 返回标准正态分布(mean=0, std=1, Gaussian
+distribution) 的采样, a, b
+都是同一分布的采样点。对于同一分布采样点来说，样本量越大越接近其分布，而二者分布一样，因此二者的
+wasserstein distance 随着样本量逐渐增大会趋近于 0。</p>
+<p>Wasserstein
+距离是一种用于衡量两个概率分布之间距离的方法，它考虑了分布之间的相似性和几何距离之间的关系。它有许多应用，例如生成对抗网络（GAN）中的损失函数和图像检索中的相似性度量。</p>
+<p>Wasserstein
+距离的定义基于最小化将一个分布转换为另一个分布所需的成本。成本可以是任意的，但通常是指将一个分布中的质量从一个位置移动到另一个位置所需的成本。这个成本可以表示为两个位置之间的距离和质量的乘积。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from scipy.stats import wasserstein_distance</span><br><span class="line"></span><br><span class="line">a, b = [2,1,3,4], [4,1,2,4]</span><br><span class="line">w = wasserstein_distance(a,b)</span><br><span class="line">print(w)</span><br></pre></td></tr></table></figure>
+<h3 id="wasserstein-p-distance">Wasserstein-p distance</h3>
+<p>如果要计算 p-Wasserstein distance between two 1d distributions,
+也就是以 p 范数为距离衡量的 wasserstein distance，那 scipy
+的功能就不行了，可以采用以下 <a
+target="_blank" rel="noopener" href="https://github.com/PythonOT/POT">PythonOT/POT: POT : Python
+Optimal Transport</a>
+的库函数：<code>ot.wasserstein_1d(u_values, v_values, u_weights=None, v_weights=None, p=1, require_sort=True)</code>,
+直接指定 p 范数的值即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import ot</span><br><span class="line">pos_p, pos_q = np.array([0, 5]), np.array([0, 1])</span><br><span class="line">counts_p, counts_q = np.array([3/4, 1/4]), np.array([1/2, 1/2])</span><br><span class="line">ot.backend = &#x27;numpy&#x27;</span><br><span class="line"></span><br><span class="line">ot.wasserstein_1d(pos_p, pos_q, u_weights=counts_p, v_weights=counts_q, p=2, require_sort=True)</span><br></pre></td></tr></table></figure>
+<h2
+id="difference-between-implementations-of-scipy-potand-pyemd">Difference
+between implementations of scipy， POT，and pyemd</h2>
+<p>这里比较 scipy 和 POT 的 wasserstein 函数和 pyemd
+等库实现的差异。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scipy.stats.wasserstein_distance(u_values, v_values, u_weights=None， v_weights=None)</span><br></pre></td></tr></table></figure>
+<p>在 scipy 中，u_values, v_values 参数是从分布中采样的每个样本位置
+(samples drawed from distribution) ，因此无顺序可重复
+（实际上看函数源码可以看到对其进行排序，也可以说明其无顺序），u_weight,
+v_weight 对应权重，质量。scipy
+这种其实对机器学习中矩阵（都是样本）的距离计算挺方便的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pyemd.emd(first_histogram,</span><br><span class="line">    second_histogram,</span><br><span class="line">    distance_matrix,</span><br><span class="line">    extra_mass_penalty=-1.0)</span><br></pre></td></tr></table></figure>
+<p>pyemd 中，first_histogram，second_histogram 是分布的频率向量
+（pre-computed frequency vector about the distribution
+或者也可以说是频率向量，mass 重量，权重，对应 scipy 中的 u_weight,
+v_weight, 并通过 distance_matrix 指定距离矩阵 specifying distances
+between bins.</p>
+<p>因此，scipy 与 pyemd 之间的差异在于参数顺序以及 位置和距离</p>
+<p>计算两个矩阵之间的距离：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from scipy.stats import wasserstein_distance</span><br><span class="line">import numpy as np</span><br><span class="line">a = np.array([[3,4], [6,1]])</span><br><span class="line">b = np.array([[68,1], [921,4]])</span><br><span class="line">len = a.size</span><br><span class="line">wasserstein_distance(np.arange(len), np.arange(len), a.flatten(), b.flatten())</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.6438631790744466</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import pyemd</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def dist_matrix(len):</span><br><span class="line">    dist = np.empty((len, len))</span><br><span class="line">    for i in range(len):</span><br><span class="line">        for j in range(len):</span><br><span class="line">            dist[i][j] = abs(i-j)</span><br><span class="line">    return dist</span><br><span class="line"></span><br><span class="line">a = np.array([[3,4], [6,1]])</span><br><span class="line">b = np.array([[68,1], [921,4]])</span><br><span class="line">freq = lambda x: x.flatten() / np.sum(x) # compute the normalized histogram、frequency of each element</span><br><span class="line"></span><br><span class="line">pyemd.pyemd.emd(freq(a), freq(b), dist_matrix(a.size)) # cost of moving mass under L1 is constant</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OUTPUT: 0.643861793763</span><br></pre></td></tr></table></figure>
+<p>看得出来直接计算矩阵的距离的话，用 scipy
+还是挺方便的，便于在机器学习中应用。</p>
+<h2 id="applications-in-machine-learning">Applications in Machine
+Learning</h2>
+<ol type="1">
+<li>Image Generation and Style Transfer, 在生成对抗网络 GAN
+中，测量真实分布与生成分布之间的距离，来构成目标函数，训练
+GAN，提高生成图片的质量</li>
+<li>Domain Adaptation,
+量化源域与目标域的概率分布差异，从而调整源域上训练的模型</li>
+<li>Outlier Detection,
+将正常分布与潜在的异常分布做对比，通过捕捉质量和位置的差异，来识别异常值</li>
+<li>数据增强，在增强训练数据时，从尽可能接近原始数据分布的分布中进行采样来生成真实的合成值。</li>
+</ol>
+<h2 id="references-and-recommends">References and Recommends</h2>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://jeremykun.com/2018/03/05/earthmover-distance/">Earthmover
+Distance – Math ∩ Programming</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/353418080">Wasserstein 距离 -
+知乎</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://rmoklesur.medium.com/understanding-wasserstein-distance-a-powerful-metric-in-machine-learning-100a1ff46b66">Understanding
+Wasserstein Distance: A Powerful Metric in Machine Learning | by
+Moklesur Rahman | Jun, 2023 | Medium</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/605795/normalized-wasserstein-distance">python
+- Normalized Wasserstein distance - Cross Validated</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/scipy/scipy/issues/9152">wasserstein_distance
+works on distributions, not frequency vectors? · Issue #9152 ·
+scipy/scipy</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://github.com/j2kun/earthmover/tree/main">j2kun/earthmover:
+Implementation of the Earthmover distance metric in python.</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/519286/intuition-on-wasserstein-distance">python
+- Intuition on Wasserstein Distance - Cross Validated</a></li>
+</ol>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/distance/" rel="tag">distance</a></li></ul></div><div class="post-nav"><a class="next" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

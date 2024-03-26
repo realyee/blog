@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Linux 下使用 Python OCR 识别 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux 下使用 Python OCR 识别</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Linux 下使用 Python OCR 识别</h1><div class="post-meta">2020-07-13<span> | </span><span class="category"><a href="/blog/categories/utilities/">utilities</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.4k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 5</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#preparation"><span class="toc-number">1.</span> <span class="toc-text">Preparation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#notice"><span class="toc-number">1.1.</span> <span class="toc-text">Notice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#screenshot-tools"><span class="toc-number">1.2.</span> <span class="toc-text">screenshot tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tesseract-ocr"><span class="toc-number">1.3.</span> <span class="toc-text">tesseract-ocr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#introduction"><span class="toc-number">1.4.</span> <span class="toc-text">Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#installation"><span class="toc-number">1.4.1.</span> <span class="toc-text">Installation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#baidu-ocr"><span class="toc-number">1.5.</span> <span class="toc-text">Baidu OCR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#introduction-1"><span class="toc-number">1.5.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#installation-1"><span class="toc-number">1.5.2.</span> <span class="toc-text">Installation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96-python-%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93"><span class="toc-number">1.6.</span> <span class="toc-text">其他 Python 第三方库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">安装总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99"><span class="toc-number">2.</span> <span class="toc-text">脚本编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">脚本思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">学习历程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python-%E4%BB%A3%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">Python 代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%AE%BE%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">快捷键设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="toc-number">5.</span> <span class="toc-text">问题与改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%AA%E5%9B%BE%E5%9B%BE%E7%89%87%E4%BD%9C%E4%B8%BA%E4%B8%AD%E9%97%B4%E4%BA%A7%E7%89%A9"><span class="toc-number">5.1.</span> <span class="toc-text">截图图片作为中间产物</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><h2 id="preparation">Preparation</h2>
+<h3 id="notice">Notice</h3>
+<blockquote>
+<p>manjaro kde 用户直接看下面的安装总结，一把梭哈。</p>
+</blockquote>
+<h3 id="screenshot-tools">screenshot tools</h3>
+<p>Spectacle 为 KDE
+桌面自带的官方屏幕截图工具，功能强大，使用舒适，推荐使用哦。 本来想通过
+flameshot
+的命令行来实现截图并存储到指定位置的，然而它的命令行不能够截取部分区域，只能截取整个桌面或者屏幕。</p>
+<p>我知道的其他可以使用截图工具的有： scot、gnome-screenshot</p>
+<p>参考命令(截取指定矩形，并存储到指定位置):</p>
+<p><code>scrot -s -o ~/Documents/temp.png</code>、<code>gnome-screenshot -a -f ~/Documents/temp.png</code></p>
+<p>注：个人认为 spectacle 比 scrot 截图可视化做得好，
+即：截取区域时，可以明显看见，而且截取完了，可以再改变或者与移动区域。</p>
+<h3 id="tesseract-ocr">tesseract-ocr</h3>
+<h3 id="introduction">Introduction</h3>
+<p>tesseract 是一款被广泛使用的开源 OCR 工具，在现在的免费 OCR
+引擎中，其识别精度类较好的，也广泛被使用。tesseract 作为开源项目发布在
+GitHub 上，其最新版本已经支持中文 OCR，并提供了命令行工具，此外，还有
+Python 库 <code>pytesseract</code>。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tesseract-ocr/tesseract">tesseract
+Github</a></p>
+<h4 id="installation">Installation</h4>
+<p>各发行版 Linux 一般对应仓库都有包，我使用的是
+Manjaro，得益于其强大的社区以及用户仓库，安装软件一句命令行搞定。</p>
+<ol type="1">
+<li><p>安装 Tesseract <code>sudo pacman -S tesseract</code></p></li>
+<li><p>安装语言文件</p>
+<ol type="1">
+<li><p>方法一：<code>sudo pacman -S tesseract-data-chi_sim tesseract-data-eng</code></p></li>
+<li><p>方法二： 直接在 <a
+target="_blank" rel="noopener" href="https://github.com/tesseract-ocr/tessdata">Github tessdata</a>
+下载，然后将其移动到 tessdata 对应位置即可。 manjaro linux 的位置是
+<code>/usr/share/tessdata/</code>， 其他 Debian based Linux 可能是
+<code>/usr/share/tesseract-ocr/tessdata</code>。</p></li>
+</ol></li>
+<li><p>检查是否安装好</p></li>
+</ol>
+<p>该命令显示出安装过的语言数据包（我多安装了两个）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">tesseract --list-langs</span></span><br><span class="line">List of available languages (4):</span><br><span class="line">chi_sim</span><br><span class="line">chi_sim_vert</span><br><span class="line">eng</span><br><span class="line">osd</span><br></pre></td></tr></table></figure>
+<h3 id="baidu-ocr">Baidu OCR</h3>
+<h4 id="introduction-1">Introduction</h4>
+<p>我使用的是百度 OCR 的 SDK（为啥没直接 API，额，第一眼看到了
+SDK，就用了 emm）。后面才发现 SDK
+不太适合对含位置信息版的接口进行二次处理，扩展功能，等有空再搞吧。</p>
+<h4 id="installation-1">Installation</h4>
+<ol type="1">
+<li><code>pip install baidu-aip</code></li>
+<li>申请 API 接口 后面填到脚本对应位置。 申请教程参考：<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/biao197/article/details/102907492">如何申请百度文字识别
+apikey 和 Secret Key</a></li>
+</ol>
+<h3 id="其他-python-第三方库">其他 Python 第三方库</h3>
+<ol type="1">
+<li><p>pytesseract 调用 tesseract：
+<code>pip install pytesseract</code></p></li>
+<li><p>pyperclip 处理剪切板中纯文本与 Python 的交互：
+<code>pip install pyperclip</code> 依赖 <code>xclip</code> 或者
+<code>xsel</code>， 安装命令：<code>sudo pacman -S xclip</code></p></li>
+</ol>
+<p>pillow 处理图片： <code>pip install pillow</code></p>
+<h3 id="安装总结">安装总结</h3>
+<ol type="1">
+<li><p>安装</p>
+<p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S xclip tesseract tesseract-data-chi_sim tesseract-data-eng</span><br><span class="line">pip install baidu-aip pytesseract pyperclip</span><br></pre></td></tr></table></figure></p></li>
+<li><p>去百度智能云创建文字识别应用，并获取该应用三个信息 详细步骤见 <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/biao197/article/details/102907492">如何申请百度文字识别
+apikey 和 Secret Key</a>
+<code>APP_ID、API_KEY、SECRET_KEY</code></p></li>
+</ol>
+<h2 id="脚本编写">脚本编写</h2>
+<h3 id="脚本思路">脚本思路</h3>
+<ol type="1">
+<li><p>利用截图软件 spectacle 截取需要被文字识别的部分；</p></li>
+<li><p>利用百度 OCR 或者文字识别 OCR 软件 tesseract 进行识别
+参数控制有无网络，使得有网络用百度， 无网络用 tesseract</p></li>
+<li><p>将结果输出至剪切板
+参数控制是否需要段落整理（在你识别段落文字时，很重要，不处理的话，换行之类的格式较乱），通过正则进行段落整理。</p></li>
+</ol>
+<h3 id="学习历程">学习历程</h3>
+<ol start="0" type="1">
+<li><p>查阅学习 spectacle <code>spectacle --help</code></p></li>
+<li><p>查阅学习 tesseract 基本命令；
+<code>tesseract --help-extra</code></p></li>
+<li><p>查阅学习 百度 OCR SDK 文档，并学习 baidu-aip 模块基本使用 <a
+target="_blank" rel="noopener" href="https://cloud.baidu.com/doc/OCR/s/Ek3h7yeiq">baidu OCR SDK Python
+文档</a></p></li>
+<li><p>学习 pytesseract、pyperclip、pillow 模块基本使用</p></li>
+<li><p>学习 Python 调用 shell 命令</p></li>
+</ol>
+<h2 id="python-代码">Python 代码</h2>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/violetu/mybackup/blob/master/useful_scripts/spectacle_ocr.py">脚本
+spectacle_ocr.py</a></p>
+<p>注意：</p>
+<ol type="1">
+<li>将临时路径 TEMP_IMG_PATH 自己设置一个。</li>
+<li>在脚本中搜索 "Notice"，找到百度 API
+信息的位置，补充之前你创建的百度文字识别应用的信息：
+<code>APP_ID、API_KEY、SECRET_KEY</code></li>
+</ol>
+<h2 id="快捷键设置">快捷键设置</h2>
+<figure>
+<img
+src="https://raw.githubusercontent.com/violetu/blogimages/master/20200711205058.png"
+alt="快捷键设置" />
+<figcaption aria-hidden="true">快捷键设置</figcaption>
+</figure>
+<h2 id="问题与改进">问题与改进</h2>
+<h3 id="截图图片作为中间产物">截图图片作为中间产物</h3>
+<p>本脚本使用了外部截图工具截图后放到指定位置，然后从该位置获取图片，这样存储读取速度就慢了些，而且产生了中间产物：一张截图。</p>
+<p>我尝试解决这个问题，发现常用的方法有两种：</p>
+<ol type="1">
+<li><p>使用 pillow 模块的 <code>ImageGrab.grabclipboard()</code>
+获取剪切板的截图</p>
+<p>从下面链接可以看出，该方法只是用于 Windows 和 OS X。 <a
+target="_blank" rel="noopener" href="https://pillow.readthedocs.io/en/3.1.x/reference/ImageGrab.html">ImageGrab
+Module (OS X and Windows only)</a></p>
+<p>因此，我尝试搜索 ”ImageGrab Linux alternative“ 找到了 <a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/43520757/imagegrab-alternative-in-linux">ImageGrab
+alternative in linux</a>，也就是： pyscreenshot</p>
+<p>然而， pyscreenshot 并没有 grabclipboard
+方法，直接获取剪切板图片，而是可以直接截图，这就很高级了。通过搭配
+python 的 <code>pynput</code>
+库来监听键盘实现快捷键截图，监听鼠标确定截图区域。</p>
+<p>这样，就直接避免了使用截图工具和产生中间图片的问题，Great！</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />待改进</label></li>
+</ul></li>
+<li><p>使用 Qt 或者 GTK 图形界面框架来进行截图与获取截图后的图片至
+Python 对象。</p>
+<p>这当然选 Qt 了，一方面学过 Qt 的一些知识，一方面我用的 KDE 桌面是使用
+Qt 开发。</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />图形界面的 OCR 识别</label></li>
+</ul></li>
+</ol>
+<h2 id="参考资料">参考资料</h2>
+<blockquote>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/51668339/preserving-spaces-in-tesseract">Preserving
+Spaces in Tesseract</a></li>
+<li><a target="_blank" rel="noopener" href="https://pypi.org/project/pytesseract/">pypi pytesseract
+0.3.4</a></li>
+<li><a target="_blank" rel="noopener" href="https://ptorch.com/news/231.html">pypi pytesseract 0.3.4
+中文翻译</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4909396/">Is there any
+way to improve tesseract OCR with small fonts?</a></li>
+<li><a target="_blank" rel="noopener" href="https://ai.baidu.com/ai-doc/OCR/3k3h7yeqa">baidu 文字识别
+SDK python 接口说明</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/XnCSD/article/details/80786793">Python
+利用百度文字识别 API 识别并提取图片中文字</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/asweigart/pyperclip">pyperclip
+github</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a793c0d960fe">python
+命名规范</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/26232941">使用 OCR 识别扫描
+PDF 后的多余回车应该如何去除？</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pythonf.cn/read/124275">Python 屏幕捕获+OCR
+识别+翻译,python,截屏,ocr</a></li>
+</ol>
+</blockquote>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Tools/" rel="tag">Tools</a></li></ul></div><div class="post-nav"><a class="pre" href="/blog/2020/07/17/network/osi_layer/">OSI 7 层模型及其安全隐患</a><a class="next" href="/blog/2020/07/13/linux/tools/chmod/">chmod（File Permissions）</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

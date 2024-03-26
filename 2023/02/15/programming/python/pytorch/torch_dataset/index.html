@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>torch dataset 相关函数 | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">torch dataset 相关函数</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">torch dataset 相关函数</h1><div class="post-meta">2023-02-15<span> | </span><span class="category"><a href="/blog/categories/blockchain/">blockchain</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.3k</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 5</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E7%8B%AC%E7%AB%8B%E5%90%8C%E5%88%86%E5%B8%83"><span class="toc-number">1.</span> <span class="toc-text">数据集独立同分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#normalize-dataset"><span class="toc-number">2.</span> <span class="toc-text">Normalize dataset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#torch-%E5%88%86%E5%89%B2%E6%95%B0%E6%8D%AE%E9%9B%86-sampler-vs-subset-vs-random_split"><span class="toc-number">3.</span> <span class="toc-text">Torch
+分割数据集 sampler vs subset vs random_split</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#change-label-in-dataset"><span class="toc-number">4.</span> <span class="toc-text">Change label in dataset</span></a></li></ol></div></div><div class="post-content"><p>以 MNIST 举例,</p>
+<ul>
+<li><code>train_dataset.data</code> 获得 feature/image 的 tensor， 其
+shape 为 <code>torch.Size([60000, 28, 28])</code></li>
+<li><code>train_dataset.targets</code> 获得 label 的 tensor，其 shape 为
+<code>torch.Size([60000])</code></li>
+<li><code>train_dataset[0]</code> 获得二元组(image,
+label)表示第一条记录</li>
+<li><code>train_dataset[0][0]</code>，<code>train_dataset[0][1]</code>
+分别为第一条数据的 image 和 label 对应的 tensor</li>
+</ul>
+<h2 id="数据集独立同分布">数据集独立同分布</h2>
+<p>MINST 数据独立同分布和非独立同分布的代码：</p>
+<p><a
+target="_blank" rel="noopener" href="https://www.kaggle.com/code/melikedograr0/mnist-dataset-distributed-as-iid-non-iid">MNIST
+dataset distributed as IID &amp; Non-IID | Kaggle</a></p>
+<p>MNIST 数据集中各类别数目与比例：<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/mnist_percentage.png"
+alt="Class percentages in MNIST dataset" /> from paper: <a
+target="_blank" rel="noopener" href="https://www.researchgate.net/publication/320761896">A Minimal
+Subset of Features Using Feature Selection for Handwritten Digit
+Recognition</a></p>
+<h2 id="normalize-dataset">Normalize dataset</h2>
+<p>归一化的目的就是使得预处理的数据被限定在一定的范围内（比如 [0,1] 或者
+[-1,1]），从而消除奇异样本数据导致的不良影响。</p>
+<p>奇异样本数据是指相对于其他输入样本特别大或特别小的样本矢量（即特征向量）</p>
+<p>例如：age 特征一般范围 [0, 100], 工资特征一般范围：[2000, 6000],
+那么采用梯度下降法训练过程中，寻找最优解的梯度下降过程中，路径就有可能被工资特征的影响所主导，从而导致收敛过程缓慢，甚至收敛效果不好。</p>
+<p>例如下图损失函数的等高线,未归一化的特征会导致损失函数的等高线变成椭圆形状，从而导致梯度下降法收敛过程缓慢，甚至收敛效果不好。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/unnormalized_data.png"
+alt="unnormalized_data" />
+<figcaption aria-hidden="true">unnormalized_data</figcaption>
+</figure>
+<p>归一化之后，损失函数的等高线变成圆形，从而导致梯度下降法收敛过程更加平缓，收敛速度加快。
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/normalized_data.png"
+alt="Normalized Data" /></p>
+<p>数据归一化效果：收敛过程更加平缓，收敛速度加快</p>
+<p>常见数据集 mean std：</p>
+<p>MNIST: mean, std = (0.1307,), (0.3081,) FashionMNIST: mean, std =
+(0.2861,), (0.3528,) CIFAR10: mean, std = (0.4914, 0.4822, 0.4465),
+(0.2470, 0.243, 0.261)</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">trans = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((0.4914, 0.4822, 0.4465),</span><br><span class="line">                            (0.2470, 0.243, 0.261)),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><p><code>torch.ToTensor()</code> 将图片转换为 FloatTensor</p>
+<blockquote>
+<p>Converts a PIL Image or numpy.ndarray (H x W x C) in the range [0,
+255] to a <strong>torch.FloatTensor</strong> of shape (C x H x W) in the
+range [0.0, 1.0], 将所有数除以 255，将数据归一化到 [0，1]</p>
+</blockquote></li>
+<li><p><code>torch.flatten</code></p>
+<p><code>transforms.Lambda(torch.flatten)</code> 将数据集 flatten
+成一维</p>
+<p><a
+target="_blank" rel="noopener" href="https://pytorch.org/vision/main/generated/torchvision.transforms.ToTensor.html">ToTensor
+— Torchvision main documentation</a></p></li>
+<li><p><code>transforms.Normalize</code></p>
+<p>对应 channel
+的数据，均值和标准差，运算如下：<code>x = (x - mean) / std</code> 经过
+transforms.Normalize 数据不一定服从正态分布,结果也不一定都处于 [-1,1]
+之间</p>
+<p>Normalize:
+减去均值，除以标准差只是将数据进行标准化处理，并不会改变原始数据的分布。每一个
+channels 上所有 batch 的数据服从均值为 0，标准差为 1。</p>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/840635">我用 PyTorch
+复现了 LeNet-5 神经网络（MNIST
+手写数据集篇）！-阿里云开发者社区</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/silence-tommy/p/7113498.html">机器学习笔记：为什么要对数据进行归一化处理？
+- 不说话的汤姆猫 - 博客园</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/424518359">如何理解归一化（normalization）?
+- 知乎</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/414242338">pytorch 中归一化
+transforms.Normalize 的真正计算过程 - 知乎</a></li>
+</ol></li>
+</ol>
+<h2 id="torch-分割数据集-sampler-vs-subset-vs-random_split">Torch
+分割数据集 sampler vs subset vs random_split</h2>
+<ol type="1">
+<li><p>如果一直不停使用一个数据集，且需要根据特征使用数据集的不同部分，则使用
+sampler</p>
+<p>为了避免重复性创建数据集，只针对一个数据集做后续的处理的话，可以采用
+sampler，而不必采用 subset. You can define a custom sampler for the
+dataset loader avoiding recreating the dataset (just creating a new
+loader for each different sampling).</p></li>
+<li><p>定制化获取数据集的子集，后续只用该子集 /
+只使用大数据集的一部分子集训练</p>
+<p>直接根据原始数据集创建一个 subset 子集即可。</p>
+<p><a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/47432168/taking-subsets-of-a-pytorch-dataset">python
+- Taking subsets of a pytorch dataset - Stack Overflow</a></p>
+<p>参考：<a
+target="_blank" rel="noopener" href="http://www.codebaoku.com/it-python/it-python-238136.html">Pytorch
+继承 Subset 类完成自定义数据拆分 - 编程宝库</a></p>
+<p>动态变化权重的采样器， <a
+target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/issues/7359">[feature request]
+[PyTorch] Dynamic Samplers. · Issue #7359 · pytorch/pytorch</a></p></li>
+<li><p>联邦学习中服务端对数据集进行分割，然后分发给 client 从而模拟
+local model training with the share of data。</p>
+<p>可以采用 `random_split</p>
+<p>random_split(dataset, lengths) works directly on the dataset.</p>
+<p>Two input arguments:</p>
+<ol type="1">
+<li>The first argument is the dataset.</li>
+<li>The second is a tuple of lengths.</li>
+</ol>
+<p>returns two Datasets with non-overlapping indices, which were drawn
+randomly based on the passed lengths, while SubsetRandomSampler accepts
+the indices directly.</p>
+<p>If we want to split our dataset into 2 parts, we will provide a tuple
+with 2 numbers. These numbers are the sizes of the corresponding
+datasets after the split.</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">train_dataset, val_dataset = random_split(dataset, (<span class="number">6000</span>, <span class="number">899</span>))</span><br></pre></td></tr></table></figure></p>
+<p>It's important to note that in federated learning, both
+<code>random_split</code> and <code>sampler</code> can be used together,
+but their roles are slightly different.</p>
+<ol type="1">
+<li><p><code>random_split</code> is typically used on the server side to
+divide the global dataset into subsets for clients</p></li>
+<li><p>while <code>sampler</code> is used on the client side to control
+the data sampling strategy during local training</p></li>
+</ol></li>
+<li><p>数据集本地分份，然后使用</p>
+<p>train_dataset 读取了数据集的 dataset 对象。</p>
+<ol type="1">
+<li><p>[不推荐] 将 tensor split 成 K 个 tensor，</p>
+<p><code>torch.tensor_split(train_dataset.data, K_partitions, dim=0)</code></p></li>
+<li><p>[推荐] 通过 reshape 或者 view 来改变 tensor 的视图</p>
+<p><code>train_dataset.data.reshape((K_partitions, len(train_dataset)//K_partitions, -1))</code></p></li>
+</ol></li>
+</ol>
+<h2 id="change-label-in-dataset">Change label in dataset</h2>
+<p>推荐如下方式，将标签等于 4 的标签设为 0，将标签等于 9 的标签设为 1
+<code>train_dataset.targets[dataset.targets == 4] = 0</code>
+<code>train_dataset.targets[dataset.targets == 9] = 1</code></p>
+<p>注意对训练集和测试集都要改变 <a
+target="_blank" rel="noopener" href="https://discuss.pytorch.org/t/change-labels-in-data-loader/36823">Change
+labels in Data Loader - vision - PyTorch Forums</a></p>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2023/02/16/misc/typing_keybroad/">Typing, keyboard positions and modifications</a><a class="next" href="/blog/2023/02/15/programming/python/pytorch/torch_train_skills/">pytorch 回归分类常用函数</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>

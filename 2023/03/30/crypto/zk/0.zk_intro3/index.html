@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Focusing on security of AI, and distributed AI."><title>Introduction Zero Knowledge -- Alon Rosen | realyee's blog</title><link rel="stylesheet" type="text/css" href="/blog/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/blog/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/blog/favicon.ico"><link rel="apple-touch-icon" href="/blog/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/blog/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-HT3KXNPC43" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HT3KXNPC43');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + '81692a5a3ea48096c98733a7d4bfef6b';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Introduction Zero Knowledge -- Alon Rosen</h1><a id="logo" href="/blog/.">realyee's blog</a><p class="description">Security and privacy of AI, and distributed AI, Cybersecurity</p></div><div id="nav-menu"><a class="current" href="/blog/."><i class="fa fa-home"> Home</i></a><a href="/blog/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/blog/tags/"><i class="fa fa-tag"> Tags</i></a><a href="/blog/history/"><i class="fa fa-book"> History</i></a><a href="/blog/cheatsheet/"><i class="fa fa-user"> Cheatsheet</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Introduction Zero Knowledge -- Alon Rosen</h1><div class="post-meta">2023-03-30<span> | </span><span class="category"><a href="/blog/categories/Cryptography/">Cryptography</a><a href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 958</span><span class="post-meta-item-text"> Words</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 4</span><span class="post-meta-item-text"> Minutes</span></span></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#introduction-zero-knowledge----alon-rosen"><span class="toc-number">1.</span> <span class="toc-text">Introduction Zero
+Knowledge -- Alon Rosen</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#zero-knowledge-proofs"><span class="toc-number">1.1.</span> <span class="toc-text">Zero-Knowledge Proofs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#what-is-zero-knowledge-good-for"><span class="toc-number">1.2.</span> <span class="toc-text">What is zero knowledge good
+for</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#proof-systems"><span class="toc-number">1.3.</span> <span class="toc-text">Proof Systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-language-of-true-statements"><span class="toc-number">1.3.1.</span> <span class="toc-text">The language of true
+statements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-proof-system"><span class="toc-number">1.3.2.</span> <span class="toc-text">NP Proof System</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E-dapp-%E5%BC%80%E5%8F%91%E8%A7%92%E5%BA%A6%E7%9C%8B"><span class="toc-number">1.4.</span> <span class="toc-text">从 DAPP 开发角度看</span></a></li></ol></li></ol></div></div><div class="post-content"><h1 id="introduction-zero-knowledge----alon-rosen">Introduction Zero
+Knowledge -- Alon Rosen</h1>
+<h2 id="zero-knowledge-proofs">Zero-Knowledge Proofs</h2>
+<p>It's mainly about the content of <a
+target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=6uGimDYZPMw&amp;list=PL8Vt-7cSFnw29cLUVqAIuMlg1QJ-szV0K&amp;index=2">The
+9th BIU Winter School on Cryptography-Zero Knowledge</a> and some
+understanding of my own.</p>
+<h2 id="what-is-zero-knowledge-good-for">What is zero knowledge good
+for</h2>
+<p>Can prove that I know a secret without having to reveal it.</p>
+<ol type="1">
+<li><p>Identification, Membership, Ownership and so on</p>
+<p>A zero-knowledge identity proof is a term used to refer to an
+authentication scheme where one party proves to the other to have a
+particular piece of knowledge that proves ownership of the
+identity.</p></li>
+<li><p>Protocol Design</p>
+<ol type="1">
+<li><p>Design against parties that <strong>follow instructions</strong>.
+(against 针对)</p>
+<p>Secure against arbitrary deviation from the protocol.</p></li>
+<li><p>Use ZK proof to <strong>force honest behavior</strong></p></li>
+</ol></li>
+</ol>
+<p>Trusted Party, a general cryptography framework which is more general
+even than zero knowledge, can be turned into a cryptographic protocol
+using zero-knowledge. Zero knowledge is what enables us to go
+<strong>from a setting which we trust into a setting in which we don't
+trust.</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">	A[&quot;Trusted Party&quot;] --&quot;Zero-Knowledge Proof&quot;--&gt; B[&quot;Protocol&quot;]</span><br></pre></td></tr></table></figure>
+<p>Note: Crypto is not just about zero knowledge. Zero-Knowledge is just
+a means to an end.</p>
+<p>Weaker definitions are also useful. (WI/WH/NIZK)</p>
+<h2 id="proof-systems">Proof Systems</h2>
+<p>A proof is a method for establishing truth. what is the method
+depends on the context in which it's deployed, such as legal(truth is
+determined by a jury or by a judge), authoritative, scientific,
+philosophical, mathematical(Axiom -&gt;π-&gt;-&gt; Propositions).</p>
+<p>Euclid put forward that inference should be cast in terms of axioms
+and <em>rules of inference</em>. After that,</p>
+<p>Two element have been added to the notion of proof:
+<strong>probabilistic and interactive</strong>. You are willing to
+accept that small statement with the small probability of error and the
+notion of interaction</p>
+<h3 id="the-language-of-true-statements">The language of true
+statements</h3>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416222657082.png"
+alt="image-20220416222657082" />
+<figcaption aria-hidden="true">image-20220416222657082</figcaption>
+</figure>
+<p>There is no prover here. To define a classic proof, you don't need to
+talk about prover at all and verifier is what matters. <strong>The
+verifier is the most important entity</strong> in a proof and this is
+also for people implementing a protocol. All that matters is what the
+verifier does at least for the soundness of proof.</p>
+<h3 id="np-proof-system">NP Proof System</h3>
+<p><a
+target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21768483/article/details/80430590">P
+问题、NP 问题、NP 完全问题和 NP 难问题</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://sailist.github.io/AdAlgo/#%E5%9B%BE%E7%81%B5%E6%9C%BA%E4%B8%8Epnpnpc">高级算法
+P NP 图灵机与约化 | AdAlgo</a></p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416222935487.png"
+alt="image-20220416222935487" />
+<figcaption aria-hidden="true">image-20220416222935487</figcaption>
+</figure>
+<p><strong>Boolean Satisfiability【布尔可满足性问题 SAT】</strong></p>
+<p><strong>SAT 是一个 NPC 问题</strong>，每一个属于 NP 的都可以归纳到
+SAT 问题上。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416224814534.png"
+alt="image-20220416224814534" />
+<figcaption aria-hidden="true">image-20220416224814534</figcaption>
+</figure>
+<p><strong>线性等式</strong>：P 问题，容易计算。
+Structured：是一个结构化的问题。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416224928445.png"
+alt="image-20220416224928445" />
+<figcaption aria-hidden="true">image-20220416224928445</figcaption>
+</figure>
+<p>矩阵乘法 linear equations 是 P 问题，期最佳渐进复杂度为<span
+class="math inline">\(O(n^{2.373})\)</span>.<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Matrix_multiplication_algorithm#:~:text=As%20of%20December%C2%A02020%2C%20the%20matrix%20multiplication%20algorithm%20with%20best%20asymptotic%20complexity%20runs%20in%20O(n2.3728596)%20time">wikipedia
+reference</a></p>
+<p><strong>the Class P：P 类问题</strong> poly-time(多项式时间) P
+类问题：在多项式时间下有解。 NP
+类问题：在多项式时间下不能确定能找到答案，但可验证。 NPC 类问题：NP
+类问题都可以归约到一个 NPC 类问题。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416225029312.png"
+alt="image-20220416225029312" />
+<figcaption aria-hidden="true">image-20220416225029312</figcaption>
+</figure>
+<p><strong>二次剩余 Quadratic Residuosity</strong></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=EJv4TiYP8-s&amp;list=PLXICrha0Si3oMaUzKeQVKAKc9u71Xdnsh">[Quadratic
+Residues] - What are Quadratic Residues? - YouTube</a></p>
+<p>是一个 NP
+问题，在多项式时间内不一定能解出来，但是一定能在多项式时间内能验证。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416225205379.png"
+alt="image-20220416225205379" />
+<figcaption aria-hidden="true">image-20220416225205379</figcaption>
+</figure>
+<p><strong>总结</strong> 有效的验证者 等价于
+多项式时间的验证者，下面说明如果是下面的问题，则都是可以在多项式时间下可验证的问题，即说明是有效的验证。</p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416225306186.png"
+alt="image-20220416225306186" />
+<figcaption aria-hidden="true">image-20220416225306186</figcaption>
+</figure>
+<p><strong>证明非成员</strong></p>
+<figure>
+<img
+src="https://blog-1259556217.cos.ap-chengdu.myqcloud.com/image/image-20220416225429285.png"
+alt="image-20220416225429285" />
+<figcaption aria-hidden="true">image-20220416225429285</figcaption>
+</figure>
+<ol type="1">
+<li><p>对于 Linear Equation 是 P 问题，可以在多项式时间内确定。</p></li>
+<li><p>对于 SAT 和二次剩余是 NP 问题，无法在多项式时间内确定。</p>
+<p>最原始的证明就是：发送所有可能的 witness，逐个检查他是否满足 SAT 或
+QR。而二者的 witness 都是按指数增长的。所以 naive proof exponentially
+large 按照指数增大。所以现在没有什么可以帮助你验证 non-membership 的
+statement 的。这便是 Shafi Goldwass 等人想法的来源。</p>
+<p>他们在 GMR’85
+中提出了交互式证明，允许证明使用：随机性（概率容错）和交互（增加
+prover）</p></li>
+</ol>
+<h2 id="从-dapp-开发角度看">从 DAPP 开发角度看</h2>
+<p>相关内容的公开资料很丰富，我 post 一些希望对你有帮助：</p>
+<p>从需求出发如何根据不同 zk 技术的 tradeoffs 进行方案设计:</p>
+<ol type="1">
+<li><p><a
+target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=-PUKinjbLR8&amp;list=PLaM7G4Llrb7x5JgkfCN9kf7IB6QtomyCu&amp;index=24">ZK
+Application Design Patterns | Devcon Bogotá</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://vitalik.ca/general/2022/06/15/using_snarks.html">从隐私保护的需求出发，如何把
+zkSnark fit into 现有应用</a></p></li>
+<li><p>具体应用的交互建议看一些 zk dapp
+的源码以及在本地跑一跑客户端，这样会有更直观的理解：
+例如：https://github.com/vplasencia/zkSudoku</p></li>
+</ol>
+</div><div class="tags"></div><div class="post-nav"><a class="pre" href="/blog/2023/03/30/crypto/zk/0.zk_intro2/">零知识证明介绍</a><a class="next" href="/blog/2023/03/30/crypto/zk/9.commitments/">Commitment and Overview of Modern SNARKs</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/" title=""><img class="nofancybox" src="/blog/img/avatar.png"/></a><p>What keeps me alive is my love for people and life and my desire to explore the unknown</p><a class="info-icon" href="mailto:findrealyee@outlook.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/realyee/" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/">Cryptography</a><span class="category-list-count">29</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/math/">math</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Cryptography/zero-knowledge-proof/">zero-knowledge proof</a><span class="category-list-count">20</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Golang/">Golang</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/academic/">academic</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/blockchain/">blockchain</a><span class="category-list-count">25</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/cplusplus/">cplusplus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/go/">go</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/">linux</a><span class="category-list-count">34</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/git/">git</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/macos/">macos</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/linux/tools/">tools</a><span class="category-list-count">12</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/">misc</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/misc/latex/">latex</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/">ml</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/ml/rl/">rl</a><span class="category-list-count">4</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/network/">network</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/os/">os</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/php/">php</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/probabilities/">probabilities</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/python/">python</a><span class="category-list-count">64</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/security-miscellaneous/">security miscellaneous</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/utilities/">utilities</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/">websec</a><span class="category-list-count">35</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/cmd-execution/">cmd_execution</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/file-upload/">file_upload</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/logic-vuln/">logic_vuln</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/sql-injection/">sql injection</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/websec/xss/">xss</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/wireshark/">wireshark</a><span class="category-list-count">7</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/blog/tags/academic/" style="font-size: 15px;">academic</a> <a href="/blog/tags/sci/" style="font-size: 15px;">sci</a> <a href="/blog/tags/jcr/" style="font-size: 15px;">jcr</a> <a href="/blog/tags/ml/" style="font-size: 15px;">ml</a> <a href="/blog/tags/cuda/" style="font-size: 15px;">cuda</a> <a href="/blog/tags/misc/" style="font-size: 15px;">misc</a> <a href="/blog/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/blog/tags/threat-intelligence/" style="font-size: 15px;">threat intelligence</a> <a href="/blog/tags/typing/" style="font-size: 15px;">typing</a> <a href="/blog/tags/distance/" style="font-size: 15px;">distance</a> <a href="/blog/tags/osi-sec/" style="font-size: 15px;">osi_sec</a> <a href="/blog/tags/smtp/" style="font-size: 15px;">smtp</a> <a href="/blog/tags/mail/" style="font-size: 15px;">mail</a> <a href="/blog/tags/Boot/" style="font-size: 15px;">Boot</a> <a href="/blog/tags/Computer/" style="font-size: 15px;">Computer</a> <a href="/blog/tags/FAT/" style="font-size: 15px;">FAT</a> <a href="/blog/tags/FDT/" style="font-size: 15px;">FDT</a> <a href="/blog/tags/os/" style="font-size: 15px;">os</a> <a href="/blog/tags/efi/" style="font-size: 15px;">efi</a> <a href="/blog/tags/Python/" style="font-size: 15px;">Python</a> <a href="/blog/tags/Tools/" style="font-size: 15px;">Tools</a> <a href="/blog/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">网络协议</a> <a href="/blog/tags/Wireshark%E5%8A%9F%E8%83%BD/" style="font-size: 15px;">Wireshark功能</a> <a href="/blog/tags/%E6%B8%97%E9%80%8F/" style="font-size: 15px;">渗透</a> <a href="/blog/tags/%E6%8A%93%E5%8C%85/" style="font-size: 15px;">抓包</a> <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/blog/tags/zkp/" style="font-size: 15px;">zkp</a> <a href="/blog/tags/circom/" style="font-size: 15px;">circom</a> <a href="/blog/tags/git/" style="font-size: 15px;">git</a> <a href="/blog/tags/ssh/" style="font-size: 15px;">ssh</a> <a href="/blog/tags/arch/" style="font-size: 15px;">arch</a> <a href="/blog/tags/manjaro/" style="font-size: 15px;">manjaro</a> <a href="/blog/tags/chmod/" style="font-size: 15px;">chmod</a> <a href="/blog/tags/ping/" style="font-size: 15px;">ping</a> <a href="/blog/tags/network/" style="font-size: 15px;">network</a> <a href="/blog/tags/find/" style="font-size: 15px;">find</a> <a href="/blog/tags/head/" style="font-size: 15px;">head</a> <a href="/blog/tags/tail/" style="font-size: 15px;">tail</a> <a href="/blog/tags/ioredirect/" style="font-size: 15px;">ioredirect</a> <a href="/blog/tags/pipe/" style="font-size: 15px;">pipe</a> <a href="/blog/tags/fd/" style="font-size: 15px;">fd</a> <a href="/blog/tags/iproute2/" style="font-size: 15px;">iproute2</a> <a href="/blog/tags/kill/" style="font-size: 15px;">kill</a> <a href="/blog/tags/hardlink/" style="font-size: 15px;">hardlink</a> <a href="/blog/tags/softlink/" style="font-size: 15px;">softlink</a> <a href="/blog/tags/netstat/" style="font-size: 15px;">netstat</a> <a href="/blog/tags/ss/" style="font-size: 15px;">ss</a> <a href="/blog/tags/lsof/" style="font-size: 15px;">lsof</a> <a href="/blog/tags/traceroute/" style="font-size: 15px;">traceroute</a> <a href="/blog/tags/vim/" style="font-size: 15px;">vim</a> <a href="/blog/tags/latex/" style="font-size: 15px;">latex</a> <a href="/blog/tags/CNN/" style="font-size: 15px;">CNN</a> <a href="/blog/tags/convolution/" style="font-size: 15px;">convolution</a> <a href="/blog/tags/CMake/" style="font-size: 15px;">CMake</a> <a href="/blog/tags/Make/" style="font-size: 15px;">Make</a> <a href="/blog/tags/php/" style="font-size: 15px;">php</a> <a href="/blog/tags/python/" style="font-size: 15px;">python</a> <a href="/blog/tags/re/" style="font-size: 15px;">re</a> <a href="/blog/tags/Regexp/" style="font-size: 15px;">Regexp</a> <a href="/blog/tags/shell/" style="font-size: 15px;">shell</a> <a href="/blog/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/blog/tags/pseudo-static/" style="font-size: 15px;">pseudo static</a> <a href="/blog/tags/sql-injection/" style="font-size: 15px;">sql injection</a> <a href="/blog/tags/XSS/" style="font-size: 15px;">XSS</a> <a href="/blog/tags/collection/" style="font-size: 15px;">collection</a> <a href="/blog/tags/collections/" style="font-size: 15px;">collections</a> <a href="/blog/tags/comprehensions/" style="font-size: 15px;">comprehensions</a> <a href="/blog/tags/fun/" style="font-size: 15px;">fun</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/18/ml/wasserstein_dist/">Delve into Wasserstein Distance, principles and implementation analysis</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/09/17/math/probabilities/wasserstein_bg/">Probabilities background for Wasserstein Distance</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/11/academic/papers/ldp_location/">L-SRR Local Differential Privacy for Location-Based Services with Staircase Randomized Response</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/10/academic/papers/ldp_byz_fl/">Practical Differentially Private and Byzantine-resilient Federated Learning</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fedrecover/">FedRecover 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/flcert/">FLCert Provably Secure Federated Learning against Poisoning Attacks 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/08/04/academic/papers/fltrust/">FLTrust Byzantine-robust Federated Learning via Trust Bootstrapping 论文阅读笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/05/30/crypto/zk/specific2program/">zk with programmability</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/30/crypto/zk/great_resource/">zk 资料汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2023/04/16/misc/latex/latex_grammars/">常用 LaTeX 语法总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://snowolf0620.xyz/" title="snowolf0620" target="_blank">snowolf0620</a><ul></ul><a href="https://space.keter.top/" title="Sonder" target="_blank">Sonder</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2024 <a href="/blog/." rel="nofollow">realyee's blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/blog/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/blog/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/blog/css/search.css?v=1.0.0"><script type="text/javascript" src="/blog/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/blog/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/blog/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/blog/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/blog/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/blog/js/smartresize.js?v=1.0.0"></script></div></body></html>
